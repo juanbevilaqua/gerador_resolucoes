@@ -1,0 +1,21 @@
+verificar como definir largura para as colunas da tabela
+
+comentar código
+
+revisar como ajustar largura das colunas
+
+titulos das tabelas centralizados e em negrito
+
+usar join() no coletor de dados para substituir o formato de lista atual
+
+tratamento de erros(try-catch)
+
+funcao geraTitulo(), da mesma forma que geraCabecalho()
+
+novo modelo: comissão de seleção
+
+adicionar opção de reuniao extraordinaria
+
+adicionar opção de resolucao retroativa
+
+add opção de resolução extraordinaria

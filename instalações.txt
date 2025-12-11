@@ -1,0 +1,22 @@
+pip install python-docx
+pip install pypandoc
+
+python versão 3.X pra frente
+Pandoc: https://github.com/jgm/pandoc/releases/tag/3.3
+LaTeX: https://miktex.org/download
+
+LibreOffice: https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
+
+//Camelot(extrair tabelas de pdf): pip install camelot-py[cv]
+
+pdf2docx: pip install pdf2docx
+
+pyPDF: pip install PyPDF2
+
+custom Tkinter: pip install customtkinter
+
+google drive desktop(329MB): https://workspace.google.com/products/drive/#download
+
+pyyaml = pip install pyyaml
+
+PIL(para uso de imagens) = pip install pillow

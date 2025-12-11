@@ -1,0 +1,63 @@
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
+from src.util.Titulo import geraTitulo
+from src.util.Cabecalho import geraCabecalho
+from src.util import Armazenador, ManipuladorDeArquivos, ColetorDeDados, Assinatura, BuscadorDeArquivos
+from util.RodapeRepublicacao import geraRodapeRepublicacao
+import yaml
+
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos, configs):
+
+    lista_res = dados_dinamicos["Resolução"]
+    conj_res = ', '.join(res for res in lista_res)
+
+    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
+        file_parts = list(yaml.safe_load_all(file))
+    document = Document(str(file_parts[0]['timbre_res']))
+    #n_res, data_res, data_reuniao, lista_res, conj_res = ColetorDeDados.coletaDados(6)# indica o tipo de resolução
+
+    geraTitulo(document, n_res, data_res)
+
+    geraCabecalho(document, False, data_reuniao)
+
+    p1 = document.add_paragraph(f'      Homologar em bloco as resoluções ')
+
+    p1.add_run(f'{conj_res}').bold = True
+    p1.add_run(f', emitidas Ad Referendum pela coordenação do PPGCTA. Todas os documentos citados nesta resolução encontram-se em anexo.')
+    #p1.add_run(f'{data_limite}.').bold = True
+    p1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p1_format = p1.paragraph_format
+    p1_format.space_after = Pt(100)
+
+    Assinatura.geraCampoAssinatura(document)
+
+    if isinstance(file_parts[1]['republicacao'], list):
+        geraRodapeRepublicacao(document)
+
+    # Define o título da resolução que será salva
+    #dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+
+    #titulo_doc = f'Resolução nº {n_res} - Homologa resoluções Ad Referendum - {conj_res}.docx'
+
+    dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+
+    titulo_doc = f'Resolução nº {n_res} - Homologa resoluções Ad Referendum - {conj_res}.docx'
+
+    Armazenador.salvar(dir_res, document, titulo_doc) # a compilação de arquivos necessita da versao pdf
+
+    # Define resoluçoes pra unir
+    lista_caminhos_res = []
+    titulo_pdf = f'./resolucoes/{dir_res}/Resolução nº {n_res} - Homologa resoluções Ad Referendum - {conj_res}.pdf'
+    # Faz o append da resolução de homologação como a primeira do documento unificado
+    lista_caminhos_res.append(titulo_pdf)
+
+    # Loop para informa das resoluções que serão unidas
+    for res in lista_res:
+        #titulo_res = input('Informe o título da resolução ad referendum: ')
+        # partes = res.split('-')
+        # caminho_res = f'./resolucoes/{partes[-1]}/{titulo_res}'# partes[-1] representa o ano da res.Ex: 100-2022 --> 2022
+        caminho_res = BuscadorDeArquivos.buscarResolucao(res)
+        lista_caminhos_res.append(caminho_res)
+
+    ManipuladorDeArquivos.unirPdfs(lista_caminhos_res, titulo_pdf)# sobscreva a resolução individual p/ o documento unificado

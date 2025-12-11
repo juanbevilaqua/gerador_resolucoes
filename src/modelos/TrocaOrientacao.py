@@ -1,0 +1,78 @@
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
+from docx.oxml.ns import qn
+from docx.oxml import parse_xml
+from src.util.Titulo import geraTitulo
+from src.util.Cabecalho import geraCabecalho
+from src.util import Armazenador, ColetorDeDados, Assinatura, FormatadorTabela, Data
+from util.RodapeRepublicacao import geraRodapeRepublicacao
+import yaml
+
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, valores_dinamicos, configs):
+    #data_res_ext = Data.coletaData(data_res, True)
+
+    nivel_discente = valores_dinamicos["Nível do Discente"]
+    nome = valores_dinamicos["Nome do Discente"]
+    orientador_atual = valores_dinamicos["Orientador Atual"]
+    novo_orientador = valores_dinamicos["Novo Orientador"]
+
+    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
+        file_parts = list(yaml.safe_load_all(file))
+    document = Document(str(file_parts[0]['timbre_res']))
+    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, orientador_atual, novo_orientador = ColetorDeDados.coletaDados(5)
+
+    geraTitulo(document, n_res, data_res)
+
+    geraCabecalho(document, ad_referendum, data_reuniao)
+
+    p1 = document.add_paragraph(f'   APROVAR a troca de orientação do(a) discente de {nivel_discente}, ')
+    p1.add_run(f'{nome}').bold = True
+    p1.add_run(', conforme segue: ')
+    p1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p1_format = p1.paragraph_format
+    p1_format.space_after = Pt(20)
+
+    # Gera tabela
+    tabela = document.add_table(rows=2, cols=2)
+
+    # Definir um estilo de borda básica para cada célula
+    FormatadorTabela.defineBorda(tabela)
+
+    tabela.cell(0, 0).text = 'Orientador(a) Atual:'
+    tabela.cell(0, 1).text = orientador_atual
+
+    tabela.cell(1, 0).text = 'Novo(a) Orientador(a)'
+    tabela.cell(1, 1).text = novo_orientador
+
+    #FormatadorTabela.centralizaTotal(tabela)
+
+    # # Alinha horinzontalmete a primeira coluna
+    # for row in tabela.rows:
+    #     first_cell = row.cells[0]
+    #     first_cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Centraliza o conteúdo das células horizontalmente
+    for row in tabela.rows:
+        for cell in row.cells:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    p2 = document.add_paragraph()
+    p2_format = p2.paragraph_format
+    p2_format.space_after = Pt(80)
+
+    Assinatura.geraCampoAssinatura(document)
+
+    if isinstance(file_parts[1]['republicacao'], list):
+        geraRodapeRepublicacao(document)
+
+    # Define o título da resolução que será salva
+    dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+
+    nome_encurtado = ColetorDeDados.encurtaNome(nome)
+    if ad_referendum:
+        titulo_doc = f'Resolução nº {n_res} - AD REFERENDUM Aprova troca de orientação - {nome_encurtado}.docx'
+    else:
+        titulo_doc = f'Resolução nº {n_res} - Aprova troca de orientação - {nome_encurtado}.docx'
+
+    Armazenador.salvar(dir_res, document, titulo_doc)

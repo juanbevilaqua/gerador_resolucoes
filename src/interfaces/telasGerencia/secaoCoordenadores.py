@@ -1,0 +1,330 @@
+import customtkinter as ctk
+from src.controladores.controladorCoordenador import CoordenadorController
+from functools import partial
+from PIL import Image
+
+class SecaoCoordenadores(ctk.CTkFrame):
+    def __init__(self, master, gerenciador):
+        super().__init__(master)
+        self.gerenciador = gerenciador
+
+        self.criar_widgets_coordenadores()
+
+    def criar_widgets_coordenadores(self):
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
+        self.grid_rowconfigure(1, weight=1)
+
+        # =================
+        # FRAME DINAMICO
+        # =================
+
+        self.cadastrar_coordenador_button = ctk.CTkButton(self, text="Adicionar Coordenador",
+                                                          command=lambda: self.spam_top_level('cadastrar'))
+        self.cadastrar_coordenador_button.grid(row=0, column=0, pady=10, padx=5, sticky='e')
+
+        self.coordenadores_ativos_frame = ctk.CTkFrame(self, fg_color='#1C1C1C')
+        self.coordenadores_ativos_frame.grid(row=1, column=0, pady=10)
+        self.listar_coordenadores_ativos()
+
+        self.coordenadores_cadastrados_frame = ctk.CTkFrame(self)
+        self.coordenadores_cadastrados_frame.grid(row=2, column=0, sticky='ew', pady=20)
+        self.listar_coordenadores_cadastrados()
+
+    def gera_campos_coordenador(self, frame):
+        """
+        Centraliza os campos necessários para cadastro/edição de um coordenador.
+        """
+
+        self.nome_coordenador_label = ctk.CTkLabel(frame, text="Nome do Coordenador").grid(row=0, column=0, padx=5,
+                                                                                       pady=10)
+        self.nome_coordenador_entry = ctk.CTkEntry(frame)
+        self.nome_coordenador_entry.grid(row=0, column=1, padx=5, pady=10)
+
+        self.modalidade_label = ctk.CTkLabel(frame, text="Modalidade").grid(row=1, column=0, padx=5, pady=5)
+        self.modalidade_var = ctk.StringVar(value="Selecione")
+        self.modalidade_dropdown = ctk.CTkOptionMenu(frame, values=['Coordenador Titular', 'Vice-Coordenador'], variable=self.modalidade_var)
+        self.modalidade_dropdown.grid(row=1, column=1, padx=5, pady=10)
+
+        self.inicio_vigencia_label = ctk.CTkLabel(frame, text="Início da Vigência do Mandato").grid(row=2, column=0)
+        self.inicio_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
+        self.inicio_vigencia_entry.grid(row=2, column=1, pady=10)
+
+        self.fim_vigencia_label = ctk.CTkLabel(frame, text="Fim da Vigência do Mandato").grid(row=3, column=0)
+        self.fim_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
+        self.fim_vigencia_entry.grid(row=3, column=1, pady=10)
+
+        return 4  # linha atual do grid
+
+    def listar_coordenadores_cadastrados(self):
+
+        coordenadores = CoordenadorController.listar_todos()[0]
+
+        self.headers_coordenadores_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
+        self.headers_coordenadores_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
+        self.headers_coordenadores_frame.grid_columnconfigure(0, minsize=50)  # ID
+        self.headers_coordenadores_frame.grid_columnconfigure(1, minsize=200)  # Nome
+        self.headers_coordenadores_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
+        self.headers_coordenadores_frame.grid_columnconfigure(3, minsize=100)  # Inicio
+        self.headers_coordenadores_frame.grid_columnconfigure(4, minsize=100)  # Fim
+
+        headers = ["ID", "Nome", "Modalidade", "Início Vigência", "Fim Vigência", "Operações"]
+
+        tam_cols = [50, 200, 200, 100, 100, 100]
+        qtde_headers = len(headers)
+
+        # CONSTRÓI CABEÇALHO
+        for i, header in enumerate(headers):
+            ctk.CTkLabel(self.headers_coordenadores_frame, text=header, font=("Arial", 14, "bold"),
+                         width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+
+        # CONSTRÓI REGISTROS
+        # Loop p/ cada coordenador
+        for index, coordenador in enumerate(coordenadores):
+            id_coordenador = coordenador[0]
+            nome_frame = f"frame_coordenador_{id_coordenador}"
+
+            self.coordenador_cadastrado_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
+            # print("Nome Frame: ", nome)
+            self.coordenador_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+
+            self.coordenador_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
+            self.coordenador_cadastrado_frame.grid_columnconfigure(1, minsize=200)  # Nome
+            self.coordenador_cadastrado_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
+            self.coordenador_cadastrado_frame.grid_columnconfigure(3, minsize=100)  # Inicio
+            self.coordenador_cadastrado_frame.grid_columnconfigure(4, minsize=100)  # Fim
+            self.coordenador_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
+
+            # Loop p/ cada atributo
+            for i, atr in enumerate(coordenador):
+                atr = self.gerenciador.encurta_texto(atr, 25)
+                ctk.CTkLabel(self.coordenador_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
+                                                                                                  padx=5)
+
+            self.operacoes_frame = ctk.CTkFrame(self.coordenador_cadastrado_frame, fg_color='transparent')
+            self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
+
+            self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
+                                               command=partial(self.spam_top_level, "editar",
+                                                               {'id': coordenador[0], 'nome': coordenador[1],
+                                                                'modalidade': coordenador[2], 'inicio_vigencia': coordenador[3],
+                                                                'fim_vigencia':coordenador[4]}))
+            self.update_button.grid(row=0, column=0, padx=5)
+            self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
+                                               command=partial(self.spam_top_level, "excluir", {'id': coordenador[
+                                                   0]}))  # partial(self.excluir_professor, professor[0]))
+            # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
+
+            self.delete_button.grid(row=0, column=1, padx=5)
+
+    def listar_coordenadores_ativos(self):
+        coordenadores = CoordenadorController.listar_ativos()
+
+        dict_coordenadores = {}
+        if len(coordenadores) == 0:
+            print("Nenhum coordenador ativo no momento.")
+        else:
+            for coordenador in coordenadores:
+                if coordenador[2] == 'Coordenador Titular':
+                    dict_coordenadores['Coordenador Titular'] = coordenador[1] # Nome do coordenador
+                else:
+                    dict_coordenadores['Vice-Coordenador'] = coordenador[1]
+
+        #return dict_coordenadores
+
+        self.icon_coord_ativo = ctk.CTkImage(
+            light_image=Image.open('./src/static/img/active_icon.png'),
+            dark_image=Image.open('./src/static/img/active_icon.png'),
+            size=(30, 30)
+        )
+
+        self.img_label = ctk.CTkLabel(self.coordenadores_ativos_frame, image=self.icon_coord_ativo, text='',
+                                      fg_color='#4169E1')
+        self.img_label.grid(row=0, column=0, sticky='ew')
+        self.coordenadores_ativos_titulo_label = ctk.CTkLabel(self.coordenadores_ativos_frame,
+                                                              text="Coordenadores Ativos",
+                                                              font=('Bahnschrift', 20, 'bold'),
+                                                              fg_color='#4169E1').grid(row=1, column=0, sticky='ew')
+
+        if 'Coordenador Titular' in dict_coordenadores.keys():
+            nome_coordenador_titular = dict_coordenadores['Coordenador Titular'].upper()
+        else:
+            nome_coordenador_titular = 'Sem Coordenador Titular Ativo no Momento'
+        self.coordenador_titular_label = ctk.CTkLabel(self.coordenadores_ativos_frame, text=nome_coordenador_titular,
+                                                      font=("Segoe UI", 18, 'underline')) \
+            .grid(row=2, column=0, pady=10, padx=5)
+
+        if 'Vice-Coordenador' in dict_coordenadores.keys():
+            nome_vice_coordenador = f"{dict_coordenadores['Vice-Coordenador']} (Vice-Coordenador)"
+        else:
+            nome_vice_coordenador = 'Sem Vice-Coordenador Ativo no Momento'
+        self.voce_coordenador_label = ctk.CTkLabel(self.coordenadores_ativos_frame,
+                                                   text=nome_vice_coordenador, font=("Segoe UI", 14, 'italic')) \
+            .grid(row=3, column=0, pady=5, padx=5)
+
+    def spam_top_level(self, action, infos=None):
+        self.top_level = ctk.CTkToplevel()
+        width = 500 if action in ("cadastrar", "editar") else 300
+        height = 300 if action in ("cadastrar", "editar") else 150
+        # centralizar o popup
+        x = (self.top_level.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.top_level.winfo_screenheight() // 2) - (height // 2)
+        self.top_level.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+        self.top_level.resizable(False, False)
+
+        if action == "cadastrar":
+            self.top_level.title('📝 Cadastrar Registro')
+            self.top_level.columnconfigure(0, weight=1)
+            self.top_level.columnconfigure(1, weight=1)
+
+            def confirm_action():
+                # chamada do método
+                result, msg = self.cadastrar_coordenador()
+                if result is True:
+                    self.top_level.destroy()
+                else:
+                    self.gerenciador.spam_warning(msg)
+
+            line = self.gera_campos_coordenador(self.top_level)
+
+            buttons_frame = ctk.CTkFrame(self.top_level)
+            buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button.grid(row=0, column=0, padx=5)
+
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button.grid(row=0, column=1, padx=5)
+
+        elif action == "editar":
+            self.top_level.title('📝 Editar Registro')
+            self.top_level.columnconfigure(0, weight=1)
+            self.top_level.columnconfigure(1, weight=1)
+
+            def confirm_action():
+                # captura dos dados atualizados
+                nome = self.nome_coordenador_entry.get()
+                modalidade = self.modalidade_var.get()
+                inicio_vigencia = self.inicio_vigencia_entry.get()
+                fim_vigencia = self.fim_vigencia_entry.get()
+
+                # chamada do método
+                result, msg = self.editar_coordenador(infos['id'], nome, modalidade, inicio_vigencia, fim_vigencia)
+
+                if result is True:
+                    self.top_level.destroy()
+                else:
+                    self.gerenciador.spam_warning(msg)
+
+
+            line = self.gera_campos_coordenador(self.top_level)
+
+            buttons_frame = ctk.CTkFrame(self.top_level)
+            buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button.grid(row=0, column=0, padx=5)
+
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button.grid(row=0, column=1, padx=5)
+
+            # inserção dos dados do professor selecionado nos campos
+            self.nome_coordenador_entry.insert(0, infos['nome'])
+            self.modalidade_var.set(infos['modalidade'])
+            self.inicio_vigencia_entry.insert(0, infos['inicio_vigencia'])
+            self.fim_vigencia_entry.insert(0, infos['fim_vigencia'])
+
+        else:
+            self.top_level.title('⚠️ Atenção')
+            self.top_level.columnconfigure(0, weight=1)
+            self.top_level.columnconfigure(1, weight=1)
+
+            def confirm_action():
+                result, msg = self.excluir_coordenador(infos["id"])
+
+                if result is True:
+                    self.top_level.destroy()
+                else:
+                    self.gerenciador.spam_warning(msg)
+
+            self.confirmacao_exclusao_label = ctk.CTkLabel(self.top_level,
+                                                           text="Deseja mesmo excluir o item selecionado?")
+            self.confirmacao_exclusao_label.grid(row=0, column=0, pady=10, columnspan=2)
+            ok_button = ctk.CTkButton(self.top_level, text="Excluir", command=confirm_action)
+            ok_button.grid(row=1, column=0)
+
+            cancel_button = ctk.CTkButton(self.top_level, text="Cancelar", command=self.top_level.destroy)
+            cancel_button.grid(row=1, column=1)
+        self.top_level.grab_set()
+
+    # def spam_warning(self, msg):
+    #     self.warning_top_level = ctk.CTkToplevel()
+    #     width = 300
+    #     height = 150
+    #     # centralizar o popup
+    #     x = (self.warning_top_level.winfo_screenwidth() // 2) - (width // 2)
+    #     y = (self.warning_top_level.winfo_screenheight() // 2) - (height // 2)
+    #     self.warning_top_level.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    #     self.warning_top_level.resizable(False, False)
+    #
+    #     self.warning_top_level.title('⚠️ Atenção')
+    #     self.warning_top_level.columnconfigure(0, weight=1)
+    #     self.warning_top_level.columnconfigure(1, weight=1)
+    #
+    #     self.msg_label = ctk.CTkLabel(self.warning_top_level,
+    #                                                    text=msg, wraplength=300)
+    #     self.msg_label.grid(row=0, column=0, pady=30)
+    #
+    #     ok_button = ctk.CTkButton(self.warning_top_level, text="OK", command=self.warning_top_level.destroy)
+    #     ok_button.grid(row=1, column=0)
+    #
+    #     self.top_level.grab_set()
+    def atualizar_listagem_coordenadores(self):
+        # Atualiza lista de coordenadores cadastrados
+        for widget in self.coordenadores_cadastrados_frame.winfo_children():  # limpeza da tela
+            widget.destroy()
+        self.listar_coordenadores_cadastrados()  # Recria os frames com os registro do banco
+
+    def atualizar_listagem_coordenadores_ativos(self):
+        for widget in self.coordenadores_ativos_frame.winfo_children():  # limpeza da tela
+            widget.destroy()
+        self.listar_coordenadores_ativos()
+
+    def cadastrar_coordenador(self):
+        nome = self.nome_coordenador_entry.get()
+        modalidade = self.modalidade_var.get()
+        inicio_vigencia = self.inicio_vigencia_entry.get()
+        fim_vigencia = self.fim_vigencia_entry.get()
+
+        result, msg = CoordenadorController.cadastrar(nome, modalidade, inicio_vigencia, fim_vigencia)
+
+        print(msg)
+
+        self.atualizar_listagem_coordenadores()
+        self.atualizar_listagem_coordenadores_ativos()
+
+        return result, msg
+
+    # @staticmethod
+    def excluir_coordenador(self, id):
+
+        result, msg = CoordenadorController.deletar(id)
+
+        if result is False:
+            self.gerenciador.spam_warning(msg, self.top_level)
+
+        print("MENSAGEM: ", msg)
+
+        self.atualizar_listagem_coordenadores()
+        self.atualizar_listagem_coordenadores_ativos()
+
+        return result, msg
+
+    def editar_coordenador(self, id, nome=None, modalidade=None, inicio_vigencia=None, fim_vigencia=None):
+
+        result, msg = CoordenadorController.atualizar(id, nome, modalidade, inicio_vigencia, fim_vigencia)
+        self.atualizar_listagem_coordenadores()
+        self.atualizar_listagem_coordenadores_ativos()
+
+        # if result is False:
+        #     self.gerenciador.spam_warning(msg, self.top_level)
+
+        return result, msg
