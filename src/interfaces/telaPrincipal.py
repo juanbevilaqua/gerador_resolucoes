@@ -7,7 +7,7 @@ from src import modelos
 import yaml
 from src.controladores import controladorProfessor, controladorDisciplina
 import os
-
+#NOVO
 class TelaPrincipal(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -175,6 +175,8 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_dinamico.grid_columnconfigure(0, weight=1)  # frame esquerdo
         self.frame_dinamico.grid_columnconfigure(1, weight=1)  # frame direito
 
+        self.frame_dinamico.bind("<Button-1>", self.focar_frame_dinamico)
+
         # =================
         # BOTÃO GERAR RESOUÇÃO
         # =================
@@ -183,6 +185,9 @@ class TelaPrincipal(ctk.CTkFrame):
         #self.botao_gerar.pack(pady=10)
         self.botao_gerar.grid(row=4, column=0)
         self.botao_gerar.configure(state="disabled")  # ativa só após escolher tipo
+
+    def focar_frame_dinamico(self, event=None):
+        self.frame_dinamico.focus_set()
 
     def exibir_tipos_resolucao_listbox(self, exibir, event):
         if exibir:
@@ -265,11 +270,23 @@ class TelaPrincipal(ctk.CTkFrame):
 
             professores_listbox.delete(0, END)
 
-            for professor in lista_professores:
-                professores_listbox.insert(END, professor)
+            if len(lista_professores) > 0:
+                for professor in lista_professores:
+                    professores_listbox.insert(END, professor)
+
+                # Garante que o listbox apareça quando há dados
+                if not professores_listbox.winfo_ismapped():
+                    professores_listbox.grid(row=1, column=0, columnspan=2)
+
+            else: # se a lista estiver vazia, o listbox desaparece p/ liberar espaço de tela
+                professores_listbox.grid_forget()
+                #self.frame_dinamico.focus_set()
+                #professores_entry.focus_set()
 
         def preencher_professor_entry(event=None):
             self.after(10, self._atualizar_valor_entry(professores_listbox, professores_entry))
+            professores_listbox.grid_forget()
+            self.frame_dinamico.focus_set()
 
         def filtrar_professores(event=None):
             termo = professores_entry.get()
@@ -282,14 +299,20 @@ class TelaPrincipal(ctk.CTkFrame):
                     if termo.lower() in professor.lower():
                         data.append(professor)
 
+            #if len(data) > 0:
             atualizar_listbox_professores(data)
 
+        def fechar_listbox_professores(event=None):
+            professores_listbox.grid_forget()
+            self.frame_dinamico.focus_set()
 
-        professores_entry.bind("<FocusIn>", lambda event: exibir_professores_listbox(True, event))
-        professores_entry.bind("<FocusOut>", lambda event: exibir_professores_listbox(False, event))
-        atualizar_listbox_professores(self.professores_cadastrados)
+
+        #professores_entry.bind("<Button-1>", lambda event: exibir_professores_listbox(True, event))
+        #professores_entry.bind("<FocusOut>", lambda event: exibir_professores_listbox(False, event))
+        #atualizar_listbox_professores(self.professores_cadastrados)
         professores_listbox.bind("<<ListboxSelect>>", preencher_professor_entry)
         professores_entry.bind("<KeyRelease>", filtrar_professores)
+        professores_entry.bind("<Escape>", fechar_listbox_professores)
 
         return professores_entry
 
@@ -321,11 +344,21 @@ class TelaPrincipal(ctk.CTkFrame):
         def atualizar_listbox_disciplinas(lista_disciplinas):
             disciplinas_listbox.delete(0, END)
 
-            for disciplina in lista_disciplinas:
-                disciplinas_listbox.insert(END, disciplina)
+            if len(lista_disciplinas) > 0:
+                for disciplina in lista_disciplinas:
+                    disciplinas_listbox.insert(END, disciplina)
+
+                    # Garante que o listbox apareça quando há dados
+                    if not disciplinas_listbox.winfo_ismapped():
+                        disciplinas_listbox.grid(row=1, column=0, columnspan=2)
+
+            else:  # se a lista estiver vazia, o listbox desaparece p/ liberar espaço de tela
+                disciplinas_listbox.grid_forget()
 
         def preencher_disciplina_entry(event=None):
             self.after(10, self._atualizar_valor_entry(disciplinas_listbox, disciplinas_entry))
+            disciplinas_listbox.grid_forget()
+            self.frame_dinamico.focus_set()
 
         def filtrar_disciplinas(event=None):
             termo = disciplinas_entry.get()
@@ -340,12 +373,17 @@ class TelaPrincipal(ctk.CTkFrame):
 
             atualizar_listbox_disciplinas(data)
 
+        def fechar_listbox_disciplinas(event=None):
+            disciplinas_listbox.grid_forget()
+            self.frame_dinamico.focus_set()
 
-        disciplinas_entry.bind("<FocusIn>", lambda event: exibir_disciplinas_listbox(True, event))
-        disciplinas_entry.bind("<FocusOut>", lambda event: exibir_disciplinas_listbox(False, event))
-        atualizar_listbox_disciplinas(self.disciplinas_cadastradas)
+        #disciplinas_entry.bind("<FocusIn>", lambda event: exibir_disciplinas_listbox(True, event))
+        #disciplinas_entry.bind("<FocusOut>", lambda event: exibir_disciplinas_listbox(False, event))
+        #atualizar_listbox_disciplinas(self.disciplinas_cadastradas)
         disciplinas_listbox.bind("<<ListboxSelect>>", preencher_disciplina_entry)
         disciplinas_entry.bind("<KeyRelease>", filtrar_disciplinas)
+        disciplinas_entry.bind("<Escape>", fechar_listbox_disciplinas)
+
 
         return disciplinas_entry
     def alternar_ativacao_dos_campos(self, ativacao, checkbox, campos, default_colors):
