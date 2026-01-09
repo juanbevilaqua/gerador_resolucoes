@@ -32,13 +32,15 @@ def coletaData(data, extenso):
     else:
         return data
 
-def validar_data(entry):
-    data = entry.get()
+def validar_data(data):
+    #data = entry.get()
 
     try:
         datetime.strptime(data, "%d/%m/%Y")
+        return True
     except ValueError:
-        messagebox.showerror("Erro", "Formato de data inválido. Use: dd/mm/aaaa")
+        #messagebox.showerror("Erro", "Formato de data inválido. Use: dd/mm/aaaa")
+        return False
 
 # *** formato de data DD/MM/AA e usa split para dividir a data e utilzar o valor das variaveis
 

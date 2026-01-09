@@ -6,8 +6,8 @@ from collections import defaultdict
 from src import modelos
 import yaml
 from src.controladores import controladorProfessor, controladorDisciplina
-import os
-#NOVO
+from src.util import Data
+
 class TelaPrincipal(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -429,7 +429,7 @@ class TelaPrincipal(ctk.CTkFrame):
                     widget.delete(0, ctk.END)
             frame.pack(pady=10)
 
-    def duplicar_elementos(self, elementos, botao, frame):
+    def duplicar_elementos(self, elementos, botao, frame, listbox):
 
         frame_container_for_duplicate = ctk.CTkFrame(frame)
         frame_container_for_duplicate.pack(padx=20, pady=10)#anchor="w",
@@ -437,11 +437,14 @@ class TelaPrincipal(ctk.CTkFrame):
         botao.destroy()  # destrói a última referência de botão '+' criado
         botao = None
         for elemento in elementos:
-            self.criar_campo(elemento, tipo='entry_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
+            if listbox:
+                self.criar_campo(elemento, tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
+            else:
+                self.criar_campo(elemento, tipo='entry_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
 
         botao = ctk.CTkButton(self.frame_direito_inferior, text="+", width=50,
                                               command=lambda: self.duplicar_elementos(elementos, botao,
-                                                                                      frame))
+                                                                                      frame, listbox))
         botao.pack(pady=10)
 
     def excluir_botoes(self, frame_pai, frame_alvo):# apaga as referência de botão de um frame específico para evitar erros na interface
@@ -732,12 +735,12 @@ class TelaPrincipal(ctk.CTkFrame):
             elementos_frame_for_duplicate = []
             frame_container_for_duplicate = ctk.CTkFrame(self.frame_direito_inferior)
             frame_container_for_duplicate.pack(padx=20, pady=10)  #
-            self.criar_campo("Disciplina", tipo='entry_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)#self.frame_direito_inferior
+            self.criar_campo("Disciplina", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)#self.frame_direito_inferior
             elementos_frame_for_duplicate.append("Disciplina")
-            self.criar_campo("Professor", tipo='entry_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
+            self.criar_campo("Professor", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
             elementos_frame_for_duplicate.append("Professor")
-
-            button_add_disciplina = ctk.CTkButton(self.frame_direito_inferior, text="+", width=50, command=lambda: self.duplicar_elementos(elementos_frame_for_duplicate, button_add_disciplina, self.frame_direito_inferior) )
+            flag_listbox = True
+            button_add_disciplina = ctk.CTkButton(self.frame_direito_inferior, text="+", width=50, command=lambda: self.duplicar_elementos(elementos_frame_for_duplicate, button_add_disciplina, self.frame_direito_inferior, flag_listbox) )
             button_add_disciplina.pack(pady=20)
 
             #ctk.CTkLabel(self.frame_direito_inferior, text="Disciplina Teste").pack(anchor="w")
@@ -979,7 +982,7 @@ class TelaPrincipal(ctk.CTkFrame):
             entry = ctk.CTkEntry(frame_entry_button, width=150)
             entry.pack(side="left", padx=(0, 2))
             self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = entry
-            self.cont_entry_button_aux += 1 # cont auxiliar que será utilizado exclusivamente p/ o modelo "Cancelamento de Matrícula"(e caso surjam modelos na mesma esttutura posteriormente)
+            self.cont_entry_button_aux += 1 # cont auxiliar que será utilizado exclusivamente p/ o modelo "Cancelamento de Matrícula"(e caso surjam modelos na mesma estrutura posteriormente)
 
             if self.button_add:
                 self.button_add.destroy()# destrói a última referência de botão + criado
@@ -1068,7 +1071,7 @@ class TelaPrincipal(ctk.CTkFrame):
             #entry = ctk.CTkEntry(frame_entry_button, width=150)
             #entry.pack(side="left", padx=(0, 2))
             #self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = entry
-            self.cont_entry_button_aux += 1 # cont auxiliar que será utilizado exclusivamente p/ o modelo "Cancelamento de Matrícula"(e caso surjam modelos na mesma esttutura posteriormente)
+            self.cont_entry_button_aux += 1 # cont auxiliar que será utilizado exclusivamente p/ o modelo "Cancelamento de Matrícula"(e caso surjam modelos na mesma estrutura posteriormente)
 
             if self.button_add:
                 self.button_add.destroy()# destrói a última referência de botão + criado
@@ -1086,6 +1089,34 @@ class TelaPrincipal(ctk.CTkFrame):
 
             #return entry
 
+        elif tipo == 'entry_listbox_for_duplicate':
+            frame_barra_pesq = ctk.CTkFrame(frame, fg_color='transparent')
+
+            label = ctk.CTkLabel(frame, text=nome)
+            #label.grid(row=i, column=0, pady=10, padx=(0, 5))#padx=(0, 0),
+            label.pack(side="left", padx=2, pady=(5, 0))
+
+            # entry = ctk.CTkEntry(frame, width=150)
+            # #entry.grid(row=i, column=1, pady=10, padx=(0, 5))#padx=(0, 0),
+            # entry.pack(side="left", padx=2, pady=(0, 10))
+            frame_barra_pesq.pack(side="left")
+
+            if any(termo in nome.lower() for termo in ("professor", "docente", "orientador")):
+                professores_entry = self.gera_barra_pesq_professores(frame_barra_pesq)
+
+                self.campos_dinamicos[f"{nome} {self.cont_entry_button_aux}_{self.cont_entry_for_duplicate}"] = professores_entry
+
+            elif any(termo in nome.lower() for termo in ("disciplina")):
+                disciplinas_entry = self.gera_barra_pesq_disciplinas(frame_barra_pesq)
+
+                self.campos_dinamicos[f"{nome} {self.cont_entry_button_aux}_{self.cont_entry_for_duplicate}"] = disciplinas_entry
+
+            self.cont_entry_for_duplicate += 1
+
+            # if flag_list is True:
+            #     self.campos_dinamicos[f"{nome} {self.cont_entry_button_aux}_{self.cont_entry_for_duplicate}"] = entry
+            # else:
+            #     self.campos_dinamicos[nome] = entry
 
         elif tipo == 'entry_placeholder':
                 label = ctk.CTkLabel(frame, text=nome)
@@ -1180,12 +1211,31 @@ class TelaPrincipal(ctk.CTkFrame):
         numero_res = self.numero_res_entry.get() if self.frame_fixo_opened else self.numero_res_entry_reduzido.get()
         data_res = self.data_res_entry.get()
         data_reuniao = self.data_reuniao_entry.get()
+        ad_referendum = self.ad_referendum_var.get()
 
-        if not numero_res or not data_res:
+
+        # VALIDAÇÃO DO PREENCHIMENTO DOS DADOS FIXOS
+        if not numero_res or not data_res or (ad_referendum is False and not data_reuniao):
             print("** Existem dados fixos sem preenchimento")
             self.gerar_popup("Existem campos sem preenchimento!!", "warning")
             return
-        ad_referendum = self.ad_referendum_var.get()
+        #ad_referendum = self.ad_referendum_var.get()
+
+        numero_res_ok = numero_res.isdigit()
+        data_res_ok = Data.validar_data(data_res)
+
+        if numero_res_ok is False:
+            self.gerar_popup("Preenchimento inválido: o número da resolução deve ser um algarismo", "warning")
+            return
+        if data_res_ok is False:
+            self.gerar_popup("Preenchimento inválido: Use: dd/mm/aaaa nos campos de data", "warning")
+            return
+        if data_reuniao:
+            data_reuniao_ok = Data.validar_data(data_reuniao)
+            if data_reuniao_ok is False and ad_referendum is False: # se for ad referendum, deverá ignorar o que está no campo data
+                self.gerar_popup("Preenchimento inválido: Use: dd/mm/aaaa nos campos de data", "warning")
+                return
+
 
         # LEITURA DAS CONFIGURAÇÕES
         configs_avancadas = {
@@ -1193,6 +1243,18 @@ class TelaPrincipal(ctk.CTkFrame):
             "republicacao" : [self.republicacao_var.get(), self.data_republicacao_entry.get(), self.motivo_republicacao_var.get()] if self.republicacao_var.get() else self.republicacao_var.get(),
             "pdf_autosave": self.pdf_autosave_switch_var.get()
         }
+
+        # VALIDAÇÃO DO PREENCHIMENTO DAS CONFIGS. AVANÇADAS
+        if isinstance(configs_avancadas['republicacao'], list):
+            if not configs_avancadas['republicacao'][1] or configs_avancadas['republicacao'][2] == 'Selecione':
+                self.gerar_popup("Existem campos sem preenchimento nas configurações!!", "warning")
+                return
+
+            data_rep_ok = Data.validar_data(configs_avancadas['republicacao'][1] )
+            if data_rep_ok is False:
+                self.gerar_popup("Preenchimento inválido: Use: dd/mm/aaaa nos campos de data", "warning")
+                return
+
 
         # GRAVAÇÃO NO ARQUIVO DE CONFIGURAÇÕES (.yaml)
         CAMINHO_CONFIG = './src/config/configs.yaml'

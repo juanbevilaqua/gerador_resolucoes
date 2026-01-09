@@ -1,5 +1,8 @@
 timbre_res: MODELO papel timbrado FACET.docx
 ---
 vice_coordenador: false
-republicacao: false
+republicacao:
+- true
+- 10/03/2026
+- Correção
 pdf_autosave: true
