@@ -27,9 +27,9 @@ class TelaPrincipal(ctk.CTkFrame):
             "Convalidação de Suficiência": "ConvalidacaoSuficiencia", "Credenciamento de Docente": "CredenciamentoDocente",
             "Descredenciamento de Docente": "DescredenciamentoDocente",
             "Desligamento de Discente": "Desligamento", "Homologação de Ad Referendum": "HomologacaoAdReferendum",
-            "Inclusão de Coorientação": "InclusaoCoorientacao", "Licença Maternidade": "LicencaMaternidade",
+            "Inclusão de Coorientação": "InclusaoCoorientacao", "Licença Maternidade": "LicencaMaternidade", "Lista de Ofertas": "ListaDeOfertas",
             "Número de Vagas Para Processo Seletivo": "NumeroVagasPS", "Relatório de Professor Visitante": "RelatorioProfessorVisitante",
-            "Prorrogação de Qualificação": "ProrrogacaoQualificacao",
+            "Revogação de Resolução": "RevogacaoDeResolucao", "Prorrogação de Qualificação": "ProrrogacaoQualificacao",
             "Trancamento de Curso": "Trancamento", "Troca de Orientação": "TrocaOrientacao",
             "Troca de Projeto de Pesquisa": "TrocaProjetoPesq"
             }
@@ -442,7 +442,7 @@ class TelaPrincipal(ctk.CTkFrame):
             else:
                 self.criar_campo(elemento, tipo='entry_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
 
-        botao = ctk.CTkButton(self.frame_direito_inferior, text="+", width=50,
+        botao = ctk.CTkButton(frame, text="+", width=50,
                                               command=lambda: self.duplicar_elementos(elementos, botao,
                                                                                       frame, listbox))
         botao.pack(pady=10)
@@ -608,9 +608,14 @@ class TelaPrincipal(ctk.CTkFrame):
                                                 command=lambda: self.alternar_ativacao_dos_campos(True, republicacao_checkbox, [self.data_republicacao_entry, motivo_republicacao_dropdown], default_colors))
         republicacao_checkbox.grid(row=0, column=1, padx=10, sticky="w")
 
+        self.extraordinaria_var = ctk.BooleanVar(value=False)
+        extraordinaria_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Reunião Extraordinária?",
+                                                    variable=self.extraordinaria_var)
+        extraordinaria_checkbox.grid(row=0, column=2, padx=10, sticky="w")
+
         self.pdf_autosave_switch_var = ctk.BooleanVar(value=True)
         pdf_autosave_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Gerar Versão PDF", variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False)
-        pdf_autosave_switch.grid(row=0, column=2, padx=10, sticky="w")
+        pdf_autosave_switch.grid(row=0, column=3, padx=10, sticky="w")
 
     def estruturar_frame_dinamico(self,tipo, line, primeira_chamada):
         #self.tipo_var = self.tipos_resolucao_entry
@@ -828,8 +833,8 @@ class TelaPrincipal(ctk.CTkFrame):
 
         elif self.tipo_var.get() == "Homologação de Ad Referendum":
             self.frame_entry_button_container = ctk.CTkFrame(self.frame_dinamico)
-            self.frame_entry_button_container.pack(pady=10)
-            self.criar_campo("Resolução", tipo='entry_button', frame=self.frame_entry_button_container)
+            self.frame_entry_button_container.grid(row=line, column=0, pady=10)
+            self.criar_campo("Resolução (nº-Ano)", tipo='entry_button', frame=self.frame_entry_button_container)
 
         elif self.tipo_var.get() == "Inclusão de Coorientação":
             self.criar_campo("Nível do Discente", tipo='dropdown', opcoes=["Mestrado", "Doutorado"])
@@ -845,6 +850,43 @@ class TelaPrincipal(ctk.CTkFrame):
             self.criar_campo("Data Fim da Licença", tipo='entry_placeholder')
             self.criar_campo("Data Inicial de Defesa", tipo='entry_placeholder')
             self.criar_campo("Data Limite Para Defesa Ajustada", tipo='entry_placeholder')
+
+        elif self.tipo_var.get() == "Lista de Ofertas":
+            if primeira_chamada:
+                self.frame_superior = ctk.CTkFrame(self.frame_dinamico)  # cria um novo frame p/ o container
+                self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
+                self.criar_campo("ano-semestre", frame=self.frame_superior)
+
+            self.frame_entry_button_container = ctk.CTkFrame(self.frame_dinamico)  # cria um novo frame p/ o container
+            self.frame_entry_button_container.grid(row=line, column=0, padx=10, pady=10)  # , sticky="nsew"
+
+            self.frame_direito = ctk.CTkFrame(self.frame_dinamico)
+            self.frame_direito.grid(row=line, column=1, padx=10, pady=10)
+
+            self.criar_campo("Disciplina", tipo='entry_button_listbox', frame=self.frame_entry_button_container)
+
+            #self.frame_direito_superior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
+            #self.frame_direito_superior.grid(row=0, column=0, padx=10, pady=10)
+            #self.frame_direito_superior.pack(pady=10)
+            #self.criar_campo("Docente responsável", tipo='dropdown', flag_list=True, opcoes=["Mestrado", "Doutorado"], frame=self.frame_direito_superior)
+
+            # self.frame_direito_inferior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
+            self.frame_direito.tipo = "direito" # CASO COMENTE ESSA LINHA, ELE LIBERA ADD NOVOS PROFESSORES (APARENTMENTE ESTÁ OK)
+            # #self.frame_direito_inferior.grid(row=1, column=0, padx=10, pady=10)
+            # self.frame_direito_inferior.pack(pady=10, fill="x", anchor="w")
+
+            self.excluir_botoes(self.frame_dinamico, "direito")
+
+            elementos_frame_for_duplicate = []
+            frame_container_for_duplicate = ctk.CTkFrame(self.frame_direito)
+            frame_container_for_duplicate.pack(padx=20, pady=10)  #
+            self.criar_campo("Professor Responsável", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)#self.frame_direito_inferior
+            elementos_frame_for_duplicate.append("Professor Responsável")
+            #self.criar_campo("Professor", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
+            #elementos_frame_for_duplicate.append("Professor")
+            flag_listbox = True
+            button_add_professor = ctk.CTkButton(self.frame_direito, text="+", width=50, command=lambda: self.duplicar_elementos(elementos_frame_for_duplicate, button_add_professor, self.frame_direito, flag_listbox) )
+            button_add_professor.pack(pady=20)
 
         elif self.tipo_var.get() == "Número de Vagas Para Processo Seletivo":
             #self.criar_campo("Processo Seletivo")
@@ -879,6 +921,10 @@ class TelaPrincipal(ctk.CTkFrame):
             self.criar_campo("Data de Início da Renovação", tipo='entry_placeholder', frame=frame_tipo_relatorio)
             self.criar_campo("Data Final da Renovação", tipo='entry_placeholder', frame=frame_tipo_relatorio)
             self.criar_campo("Professor Supervisor", tipo='entry_listbox', frame=frame_tipo_relatorio)
+
+        elif self.tipo_var.get() == "Revogação de Resolução":
+            self.criar_campo("Nº. da Resolução")
+            self.criar_campo("Data da Resolução", tipo='entry_placeholder')
 
         elif self.tipo_var.get() == "Trancamento de Curso":
             self.criar_campo("Nível do Discente", tipo='dropdown', opcoes=["Mestrado", "Doutorado"])
@@ -1241,6 +1287,7 @@ class TelaPrincipal(ctk.CTkFrame):
         configs_avancadas = {
            "vice_coordenador" : self.vice_coordenador_var.get(),
             "republicacao" : [self.republicacao_var.get(), self.data_republicacao_entry.get(), self.motivo_republicacao_var.get()] if self.republicacao_var.get() else self.republicacao_var.get(),
+            "extraordinaria": self.extraordinaria_var.get(),
             "pdf_autosave": self.pdf_autosave_switch_var.get()
         }
 
@@ -1333,7 +1380,7 @@ class TelaPrincipal(ctk.CTkFrame):
 
         # modelos.tipo_resolução.geraModelo
         getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
-            numero_res, data_res, ad_referendum, data_reuniao, valores_dinamicos, configs_avancadas)
+            numero_res, data_res, ad_referendum, data_reuniao, valores_dinamicos)
 
     # def iniciar(self):
     #     self.janela.mainloop()

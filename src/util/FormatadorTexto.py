@@ -1,4 +1,5 @@
 from docx import Document
+from docx.shared import Pt
 
 def add_texto_negrito(paragraph, text, bold_word):
     # divide em antes, a palavra(trecho) e depois
@@ -27,3 +28,24 @@ def add_lista_nao_ordenada(doc, itens):
         p = doc.add_paragraph()
         p.add_run("     • ").bold = True
         p.add_run(item)
+
+def add_lista_ordenada(doc, itens):
+    nums = {
+        '1': 'I',
+        '2': 'II',
+        '3': 'III',
+        '4': 'IV',
+        '5': 'V',
+        '6': 'VI',
+        '7': 'VII',
+        '8': 'VIII',
+        '9': 'IX',
+        '10': 'X'
+    }
+
+    for i, item in enumerate(itens):
+        p = doc.add_paragraph()
+        p.add_run(f"     {nums[str(i+1)]}. ").bold = True
+        p.add_run(item)
+        p_format = p.paragraph_format
+        p_format.space_after = Pt(10)

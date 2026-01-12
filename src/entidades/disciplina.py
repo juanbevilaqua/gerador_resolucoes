@@ -52,8 +52,25 @@ class Disciplina:
 
         try:
             cursor.execute(query, id)
-            professor = cursor.fetchone()
-            return professor
+            disciplina = cursor.fetchone()
+            return disciplina
+        except sqlite3.Error as e:
+            print(f"Erro ao BUSCAR disciplina: {e}")
+            return None
+        finally:
+            conn.close()
+
+    @staticmethod
+    def get_by_name(name):
+        conn = connect()
+        cursor = conn.cursor()
+
+        query = 'SELECT * FROM Disciplinas WHERE nome = ?'
+
+        try:
+            cursor.execute(query, name)
+            disciplina = cursor.fetchone()
+            return disciplina
         except sqlite3.Error as e:
             print(f"Erro ao BUSCAR disciplina: {e}")
             return None

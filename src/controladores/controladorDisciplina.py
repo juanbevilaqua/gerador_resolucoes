@@ -36,6 +36,17 @@ class DisciplinaController:
         return disciplina, None
 
     @staticmethod
+    def buscar_por_nome(nome_disciplina: str):
+        """Retorna os dados de uma disciplina pelo Nome."""
+        if not isinstance(nome_disciplina, str):
+            return None, "Nome inválido."
+
+        disciplina = Disciplina.get_by_name((nome_disciplina,))
+        if not disciplina:
+            return None, "Disciplina não encontrada."
+        return disciplina, None
+
+    @staticmethod
     def cadastrar(nome: str, carga_horaria: str, creditos: str):
         """Cria um novo registro de disciplina."""
 

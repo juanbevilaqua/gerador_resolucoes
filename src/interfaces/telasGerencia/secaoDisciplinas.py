@@ -140,11 +140,12 @@ class SecaoDisciplinas(ctk.CTkFrame):
             return None
 
     def carregar_disciplinas(self):
-        self.resetar_disciplinas() # apaga a base de dados atual p/ liberar o banco p/ os dados dos csv
-
         disciplinas = [] #lista de listas que armazenará apenas os atributos que interessam p/ o BD
 
         caminho_csv = self.selecionar_csv()
+
+        if caminho_csv:
+            self.resetar_disciplinas()  # apaga a base de dados atual p/ liberar o banco p/ os dados dos csv
 
         with open(caminho_csv, "r", encoding="utf-8") as relatorio_csv:
             relatorio_disciplinas = csv.reader(relatorio_csv, delimiter=";")
