@@ -7,7 +7,7 @@ from src.util import Armazenador, ColetorDeDados, Assinatura, FormatadorTexto
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
-def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos, configs):
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     nome = dados_dinamicos["Nome do Professor"]
     data_inicio_relatorio = dados_dinamicos["Data de Início das Atividades"]
     data_fim_relatorio = dados_dinamicos["Data de Finalização das Atividades"]

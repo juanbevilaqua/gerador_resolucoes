@@ -7,7 +7,7 @@ from src.util import Armazenador, ColetorDeDados, Assinatura
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
-def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos, configs):
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     nivel_discente = dados_dinamicos["Nível do Discente"]
     nome = dados_dinamicos["Nome do Discente"]
     rga = dados_dinamicos["RGA"]
