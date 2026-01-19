@@ -17,6 +17,8 @@ class TelaPrincipal(ctk.CTkFrame):
         #self.janela.geometry("950x750")
         #self.janela.resizable(width=False, height=False)
 
+
+
         self.tipos_resolucao = {
             "Adiamento de Reunião": "AdiamentoReuniao", "Afastamento de Discente": "Afastamento",
             "Aprovação de Banca": "AprovacaoBanca", "Aproveitamento de Suficiência": "AproveitamentoSuficiencia",
@@ -691,8 +693,8 @@ class TelaPrincipal(ctk.CTkFrame):
             entry_n_reuniao = self.criar_campo("Nº da Reunião", tipo='entry_button', frame=self.frame_entry_button_container)
             n_reuniao = self.cont_entry_button+1
             entry_n_reuniao.insert(0, f"{n_reuniao}ª Ordinária")
-            entry_n_reuniao.configure(state="disabled")  # desabilita se marcado
-            entry_n_reuniao.configure(fg_color="#4F4F4F")
+            #entry_n_reuniao.configure(state="disabled")  # desabilita se marcado
+            #entry_n_reuniao.configure(fg_color="#4F4F4F")
             self.criar_campo("Data da Reunião", tipo='entry_placeholder', frame=self.frame_direito, flag_list=True)
 
 
