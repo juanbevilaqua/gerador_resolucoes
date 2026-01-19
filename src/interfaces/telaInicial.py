@@ -18,7 +18,7 @@ class TelaInicial(ctk.CTkFrame):
         # self.janela.grid_rowconfigure(0, weight=1)
         # self.janela.grid_rowconfigure(1, weight=1)
 
-        self.titulo_janela_label = ctk.CTkLabel(self, text="Seja bem-vindo ao Gerador de Resoluções do PPGCTA", font=('Segoe UI', 25))
+        self.titulo_janela_label = ctk.CTkLabel(self, text="Seja bem-vindo ao Gerador de Resoluções do PPGCTA (*Versão Antiga*)", font=('Segoe UI', 25))
         self.titulo_janela_label.grid(row=0, column=0, columnspan=2, pady=10)
 
         self.tela_principal_button = ctk.CTkButton(self, text="Criar Resoluções", height=60, font=('Segoe UI', 15), command=self.master.exibir_tela_principal)\
