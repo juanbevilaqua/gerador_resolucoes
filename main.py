@@ -9,13 +9,16 @@ from interfaces.telasGerencia import telaGerencia
 
 
 class App(ctk.CTk):
-    ctk.set_default_color_theme('themes/_TrojanBlue.json')
+    #ctk.set_default_color_theme('themes/_TrojanBlue.json')
     def __init__(self):
         super().__init__()
         self.title("Sistema Gerador de Resoluções")
-        self.geometry("950x750")
+        self.geometry("800x600")
         self.resizable(width=False, height=False)
 
+        # self.grid_rowconfigure(0, weight=1)
+        # self.grid_columnconfigure(0, weight=1)
+        # self.grid_columnconfigure(1, weight=1)
 
         self.tela_atual = None
         self.exibir_tela_inicial()
