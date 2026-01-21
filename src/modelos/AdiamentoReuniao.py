@@ -7,7 +7,7 @@ from src.util.RodapeRepublicacao import geraRodapeRepublicacao
 from src.util import Armazenador, ColetorDeDados, Assinatura
 import yaml
 
-def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos, configs):
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     n_reuniao = dados_dinamicos["Nº. da Reunião"]
     data_inicial = dados_dinamicos["Data Inicial"]

@@ -7,7 +7,7 @@ from src.util import Armazenador, ColetorDeDados, Assinatura, FormatadorTabela
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
-def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos, configs):
+def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     comissao = dados_dinamicos["Nome da Comissão"]
     membros = dados_dinamicos["Professor Membro"]
     cont_membros = len(membros)
