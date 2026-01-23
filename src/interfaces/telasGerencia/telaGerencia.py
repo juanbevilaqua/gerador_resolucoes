@@ -9,6 +9,8 @@ from interfaces.telasGerencia.secaoDisciplinas import SecaoDisciplinas
 class TelaGerencia(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
+        #self.master.geometry("1920x1080")
+        self.master.state("zoomed")
         self.dict_frames_professores = {} # dicionário que vincular o frame de um professor ao seu ID
 
         self.secao_atual = None
