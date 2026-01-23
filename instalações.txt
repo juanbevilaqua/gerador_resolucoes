@@ -20,3 +20,6 @@ google drive desktop(329MB): https://workspace.google.com/products/drive/#downlo
 pyyaml = pip install pyyaml
 
 PIL(para uso de imagens) = pip install pillow
+
+pywinstyles(p/ configurar opacidade): pip install pywinstyles
+

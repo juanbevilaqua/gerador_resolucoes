@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from PIL import Image, ImageTk
+import pywinstyles
+
 
 class TelaInicial(ctk.CTkFrame):
     def __init__(self, master):
@@ -46,16 +48,19 @@ class TelaInicial(ctk.CTkFrame):
 
         self.background = ctk.CTkImage(
             light_image=background,
-            dark_image=background,  # opcional, mas recomendado
-            size=(400, 600)  # tamanho desejado
+            dark_image=background,
+            size=(400, 600)
         )
 
         # Criação do Frame que comportará o conteúdo do frame direito
         self.background_label = ctk.CTkLabel(self.frame_direito, text='', image=self.background)
         self.background_label.grid(row=0, column=0, sticky='nsew')#.place(x=0, y=0, relwidth=1, relheight=1)#
+        #pywinstyles.set_opacity(self.background_label, color='#FFFBEC', value=0.8)
 
-        self.conteudo_frame = ctk.CTkFrame(self.background_label, fg_color='transparent')
+
+        self.conteudo_frame = ctk.CTkFrame(self.background_label, fg_color='#FFFBEC')
         self.conteudo_frame.grid(row=0, column=0)
+        pywinstyles.set_opacity(self.conteudo_frame, color='#FFFBEC', value=1)
 
         # self.conteudo_frame.grid_columnconfigure(0, weight=1)
         # self.conteudo_frame.grid_columnconfigure(1, weight=1)
@@ -64,32 +69,52 @@ class TelaInicial(ctk.CTkFrame):
         self.texto_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
         self.texto_frame.grid(row=0, column=0)
 
-        self.bem_vindo_label = ctk.CTkLabel(self.texto_frame, text="Seja bem-vindo ao", text_color='black', font=('Poppins', 22), anchor='w')
+        self.bem_vindo_label = ctk.CTkLabel(self.texto_frame, text="Bem-vindo ao", text_color='black', font=('Poppins', 22), anchor='w')
         self.bem_vindo_label.grid(row=0, column=0, sticky='w')#.pack(pady=10, side='left')
 
-        self.gerador_resolucoes_label = ctk.CTkLabel(self.texto_frame, text="Gerador de Resoluções do PPGCTA", text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
+        self.gerador_resolucoes_label = ctk.CTkLabel(self.texto_frame, text="Gerador de Resoluções", width=300, text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
         self.gerador_resolucoes_label.grid(row=1, column=0, sticky='w')#.pack(pady=5, side='left')
+
+        self.ppgcta_label = ctk.CTkLabel(self.texto_frame, text="do PPGCTA",
+                                                     text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
+        self.ppgcta_label.grid(row=2, column=0, sticky='w')  # .pack(pady=5, side='left')
 
 
         self.botoes_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
         self.botoes_frame.grid(row=1, column=0, pady=(50,0))
+        #pywinstyles.set_opacity(self.botoes_frame, color='transparent', value=1)
 
-        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", fg_color='#749619', border_color='black', border_width=1, width=200, height=80, font=('Manrope', 22), corner_radius=20)
+        criar_icon = Image.open('src/static/img/criar icon.png')
+        self.criar_icon = ctk.CTkImage(
+            light_image=criar_icon,
+            dark_image=criar_icon,
+            size=(30, 30)
+        )
+
+
+        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", image=self.criar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=1, width=200, height=80, font=('Manrope', 22), corner_radius=20)
         self.criar_button.grid(row=0, column=0, pady=10)
 
-        self.gerenciar_button = ctk.CTkButton(self.botoes_frame, text="Gerenciar", fg_color='#749619', border_color='black', border_width=1, width=200, height=80, font=('Manrope', 22), corner_radius=20)
+        gerenciar_icon = Image.open('src/static/img/gerencia icon.png')
+        self.gerenciar_icon = ctk.CTkImage(
+            light_image=gerenciar_icon,
+            dark_image=gerenciar_icon,
+            size=(30, 30)
+        )
+
+        self.gerenciar_button = ctk.CTkButton(self.botoes_frame, text="Gerenciar", image=self.gerenciar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=1, width=250, height=80, font=('Manrope', 22), corner_radius=20)
         self.gerenciar_button.grid(row=1, column=0)
 
         self.logo_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
-        self.logo_frame.grid(row=2, column=0, pady=(20, 0))
+        self.logo_frame.grid(row=2, column=0, pady=(60, 0), sticky='e')
 
         img_logo = Image.open('src/static/img/PPGCTA.png')
         # self.img_principal = ImageTk.PhotoImage(img)
 
         self.logo = ctk.CTkImage(
             light_image=img_logo,
-            dark_image=img_logo,  # opcional, mas recomendado
-            size=(110, 65)  # tamanho desejado
+            dark_image=img_logo,
+            size=(110, 65)
         )
 
         self.logo_label = ctk.CTkLabel(self.logo_frame, text='', image=self.logo, anchor='e')
