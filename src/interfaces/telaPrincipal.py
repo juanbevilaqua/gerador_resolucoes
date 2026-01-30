@@ -12,6 +12,7 @@ class TelaPrincipal(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
+        self.master.state("zoomed")
         #self.janela = ctk.CTk()
         #self.janela.title("Gerador de Resoluções")
         #self.janela.geometry("950x750")
@@ -54,27 +55,31 @@ class TelaPrincipal(ctk.CTkFrame):
         self.button_add = None # variavel para controle do entry_button(guarda a referencia do último botao criado para não haver repetição)
 
     def criar_widgets(self):
-        self.grid_columnconfigure(0, weight=1)  # .janela
+        # self.grid_columnconfigure(0, weight=1)  # .janela
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
+        self.grid_rowconfigure(1, weight=1)
 
         # =================
         # CABEÇALHO DA TELA PRINCIPAL
         # =================
-        self.cabecalho_frame = ctk.CTkFrame(self)
-        self.cabecalho_frame.grid_columnconfigure(0, weight=0)
-        self.cabecalho_frame.grid_columnconfigure(1, weight=1)
-        self.cabecalho_frame.grid_columnconfigure(2, weight=0)
-        self.cabecalho_frame.grid(row=0, column=0, sticky='ew')
+        self.barra_lateral_frame = ctk.CTkFrame(self)
+        # self.cabecalho_frame.grid_columnconfigure(0, weight=0)
+        # self.cabecalho_frame.grid_columnconfigure(1, weight=1)
+        # self.cabecalho_frame.grid_columnconfigure(2, weight=0)
+        #self.cabecalho_frame.grid(row=0, column=0, sticky='ew')
+        self.barra_lateral_frame.grid(row=0, column=0, sticky='nsw')
 
-        self.voltar_button = ctk.CTkButton(self.cabecalho_frame, text="⬅️", width=30, command=self.master.exibir_tela_inicial).grid(row=0, column=0, pady=10, padx=15)
-        self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="TELA PRINCIPAL - CRIAR RESOLUÇÕES").grid(row=0, column=1, pady=10, sticky='ew')
-        self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
-        self.placeholder.grid(row=0, column=2, padx=5)
+        self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", width=30, command=self.master.exibir_tela_inicial).grid(row=0, column=0, pady=10, padx=15)
+        #self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="TELA PRINCIPAL - CRIAR RESOLUÇÕES").grid(row=0, column=1, pady=10, sticky='ew')
+        # self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
+        # self.placeholder.grid(row=0, column=2, padx=5)
 
 
         # =================
         # FRAME FIXO
         # =================
-        self.frame_fixo = ctk.CTkFrame(self)  # .janela
+        self.frame_fixo = ctk.CTkFrame(self.barra_lateral_frame)  # .janela
         # self.frame_fixo.pack(pady=20)
         self.frame_fixo.grid(row=1, column=0, pady=20)
         self.frame_fixo.grid_columnconfigure(0, weight=1)
@@ -111,26 +116,33 @@ class TelaPrincipal(ctk.CTkFrame):
         # -----------------
         # Menu de Config. Avançadas
         # -----------------
-        self.config_avancadas_frame = ctk.CTkFrame(self.frame_fixo)
+        self.config_avancadas_frame = ctk.CTkFrame(self.barra_lateral_frame)
         self.config_avancadas_frame.grid_columnconfigure(0, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(1, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(2, weight=1)
 
         #self.frame_fixo.grid_columnconfigure(0, weight=1)
-        self.config_avancadas_button = ctk.CTkButton(self.frame_fixo, text="⚙️ Config. Avançadas ▶", fg_color="transparent", border_width=2, command=lambda: self.alternar_abertura_menu_config_avancadas())
-        self.config_avancadas_button.grid(row=4, column=0, columnspan=2, pady=10)
+        self.config_avancadas_button = ctk.CTkButton(self.barra_lateral_frame, text="⚙️ Config. Avançadas ▶", fg_color="transparent", border_width=2, command=lambda: self.alternar_abertura_menu_config_avancadas())
+        self.config_avancadas_button.grid(row=2, column=0, columnspan=2, pady=10)
 
         self.estruturar_menu_config_avancadas()
 
-        self.guardar_dados_fixos_button = ctk.CTkButton(self.frame_fixo, text="✅ Guardar", command=lambda: self.alternar_abertura_frame_fixo())
-        self.guardar_dados_fixos_button.grid(row=6, column=0, columnspan=2, pady=10)
+        # self.guardar_dados_fixos_button = ctk.CTkButton(self.frame_fixo, text="✅ Guardar", command=lambda: self.alternar_abertura_frame_fixo())
+        # self.guardar_dados_fixos_button.grid(row=6, column=0, columnspan=2, pady=10)
+
+        self.area_trabalho_frame = ctk.CTkFrame(self, fg_color='black')
+        self.area_trabalho_frame.grid(row=0, column=1, sticky='nsew')
+
+        # permite expansão horizontal
+        self.area_trabalho_frame.grid_columnconfigure(0, weight=1)
+        self.area_trabalho_frame.grid_columnconfigure(1, weight=0)
 
         # =================
         # BARRA DE PESQUISA(TIPOS DE RESOLUÇÃO)
         # =================
-        self.frame_pesquisa_resolucao = ctk.CTkFrame(self)#.janela
+        self.frame_pesquisa_resolucao = ctk.CTkFrame(self.area_trabalho_frame)#.janela
         #self.frame_pesquisa_resolucao.pack(pady=10)
-        self.frame_pesquisa_resolucao.grid(row=2, column=0, pady=10)
+        self.frame_pesquisa_resolucao.grid(row=0, column=0, pady=10, padx=10, sticky='e')
         self.frame_pesquisa_resolucao.grid_columnconfigure(0, weight=1)
         self.frame_pesquisa_resolucao.grid_columnconfigure(1, weight=1)
         ctk.CTkLabel(self.frame_pesquisa_resolucao, text="Tipo de Resolução").grid(row=0, column=0, columnspan=2)
@@ -169,9 +181,9 @@ class TelaPrincipal(ctk.CTkFrame):
         # =================
         # FRAME DINÂMICO
         # =================
-        self.frame_dinamico = ctk.CTkScrollableFrame(self, height=400)#.janela
+        self.frame_dinamico = ctk.CTkScrollableFrame(self.area_trabalho_frame, height=600)#.janela
         #self.frame_dinamico.pack(padx=20, pady=20, fill="x", expand=True)#, fill="both", expand=True
-        self.frame_dinamico.grid(row=3, column=0, pady=20, sticky="ew")
+        self.frame_dinamico.grid(row=1, column=0, pady=20, sticky="ew")
         self.frame_dinamico.grid_rowconfigure(0, weight=0)  # frame central
         self.frame_dinamico.grid_rowconfigure(1, weight=1)  # linha dos frames esquerdo/direito
         self.frame_dinamico.grid_columnconfigure(0, weight=1)  # frame esquerdo
@@ -183,9 +195,9 @@ class TelaPrincipal(ctk.CTkFrame):
         # BOTÃO GERAR RESOUÇÃO
         # =================
         # Desabilitado inicialmente
-        self.botao_gerar = ctk.CTkButton(self, text="Gerar Resolução", command=self.gerar_resolucao)#.janela
+        self.botao_gerar = ctk.CTkButton(self.area_trabalho_frame, text="Gerar Resolução", command=self.gerar_resolucao)#.janela
         #self.botao_gerar.pack(pady=10)
-        self.botao_gerar.grid(row=4, column=0)
+        self.botao_gerar.grid(row=2, column=0)
         self.botao_gerar.configure(state="disabled")  # ativa só após escolher tipo
 
     def focar_frame_dinamico(self, event=None):
@@ -549,7 +561,7 @@ class TelaPrincipal(ctk.CTkFrame):
             self.config_avancadas_button.configure(text="⚙️ Config. Avançadas ▶")
         else:
         # Abrir Menu
-            self.config_avancadas_frame.grid(row=5, column=0, pady=10, columnspan=2, sticky="")#,
+            self.config_avancadas_frame.grid(row=3, column=0, pady=10, columnspan=2, sticky="")#,
             self.config_avancadas_button.configure(text="⚙️ Config. Avançadas ▼")
 
         self.menu_config_avancadas_opened = not self.menu_config_avancadas_opened

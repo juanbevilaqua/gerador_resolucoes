@@ -93,7 +93,8 @@ class TelaInicial(ctk.CTkFrame):
             size=(30, 30)
         )
 
-        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", image=self.criar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, font=('Manrope', 22), corner_radius=15)
+        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", image=self.criar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, font=('Manrope', 22), corner_radius=15,
+                                          command=self.master.exibir_tela_principal)
         self.criar_button.grid(row=0, column=0, pady=10)
 
         gerenciar_icon = Image.open('src/static/img/gerencia icon.png')
@@ -108,7 +109,7 @@ class TelaInicial(ctk.CTkFrame):
         self.gerenciar_button.grid(row=1, column=0)
 
         self.logo_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
-        self.logo_frame.grid(row=2, column=0, pady=(60, 0), sticky='e')
+        self.logo_frame.grid(row=2, column=0, pady=(80, 0), sticky='e')
 
         img_logo = Image.open('src/static/img/PPGCTA.png')
         # self.img_principal = ImageTk.PhotoImage(img)
