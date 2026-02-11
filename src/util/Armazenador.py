@@ -3,8 +3,8 @@ from util import ManipuladorDeArquivos
 import os
 import yaml
 
-PLACE = 'LOCAL'
-#PLACE = 'DRIVE_DESKTOP'
+#PLACE = 'LOCAL'
+PLACE = 'DRIVE_DESKTOP'
 
 def salvar(diretorio, document, titulo):
     if PLACE == 'LOCAL':
