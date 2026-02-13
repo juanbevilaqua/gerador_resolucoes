@@ -63,7 +63,7 @@ class TelaPrincipal(ctk.CTkFrame):
         # =================
         # CABEÇALHO DA TELA PRINCIPAL
         # =================
-        self.barra_lateral_frame = ctk.CTkFrame(self)
+        self.barra_lateral_frame = ctk.CTkFrame(self, fg_color='#749619')
         # self.cabecalho_frame.grid_columnconfigure(0, weight=0)
         # self.cabecalho_frame.grid_columnconfigure(1, weight=1)
         # self.cabecalho_frame.grid_columnconfigure(2, weight=0)
@@ -79,22 +79,22 @@ class TelaPrincipal(ctk.CTkFrame):
         # =================
         # FRAME FIXO
         # =================
-        self.frame_fixo = ctk.CTkFrame(self.barra_lateral_frame)  # .janela
+        self.frame_fixo = ctk.CTkFrame(self.barra_lateral_frame, fg_color="#4F6416")  # .janela
         # self.frame_fixo.pack(pady=20)
         self.frame_fixo.grid(row=1, column=0, padx=40, pady=20)
         self.frame_fixo.grid_columnconfigure(0, weight=1)
         self.frame_fixo.grid_columnconfigure(1, weight=1)
 
-        ctk.CTkLabel(self.frame_fixo, text="Nº da Resolução").grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        ctk.CTkLabel(self.frame_fixo, text="Nº da Resolução", text_color='white').grid(row=0, column=0, padx=10, pady=10, sticky="e")
         self.numero_res_entry = ctk.CTkEntry(self.frame_fixo, width=200)
         self.numero_res_entry.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
-        ctk.CTkLabel(self.frame_fixo, text="Data da Resolução").grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        ctk.CTkLabel(self.frame_fixo, text="Data da Resolução", text_color='white').grid(row=1, column=0, padx=10, pady=10, sticky="e")
         self.data_res_entry = ctk.CTkEntry(self.frame_fixo, width=200, placeholder_text="dd/mm/aaaa")
         self.data_res_entry.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
         default_colors_data_reuniao = {}
-        self.data_reuniao_label = ctk.CTkLabel(self.frame_fixo, text="Data da Reunião")
+        self.data_reuniao_label = ctk.CTkLabel(self.frame_fixo, text="Data da Reunião", text_color='white')
         self.data_reuniao_label.grid(row=2, column=0, padx=10, pady=10, sticky="e")
         default_colors_data_reuniao["label"] = self.data_reuniao_label.cget("text_color")#armazena a cor padrão do label
         #default_colors_data_reuniao.append(default_color)
@@ -108,6 +108,7 @@ class TelaPrincipal(ctk.CTkFrame):
         self.ad_referendum_checkbox = ctk.CTkCheckBox(
             self.frame_fixo,
             text="Ad Referendum",
+            text_color='white',
             variable=self.ad_referendum_var,
             command = lambda: self.alternar_ativacao_dos_campos(False, self.ad_referendum_checkbox, [self.data_reuniao_label, self.data_reuniao_entry], default_colors_data_reuniao)
         )
@@ -130,7 +131,7 @@ class TelaPrincipal(ctk.CTkFrame):
         # self.guardar_dados_fixos_button = ctk.CTkButton(self.frame_fixo, text="✅ Guardar", command=lambda: self.alternar_abertura_frame_fixo())
         # self.guardar_dados_fixos_button.grid(row=6, column=0, columnspan=2, pady=10)
 
-        self.area_trabalho_frame = ctk.CTkFrame(self, fg_color='black')
+        self.area_trabalho_frame = ctk.CTkFrame(self, fg_color='#FFFEEF')
         self.area_trabalho_frame.grid(row=0, column=1, sticky='nsew')
 
         # permite expansão horizontal
@@ -146,7 +147,7 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_pesquisa_resolucao.grid_columnconfigure(0, weight=1)
         self.frame_pesquisa_resolucao.grid_columnconfigure(1, weight=1)
 
-        self.nova_res_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text='+', width=50, height=50, corner_radius=60, font=("Segoe UI", 25),
+        self.nova_res_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text='+', fg_color='#C7D300', width=50, height=50, corner_radius=60, font=("Segoe UI", 25),
                                              command=lambda: self.gera_barra_pesq_resolucoes())
         self.nova_res_button.grid(row=0, column=0, padx=5, pady=5)
 
@@ -171,7 +172,7 @@ class TelaPrincipal(ctk.CTkFrame):
         # BOTÃO GERAR RESOUÇÃO
         # =================
         # Desabilitado inicialmente
-        self.botao_gerar = ctk.CTkButton(self.area_trabalho_frame, text="Gerar Resolução", width=150, height=50, command=self.gerar_resolucao)#.janela
+        self.botao_gerar = ctk.CTkButton(self.area_trabalho_frame, text="Gerar Resolução", fg_color="#C7D300", width=150, height=50, command=self.gerar_resolucao)#.janela
         #self.botao_gerar.pack(pady=10)
         self.botao_gerar.grid(row=2, column=0, pady=10)
         self.botao_gerar.configure(state="disabled")  # ativa só após escolher tipo
@@ -238,7 +239,7 @@ class TelaPrincipal(ctk.CTkFrame):
                                                   placeholder_text="Selecione o tipo de resolução")
         self.tipos_resolucao_entry.grid(row=1, column=0, pady=5)
 
-        self.carregar_modelo_resolucao_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text="Carregar", height=50,
+        self.carregar_modelo_resolucao_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text="Carregar", fg_color="#C7D300", height=50,
                                                               width=70, command=self.check_tipo_res)
         self.carregar_modelo_resolucao_button.grid(row=1, column=1, padx=(0, 5), pady=5)
 
@@ -708,15 +709,15 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("Língua", tipo = 'dropdown', opcoes = ["Inglês", "Espanhol"], frame=self.frame_superior)#, linha=0
 
-            self.frame_inferior = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
-            self.frame_inferior.grid(row=line, column=0, padx=10, pady=10, columnspan=2)  # , sticky="nsew"
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
+            self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)  # , sticky="nsew"
 
-            self.frame_entry_button_container = ctk.CTkFrame(self.frame_inferior)#cria um novo frame p/ o container
+            self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)#cria um novo frame p/ o container
             #self.frame_entry_button_container.pack(side="left", padx=10, pady=10)#, fill="y"
             self.frame_entry_button_container.grid(row=0, column=0, padx=10, pady=10)#, sticky="nsew"
 
             # Frame da direita (campo de língua)
-            self.frame_direito = ctk.CTkFrame(self.frame_inferior)
+            self.frame_direito = ctk.CTkFrame(self.container_frame)
             #self.frame_lingua.pack(side="left", padx=10, pady=10)#, fill="y"
             self.frame_direito.grid(row=0, column=1, padx=10, pady=10)#, sticky="nsew")#row=line, column=1, padx=(0, 10), pady=10
             self.criar_campo("Nome do Discente", tipo='entry_button', frame=self.frame_entry_button_container)
@@ -729,7 +730,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("Ano Vigente", frame=self.frame_superior)
 
-            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)  # cria um novo frame p/ o container
@@ -767,7 +768,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("ano-semestre", frame=self.frame_superior)
 
-            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)  # cria um novo frame p/ o container
@@ -818,7 +819,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("Nome da Comissão", frame=self.frame_superior)
 
-            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)  # cria um novo frame p/ o container
@@ -868,7 +869,7 @@ class TelaPrincipal(ctk.CTkFrame):
             self.criar_campo(f"Outro", frame=frame_motivo)
 
         elif self.tipo_var.get() == "Desligamento de Discente":
-            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)
@@ -915,7 +916,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("ano-semestre", frame=self.frame_superior)
 
-            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color=color_frames_flag_list)
+            self.container_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent', border_color='#4F6416', border_width=2)
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)  # cria um novo frame p/ o container
@@ -1026,7 +1027,7 @@ class TelaPrincipal(ctk.CTkFrame):
             #
             # self.div.grid(row=line_div, column=0, columnspan=2, sticky="ew")
 
-            self.button_add = ctk.CTkButton(self.frame_dinamico, text="➕", width=50, height=50, corner_radius=50, fg_color=("#000000", "#1E90FF"),
+            self.button_add = ctk.CTkButton(self.frame_dinamico, text="➕", fg_color="#4F6416", width=50, height=50, corner_radius=50,
                                             command = lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), line_button, False))
             self.button_add.grid(row=line_button, column=1, pady=15, padx=25, sticky="e")
             self.cont_entry_button += 1
@@ -1097,7 +1098,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.button_add.destroy()# destrói a última referência de botão + criado
                 self.button_add = None
 
-            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", width=40, command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
+            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", width=40, fg_color="#4F6416",  command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
             #self.button_add.pack(pady=15)#side="left"
             button_add_name = self.button_add.winfo_name()
             print("Botão add: ", button_add_name)
@@ -1189,7 +1190,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.button_add.destroy()# destrói a última referência de botão + criado
                 self.button_add = None
 
-            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", width=40, command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
+            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", fg_color="#4F6416", width=40, command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
             #self.button_add.pack(pady=15)#side="left"
             button_add_name = self.button_add.winfo_name()
             print("Botão add: ", button_add_name)

@@ -9,7 +9,7 @@ from interfaces.telasGerencia import telaGerencia
 
 
 class App(ctk.CTk):
-    #ctk.set_default_color_theme('themes/_TrojanBlue.json')
+    ctk.set_default_color_theme('themes/Blue.json')
     def __init__(self):
         super().__init__()
         self.title("Sistema Gerador de Resoluções")
