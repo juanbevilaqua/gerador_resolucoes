@@ -8,6 +8,11 @@ import yaml
 from src.controladores import controladorProfessor, controladorDisciplina
 from src.util import Data
 
+# Verde Claro: #749619
+# Verde escuro: #4F6416
+# Amarelo: #C7D300
+# Off White: #FFFEEF
+
 class TelaPrincipal(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -70,7 +75,7 @@ class TelaPrincipal(ctk.CTkFrame):
         #self.cabecalho_frame.grid(row=0, column=0, sticky='ew')
         self.barra_lateral_frame.grid(row=0, column=0, sticky='nsw')
 
-        self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", width=30, command=self.master.exibir_tela_inicial).grid(row=0, column=0, pady=10, padx=15, sticky='w')
+        self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", width=30, command=self.master.exibir_tela_inicial, font=("Segoe UI", 20), border_color="#4F6416").grid(row=0, column=0, pady=10, padx=15, sticky='w')
         #self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="TELA PRINCIPAL - CRIAR RESOLUÇÕES").grid(row=0, column=1, pady=10, sticky='ew')
         # self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
         # self.placeholder.grid(row=0, column=2, padx=5)
@@ -117,13 +122,13 @@ class TelaPrincipal(ctk.CTkFrame):
         # -----------------
         # Menu de Config. Avançadas
         # -----------------
-        self.config_avancadas_frame = ctk.CTkFrame(self.barra_lateral_frame)#, width=100)
+        self.config_avancadas_frame = ctk.CTkFrame(self.barra_lateral_frame, border_width=2, border_color='black', fg_color='#4F6416')#, width=100)
         self.config_avancadas_frame.grid_columnconfigure(0, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(1, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(2, weight=1)
 
         #self.frame_fixo.grid_columnconfigure(0, weight=1)
-        self.config_avancadas_button = ctk.CTkButton(self.barra_lateral_frame, text="⚙️ Config. Avançadas ▶", fg_color="transparent", border_width=2, command=lambda: self.alternar_abertura_menu_config_avancadas())
+        self.config_avancadas_button = ctk.CTkButton(self.barra_lateral_frame, text="⚙️ Config. Avançadas ▶", fg_color="transparent", border_width=2, border_color = "black", command=lambda: self.alternar_abertura_menu_config_avancadas())
         self.config_avancadas_button.grid(row=2, column=0, columnspan=2, pady=10)
 
         self.estruturar_menu_config_avancadas()
@@ -147,7 +152,7 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_pesquisa_resolucao.grid_columnconfigure(0, weight=1)
         self.frame_pesquisa_resolucao.grid_columnconfigure(1, weight=1)
 
-        self.nova_res_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text='+', fg_color='#C7D300', width=50, height=50, corner_radius=60, font=("Segoe UI", 25),
+        self.nova_res_button = ctk.CTkButton(self.frame_pesquisa_resolucao, text='➕', fg_color='#C7D300', width=50, height=50, corner_radius=60, font=("Segoe UI", 15),
                                              command=lambda: self.gera_barra_pesq_resolucoes())
         self.nova_res_button.grid(row=0, column=0, padx=5, pady=5)
 
@@ -167,6 +172,12 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_dinamico.grid_columnconfigure(1, weight=1)  # frame direito
 
         self.frame_dinamico.bind("<Button-1>", self.focar_frame_dinamico)
+
+        self.descricao_frame = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent')
+        self.descricao_frame.grid(row=0, column=0, columnspan=2, pady=200)
+        self.titulo_descricao_label = ctk.CTkLabel(self.descricao_frame, text="Vamos Começar a Criação", font=("Manrope", 35, "bold"), text_color="#818181").grid(row=0, column=0)
+        self.subtitulo_descricao_label = ctk.CTkLabel(self.descricao_frame, text="Clique no '+' e selecione o modelo de resolução que será gerado", font=("Manrope", 15), text_color="#818181").grid(row=1, column=0, pady=5)
+
 
         # =================
         # BOTÃO GERAR RESOUÇÃO
@@ -627,7 +638,7 @@ class TelaPrincipal(ctk.CTkFrame):
 
     def estruturar_menu_config_avancadas(self):
         self.vice_coordenador_var = ctk.BooleanVar(value=False)
-        vice_coordenador_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Vice-Coordenador?", variable=self.vice_coordenador_var)
+        vice_coordenador_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Vice-Coordenador?", text_color="white", variable=self.vice_coordenador_var)
         vice_coordenador_checkbox.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
         default_colors = {}
@@ -636,23 +647,23 @@ class TelaPrincipal(ctk.CTkFrame):
         default_colors["entry"] = self.data_republicacao_entry.cget("fg_color")
         self.data_republicacao_entry.grid(row=1, column=1, padx=(0, 5), pady=10)#, columnspan=1
         self.motivo_republicacao_var = ctk.StringVar(value="Selecione")
-        motivo_republicacao_dropdown = ctk.CTkOptionMenu(self.config_avancadas_frame, values=['Correção', 'Complementação'], variable=self.motivo_republicacao_var, width=120)
+        motivo_republicacao_dropdown = ctk.CTkOptionMenu(self.config_avancadas_frame, fg_color="white", button_color="#C7D300", values=['Correção', 'Complementação'], variable=self.motivo_republicacao_var, width=120)
         motivo_republicacao_dropdown.configure(state="disabled")
         default_colors["dropdown"] = motivo_republicacao_dropdown.cget("fg_color")
         motivo_republicacao_dropdown.grid(row=1, column=2, padx=(0, 5), pady=10, sticky='w')
         self.republicacao_var = ctk.BooleanVar(value=False)
-        republicacao_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Republicação?",
+        republicacao_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Republicação?", text_color="white",
                                                 variable=self.republicacao_var,
                                                 command=lambda: self.alternar_ativacao_dos_campos(True, republicacao_checkbox, [self.data_republicacao_entry, motivo_republicacao_dropdown], default_colors))
         republicacao_checkbox.grid(row=1, column=0, padx=(10, 0), pady=10, sticky="w")
 
         self.extraordinaria_var = ctk.BooleanVar(value=False)
-        extraordinaria_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Reunião Extraordinária?",
+        extraordinaria_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Reunião Extraordinária?", text_color="white",
                                                     variable=self.extraordinaria_var)
         extraordinaria_checkbox.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
         self.pdf_autosave_switch_var = ctk.BooleanVar(value=True)
-        pdf_autosave_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Gerar Versão PDF", variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False)
+        pdf_autosave_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Gerar Versão PDF", text_color="white", variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False)
         pdf_autosave_switch.grid(row=3, column=0, padx=10, pady=10, sticky="w")
 
     def estruturar_frame_dinamico(self,tipo, line, primeira_chamada):
@@ -1027,7 +1038,7 @@ class TelaPrincipal(ctk.CTkFrame):
             #
             # self.div.grid(row=line_div, column=0, columnspan=2, sticky="ew")
 
-            self.button_add = ctk.CTkButton(self.frame_dinamico, text="➕", fg_color="#4F6416", width=50, height=50, corner_radius=50,
+            self.button_add = ctk.CTkButton(self.frame_dinamico, text="➕", fg_color="#4F6416", text_color="white", hover_color= "#749619", width=50, height=50, corner_radius=50,
                                             command = lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), line_button, False))
             self.button_add.grid(row=line_button, column=1, pady=15, padx=25, sticky="e")
             self.cont_entry_button += 1
@@ -1098,7 +1109,7 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.button_add.destroy()# destrói a última referência de botão + criado
                 self.button_add = None
 
-            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", width=40, fg_color="#4F6416",  command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
+            self.button_add = ctk.CTkButton(frame_entry_button, text="➕", text_color="white", width=40, fg_color="#4F6416",  command=lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), self.cont_entry_button + 1, False))
             #self.button_add.pack(pady=15)#side="left"
             button_add_name = self.button_add.winfo_name()
             print("Botão add: ", button_add_name)
