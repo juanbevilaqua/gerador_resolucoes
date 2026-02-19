@@ -43,7 +43,7 @@ class TelaGerencia(ctk.CTkFrame):
         # =================
         # MENU LATERAL DE CONFIGURAÇÕES
         # =================
-        self.menu_config_frame = ctk.CTkFrame(self)
+        self.menu_config_frame = ctk.CTkFrame(self, fg_color="#4F6416")
         self.menu_config_frame.grid(row=1, column=0, sticky='nsw')
 
         self.op_professores_button = ctk.CTkButton(self.menu_config_frame, text="Professores", width=60, command=lambda: self.alterar_secao('professores'))
@@ -57,7 +57,10 @@ class TelaGerencia(ctk.CTkFrame):
         # =================
         # FRAME DINAMICO
         # =================
-        self.frame_dinamico = ctk.CTkScrollableFrame(self, fg_color="black")
+        self.frame_dinamico = ctk.CTkScrollableFrame(self)
+        self.frame_dinamico.grid_columnconfigure(0, weight=1)
+        self.frame_dinamico.grid_rowconfigure(0, weight=1)
+
         self.frame_dinamico.grid(row=1, column=1, sticky='nsew')
 
         self.alterar_secao('professores') # a Tela de gerência exibe por padrão a secao de professores

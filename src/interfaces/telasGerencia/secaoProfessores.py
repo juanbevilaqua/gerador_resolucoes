@@ -7,13 +7,15 @@ class SecaoProfessores(ctk.CTkFrame):
     def __init__(self, master, gerenciador):
         super().__init__(master)
         self.gerenciador = gerenciador
+        # self.grid_columnconfigure(0, weight=1)
+        # self.grid_rowconfigure(0, weight=1)
 
         self.criar_widgets_professores()
 
     def criar_widgets_professores(self):
-        self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
+        self.grid_rowconfigure(1, weight=0)
 
         # =================
         # FRAME DINAMICO
@@ -21,11 +23,14 @@ class SecaoProfessores(ctk.CTkFrame):
         # self.frame_dinamico = ctk.CTkScrollableFrame(self, fg_color="black")
         # self.frame_dinamico.grid(row=1, column=1, sticky='nsew')
 
-        self.cadastrar_professor_button = ctk.CTkButton(self, text="Adicionar Professor",
-                                                        command=lambda: self.spam_top_level('cadastrar'))
-        self.cadastrar_professor_button.grid(row=0, column=0, pady=10, sticky='e')
+        self.cadastrar_professor_button = ctk.CTkButton(self, text="➕ Adicionar Professor", text_color="white",
+                                                        command=lambda: self.spam_top_level('cadastrar'), anchor='e')
+        self.cadastrar_professor_button.grid(row=0, column=0, padx=(0, 5), pady=10, sticky='e')
 
         self.professores_cadastrados_frame = ctk.CTkFrame(self)
+        self.professores_cadastrados_frame.grid_columnconfigure(0, weight=1)
+        #self.professores_cadastrados_frame.grid_rowconfigure(0, weight=0)
+        #self.professores_cadastrados_frame.grid_rowconfigure(1, weight=1)
         self.professores_cadastrados_frame.grid(row=1, column=0, sticky='ew', pady=20)
         self.listar_professores_cadastrados()
 
@@ -219,56 +224,246 @@ class SecaoProfessores(ctk.CTkFrame):
 
         professores = ProfessorController.listar_todos()[0]
 
-        self.headers_professores_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
-        self.headers_professores_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
-        self.headers_professores_frame.grid_columnconfigure(0, minsize=50)  # ID
-        self.headers_professores_frame.grid_columnconfigure(1, minsize=200)  # Nome
-        self.headers_professores_frame.grid_columnconfigure(2, minsize=200)  # Área
-        self.headers_professores_frame.grid_columnconfigure(3, minsize=250)
+        # Limpa o conteúdo anterior (caso esteja recarregando)
+        for widget in self.professores_cadastrados_frame.winfo_children():
+            widget.destroy()
+
+        # =========================
+        # CONFIGURAÇÃO DAS COLUNAS (UMA ÚNICA VEZ)
+        # =========================
+        self.professores_cadastrados_frame.grid_columnconfigure(0, minsize=60)  # ID
+        self.professores_cadastrados_frame.grid_columnconfigure(1, weight=2)  # Nome
+        self.professores_cadastrados_frame.grid_columnconfigure(2, weight=2)  # Área
+        self.professores_cadastrados_frame.grid_columnconfigure(3, weight=2)  # Linha
+        self.professores_cadastrados_frame.grid_columnconfigure(4, minsize=120)  # Operações
 
         headers = ["ID", "Nome", "Área de Concentração", "Linha de Pesquisa", "Operações"]
 
-        tam_cols = [50, 150, 200, 250, 100]
-        qtde_headers = len(headers)
+        # =========================
+        # HEADER (linha 0)
+        # =========================
+        for col, header in enumerate(headers):
+            ctk.CTkLabel(
+                self.professores_cadastrados_frame,
+                text=header,
+                text_color="white",
+                font=("Arial", 14, "bold"),
+                fg_color="#4F6416"
+                #anchor="w"
+            ).grid(row=0, column=col, padx=5, pady=8, sticky="ew")
 
-        # CONSTRÓI CABEÇALHO
-        for i, header in enumerate(headers):
-            ctk.CTkLabel(self.headers_professores_frame, text=header, font=("Arial", 14, "bold"),
-                         width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+        # =========================
+        # REGISTROS
+        # =========================
+        for row_index, professor in enumerate(professores, start=1):
+            cor_fundo = ["transparent", "#E6E6E6"]
 
-        # CONSTRÓI REGISTROS
-        # Loop p/ cada professor
-        for index, professor in enumerate(professores):
-            id_professor = professor[0]
-            nome_frame = f"frame_professor_{id_professor}"
+            # Dados do professor
+            for col_index, atr in enumerate(professor):
+                atr = self.gerenciador.encurta_texto(atr, 35)
 
-            self.professor_cadastrado_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
-            # print("Nome Frame: ", nome)
-            self.professor_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+                ctk.CTkLabel(
+                    self.professores_cadastrados_frame,
+                    text=atr,
+                    fg_color=cor_fundo[row_index % 2]
+                    #anchor="center"
+                ).grid(row=row_index, column=col_index, padx=5, pady=5, sticky="ew")
 
-            self.professor_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
-            self.professor_cadastrado_frame.grid_columnconfigure(1, minsize=200)  # Nome
-            self.professor_cadastrado_frame.grid_columnconfigure(2, minsize=200)  # Área
-            self.professor_cadastrado_frame.grid_columnconfigure(3, minsize=250)  # Linha
-            self.professor_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
+            # =========================
+            # BOTÕES DE OPERAÇÃO
+            # =========================
+            operacoes_frame = ctk.CTkFrame(
+                self.professores_cadastrados_frame,
+                fg_color=cor_fundo[row_index % 2]
+            )
 
-            # Loop p/ cada atributo
-            for i, atr in enumerate(professor):
-                atr = self.gerenciador.encurta_texto(atr, 25)
-                ctk.CTkLabel(self.professor_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
-                                                                                                padx=5)
+            operacoes_frame.grid(row=row_index, column=4, sticky="e", padx=(0, 5))
 
-            self.operacoes_frame = ctk.CTkFrame(self.professor_cadastrado_frame, fg_color='transparent')
-            self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
+            update_button = ctk.CTkButton(
+                operacoes_frame,
+                fg_color="orange",
+                hover_color="dark orange",
+                text='📝',
+                width=30,
+                command=partial(
+                    self.spam_top_level,
+                    "editar",
+                    {
+                        'id': professor[0],
+                        'nome': professor[1],
+                        'area': professor[2],
+                        'linha': professor[3]
+                    }
+                )
+            )
+            update_button.grid(row=0, column=0, padx=5)
 
-            self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
-                                               command=partial(self.spam_top_level, "editar",
-                                                               {'id': professor[0], 'nome': professor[1],
-                                                                'area': professor[2], 'linha': professor[3]}))
-            self.update_button.grid(row=0, column=0, padx=5)
-            self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
-                                               command=partial(self.spam_top_level, "excluir", {'id': professor[
-                                                   0]}))  # partial(self.excluir_professor, professor[0]))
-            # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
+            delete_button = ctk.CTkButton(
+                operacoes_frame,
+                fg_color="red",
+                hover_color="dark red",
+                text='❌',
+                width=30,
+                command=partial(
+                    self.spam_top_level,
+                    "excluir",
+                    {'id': professor[0]}
+                )
+            )
+            delete_button.grid(row=0, column=1, padx=5)
 
-            self.delete_button.grid(row=0, column=1, padx=5)
+    #def listar_professores_cadastrados(self):
+
+        # professores = ProfessorController.listar_todos()[0]
+        #
+        # self.headers_professores_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
+        # #self.headers_professores_frame.grid_columnconfigure(0, weight=1)
+        # self.headers_professores_frame.grid(row=0, column=0, sticky="ew")#, columnspan=1)
+        # self.headers_professores_frame.grid_columnconfigure(0, minsize=50)  # ID
+        # self.headers_professores_frame.grid_columnconfigure(1, minsize=200, weight=1)  # Nome
+        # self.headers_professores_frame.grid_columnconfigure(2, minsize=200, weight=1)  # Área
+        # self.headers_professores_frame.grid_columnconfigure(3, minsize=250, weight=1)
+        #
+        # headers = ["ID", "Nome", "Área de Concentração", "Linha de Pesquisa", "Operações"]
+        #
+        # tam_cols = [50, 150, 200, 250, 100]
+        # qtde_headers = len(headers)
+        #
+        # # CONSTRÓI CABEÇALHO
+        # for i, header in enumerate(headers):
+        #     ctk.CTkLabel(self.headers_professores_frame, text=header, font=("Arial", 14, "bold"),
+        #                  width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+        #
+        # # CONSTRÓI REGISTROS
+        # # Loop p/ cada professor
+        # for index, professor in enumerate(professores):
+        #     id_professor = professor[0]
+        #     nome_frame = f"frame_professor_{id_professor}"
+        #
+        #     self.professor_cadastrado_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
+        #     # print("Nome Frame: ", nome)
+        #     self.professor_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+        #
+        #     self.professor_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
+        #     self.professor_cadastrado_frame.grid_columnconfigure(1, minsize=200, weight=1)  # Nome
+        #     self.professor_cadastrado_frame.grid_columnconfigure(2, minsize=200, weight=1)  # Área
+        #     self.professor_cadastrado_frame.grid_columnconfigure(3, minsize=250, weight=1)  # Linha
+        #     self.professor_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
+        #
+        #     # Loop p/ cada atributo
+        #     for i, atr in enumerate(professor):
+        #         atr = self.gerenciador.encurta_texto(atr, 25)
+        #         ctk.CTkLabel(self.professor_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
+        #                                                                                         padx=5)
+        #
+        #     self.operacoes_frame = ctk.CTkFrame(self.professor_cadastrado_frame, fg_color='transparent')
+        #     self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
+        #
+        #     self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
+        #                                        command=partial(self.spam_top_level, "editar",
+        #                                                        {'id': professor[0], 'nome': professor[1],
+        #                                                         'area': professor[2], 'linha': professor[3]}))
+        #     self.update_button.grid(row=0, column=0, padx=5)
+        #     self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
+        #                                        command=partial(self.spam_top_level, "excluir", {'id': professor[
+        #                                            0]}))  # partial(self.excluir_professor, professor[0]))
+        #     # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
+        #
+        #     self.delete_button.grid(row=0, column=1, padx=5)
+
+
+
+        # professores = ProfessorController.listar_todos()[0]
+        #
+        # # =========================
+        # # FRAME DO HEADER
+        # # =========================
+        # self.headers_professores_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
+        # self.headers_professores_frame.grid(row=0, column=0, sticky="ew")
+        #
+        # # Configuração padronizada das colunas
+        # def configurar_colunas(frame):
+        #     frame.grid_columnconfigure(0, minsize=60)  # ID (fixo)
+        #     frame.grid_columnconfigure(1, weight=2)  # Nome
+        #     frame.grid_columnconfigure(2, weight=2)  # Área
+        #     frame.grid_columnconfigure(3, weight=2)  # Linha
+        #     frame.grid_columnconfigure(4, minsize=120)  # Operações (fixo)
+        #
+        # configurar_colunas(self.headers_professores_frame)
+        #
+        # headers = ["ID", "Nome", "Área de Concentração", "Linha de Pesquisa", "Operações"]
+        #
+        # # Construção do cabeçalho
+        # for i, header in enumerate(headers):
+        #     ctk.CTkLabel(
+        #         self.headers_professores_frame,
+        #         text=header,
+        #         font=("Arial", 14, "bold")#,
+        #         #anchor = "w"
+        #     ).grid(row=0, column=i, padx=5, pady=5, sticky="ew")
+        #
+        # # =========================
+        # # CONSTRUÇÃO DOS REGISTROS
+        # # =========================
+        # for index, professor in enumerate(professores):
+        #
+        #     self.professor_cadastrado_frame = ctk.CTkFrame(self.professores_cadastrados_frame)
+        #     self.professor_cadastrado_frame.grid(
+        #         row=index + 1,
+        #         column=0,
+        #         pady=5,
+        #         sticky="ew"
+        #     )
+        #
+        #     configurar_colunas(self.professor_cadastrado_frame)
+        #
+        #     # Dados do professor
+        #     for i, atr in enumerate(professor):
+        #         atr = self.gerenciador.encurta_texto(atr, 25)
+        #
+        #         ctk.CTkLabel(
+        #             self.professor_cadastrado_frame,
+        #             text=atr#,
+        #             #anchor = "w"
+        #         ).grid(row=0, column=i, padx=5, sticky="ew")
+        #
+        #     # =========================
+        #     # OPERAÇÕES
+        #     # =========================
+        #     self.operacoes_frame = ctk.CTkFrame(
+        #         self.professor_cadastrado_frame,
+        #         fg_color="transparent"
+        #     )
+        #
+        #     self.operacoes_frame.grid(row=0, column=4, sticky="e", padx=(0, 5))
+        #
+        #     self.update_button = ctk.CTkButton(
+        #         self.operacoes_frame,
+        #         fg_color="orange",
+        #         text='📝',
+        #         width=30,
+        #         command=partial(
+        #             self.spam_top_level,
+        #             "editar",
+        #             {
+        #                 'id': professor[0],
+        #                 'nome': professor[1],
+        #                 'area': professor[2],
+        #                 'linha': professor[3]
+        #             }
+        #         )
+        #     )
+        #     self.update_button.grid(row=0, column=0, padx=5)
+        #
+        #     self.delete_button = ctk.CTkButton(
+        #         self.operacoes_frame,
+        #         fg_color="red",
+        #         text='❌',
+        #         width=30,
+        #         command=partial(
+        #             self.spam_top_level,
+        #             "excluir",
+        #             {'id': professor[0]}
+        #         )
+        #     )
+        #     self.delete_button.grid(row=0, column=1, padx=5)

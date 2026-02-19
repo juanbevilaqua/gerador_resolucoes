@@ -11,19 +11,19 @@ class SecaoCoordenadores(ctk.CTkFrame):
         self.criar_widgets_coordenadores()
 
     def criar_widgets_coordenadores(self):
-        self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
+        self.grid_rowconfigure(2, weight=0)
 
         # =================
         # FRAME DINAMICO
         # =================
 
-        self.cadastrar_coordenador_button = ctk.CTkButton(self, text="Adicionar Coordenador",
+        self.cadastrar_coordenador_button = ctk.CTkButton(self, text="➕ Adicionar Coordenador", text_color="white",
                                                           command=lambda: self.spam_top_level('cadastrar'))
         self.cadastrar_coordenador_button.grid(row=0, column=0, pady=10, padx=5, sticky='e')
 
-        self.coordenadores_ativos_frame = ctk.CTkFrame(self, fg_color='#1C1C1C')
+        self.coordenadores_ativos_frame = ctk.CTkFrame(self, fg_color='transparent')
         self.coordenadores_ativos_frame.grid(row=1, column=0, pady=10)
         self.listar_coordenadores_ativos()
 
@@ -60,107 +60,293 @@ class SecaoCoordenadores(ctk.CTkFrame):
 
         coordenadores = CoordenadorController.listar_todos()[0]
 
-        self.headers_coordenadores_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
-        self.headers_coordenadores_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
-        self.headers_coordenadores_frame.grid_columnconfigure(0, minsize=50)  # ID
-        self.headers_coordenadores_frame.grid_columnconfigure(1, minsize=200)  # Nome
-        self.headers_coordenadores_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
-        self.headers_coordenadores_frame.grid_columnconfigure(3, minsize=100)  # Inicio
-        self.headers_coordenadores_frame.grid_columnconfigure(4, minsize=100)  # Fim
+        # Limpa conteúdo anterior
+        for widget in self.coordenadores_cadastrados_frame.winfo_children():
+            widget.destroy()
 
-        headers = ["ID", "Nome", "Modalidade", "Início Vigência", "Fim Vigência", "Operações"]
+        # =========================
+        # CONFIGURAÇÃO DAS COLUNAS (UMA ÚNICA VEZ)
+        # =========================
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(0, minsize=50)  # ID
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(1, weight=2)  # Nome
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(2, weight=2)  # Modalidade
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(3, minsize=120)  # Início
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(4, minsize=120)  # Fim
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(5, minsize=120)  # Operações
 
-        tam_cols = [50, 200, 200, 100, 100, 100]
-        qtde_headers = len(headers)
+        headers = [
+            "ID",
+            "Nome",
+            "Modalidade",
+            "Início Vigência",
+            "Fim Vigência",
+            "Operações"
+        ]
 
-        # CONSTRÓI CABEÇALHO
-        for i, header in enumerate(headers):
-            ctk.CTkLabel(self.headers_coordenadores_frame, text=header, font=("Arial", 14, "bold"),
-                         width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+        # =========================
+        # HEADER (linha 0)
+        # =========================
+        for col, header in enumerate(headers):
+            ctk.CTkLabel(
+                self.coordenadores_cadastrados_frame,
+                text=header,
+                text_color="white",
+                font=("Arial", 14, "bold"),
+                fg_color="#4F6416"
+            ).grid(row=0, column=col, padx=5, pady=8, sticky="ew")
 
-        # CONSTRÓI REGISTROS
-        # Loop p/ cada coordenador
-        for index, coordenador in enumerate(coordenadores):
-            id_coordenador = coordenador[0]
-            nome_frame = f"frame_coordenador_{id_coordenador}"
+        # =========================
+        # REGISTROS
+        # =========================
+        for row_index, coordenador in enumerate(coordenadores, start=1):
 
-            self.coordenador_cadastrado_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
-            # print("Nome Frame: ", nome)
-            self.coordenador_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+            cor_fundo = ["transparent", "#E6E6E6"]
 
-            self.coordenador_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
-            self.coordenador_cadastrado_frame.grid_columnconfigure(1, minsize=200)  # Nome
-            self.coordenador_cadastrado_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
-            self.coordenador_cadastrado_frame.grid_columnconfigure(3, minsize=100)  # Inicio
-            self.coordenador_cadastrado_frame.grid_columnconfigure(4, minsize=100)  # Fim
-            self.coordenador_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
-
-            # Loop p/ cada atributo
-            for i, atr in enumerate(coordenador):
+            # Dados do coordenador
+            for col_index, atr in enumerate(coordenador):
                 atr = self.gerenciador.encurta_texto(atr, 25)
-                ctk.CTkLabel(self.coordenador_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
-                                                                                                  padx=5)
 
-            self.operacoes_frame = ctk.CTkFrame(self.coordenador_cadastrado_frame, fg_color='transparent')
-            self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
+                ctk.CTkLabel(
+                    self.coordenadores_cadastrados_frame,
+                    text=atr,
+                    fg_color=cor_fundo[row_index % 2],
+                    anchor="center"
+                ).grid(
+                    row=row_index,
+                    column=col_index,
+                    padx=5,
+                    pady=5,
+                    sticky="ew"
+                )
 
-            self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
-                                               command=partial(self.spam_top_level, "editar",
-                                                               {'id': coordenador[0], 'nome': coordenador[1],
-                                                                'modalidade': coordenador[2], 'inicio_vigencia': coordenador[3],
-                                                                'fim_vigencia':coordenador[4]}))
-            self.update_button.grid(row=0, column=0, padx=5)
-            self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
-                                               command=partial(self.spam_top_level, "excluir", {'id': coordenador[
-                                                   0]}))  # partial(self.excluir_professor, professor[0]))
-            # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
+            # =========================
+            # OPERAÇÕES
+            # =========================
+            operacoes_frame = ctk.CTkFrame(
+                self.coordenadores_cadastrados_frame,
+                fg_color=cor_fundo[row_index % 2]
+            )
 
-            self.delete_button.grid(row=0, column=1, padx=5)
+            operacoes_frame.grid(row=row_index, column=5, sticky="e", padx=(0, 5))
+
+            update_button = ctk.CTkButton(
+                operacoes_frame,
+                fg_color="orange",
+                hover_color="dark orange",
+                text='📝',
+                width=30,
+                command=partial(
+                    self.spam_top_level,
+                    "editar",
+                    {
+                        'id': coordenador[0],
+                        'nome': coordenador[1],
+                        'modalidade': coordenador[2],
+                        'inicio_vigencia': coordenador[3],
+                        'fim_vigencia': coordenador[4]
+                    }
+                )
+            )
+            update_button.grid(row=0, column=0, padx=5)
+
+            delete_button = ctk.CTkButton(
+                operacoes_frame,
+                fg_color="red",
+                hover_color="dark red",
+                text='❌',
+                width=30,
+                command=partial(
+                    self.spam_top_level,
+                    "excluir",
+                    {'id': coordenador[0]}
+                )
+            )
+            delete_button.grid(row=0, column=1, padx=5)
+
+    # def listar_coordenadores_cadastrados(self):
+    #
+    #     coordenadores = CoordenadorController.listar_todos()[0]
+    #
+    #     self.headers_coordenadores_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
+    #     self.headers_coordenadores_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
+    #     self.headers_coordenadores_frame.grid_columnconfigure(0, minsize=50)  # ID
+    #     self.headers_coordenadores_frame.grid_columnconfigure(1, minsize=200)  # Nome
+    #     self.headers_coordenadores_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
+    #     self.headers_coordenadores_frame.grid_columnconfigure(3, minsize=100)  # Inicio
+    #     self.headers_coordenadores_frame.grid_columnconfigure(4, minsize=100)  # Fim
+    #
+    #     headers = ["ID", "Nome", "Modalidade", "Início Vigência", "Fim Vigência", "Operações"]
+    #
+    #     tam_cols = [50, 200, 200, 100, 100, 100]
+    #     qtde_headers = len(headers)
+    #
+    #     # CONSTRÓI CABEÇALHO
+    #     for i, header in enumerate(headers):
+    #         ctk.CTkLabel(self.headers_coordenadores_frame, text=header, font=("Arial", 14, "bold"),
+    #                      width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+    #
+    #     # CONSTRÓI REGISTROS
+    #     # Loop p/ cada coordenador
+    #     for index, coordenador in enumerate(coordenadores):
+    #         id_coordenador = coordenador[0]
+    #         nome_frame = f"frame_coordenador_{id_coordenador}"
+    #
+    #         self.coordenador_cadastrado_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
+    #         # print("Nome Frame: ", nome)
+    #         self.coordenador_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+    #
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(1, minsize=200)  # Nome
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(3, minsize=100)  # Inicio
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(4, minsize=100)  # Fim
+    #         self.coordenador_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
+    #
+    #         # Loop p/ cada atributo
+    #         for i, atr in enumerate(coordenador):
+    #             atr = self.gerenciador.encurta_texto(atr, 25)
+    #             ctk.CTkLabel(self.coordenador_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
+    #                                                                                               padx=5)
+    #
+    #         self.operacoes_frame = ctk.CTkFrame(self.coordenador_cadastrado_frame, fg_color='transparent')
+    #         self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
+    #
+    #         self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
+    #                                            command=partial(self.spam_top_level, "editar",
+    #                                                            {'id': coordenador[0], 'nome': coordenador[1],
+    #                                                             'modalidade': coordenador[2], 'inicio_vigencia': coordenador[3],
+    #                                                             'fim_vigencia':coordenador[4]}))
+    #         self.update_button.grid(row=0, column=0, padx=5)
+    #         self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
+    #                                            command=partial(self.spam_top_level, "excluir", {'id': coordenador[
+    #                                                0]}))  # partial(self.excluir_professor, professor[0]))
+    #         # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
+    #
+    #         self.delete_button.grid(row=0, column=1, padx=5)
 
     def listar_coordenadores_ativos(self):
+
+        # Limpa conteúdo anterior
+        for widget in self.coordenadores_ativos_frame.winfo_children():
+            widget.destroy()
+
         coordenadores = CoordenadorController.listar_ativos()
 
         dict_coordenadores = {}
-        if len(coordenadores) == 0:
-            print("Nenhum coordenador ativo no momento.")
-        else:
-            for coordenador in coordenadores:
-                if coordenador[2] == 'Coordenador Titular':
-                    dict_coordenadores['Coordenador Titular'] = coordenador[1] # Nome do coordenador
-                else:
-                    dict_coordenadores['Vice-Coordenador'] = coordenador[1]
 
-        #return dict_coordenadores
+        for coordenador in coordenadores:
+            if coordenador[2] == 'Coordenador Titular':
+                dict_coordenadores['titular'] = coordenador[1]
+            else:
+                dict_coordenadores['vice'] = coordenador[1]
 
-        self.icon_coord_ativo = ctk.CTkImage(
+        # =========================
+        # CARD PRINCIPAL
+        # =========================
+        card = ctk.CTkFrame(
+            self.coordenadores_ativos_frame,
+            corner_radius=15,
+            fg_color="#F4F6FB",
+            border_width=3,
+            border_color="#4F6416"
+        )
+        card.pack(fill="both", expand=True, padx=7, pady=7)
+
+        # =========================
+        # HEADER DO CARD
+        # =========================
+        header_frame = ctk.CTkFrame(card, fg_color="transparent")
+        header_frame.pack(fill="x", pady=(15, 10))
+
+        icon = ctk.CTkImage(
             light_image=Image.open('./src/static/img/active_icon.png'),
             dark_image=Image.open('./src/static/img/active_icon.png'),
-            size=(30, 30)
+            size=(28, 28)
         )
 
-        self.img_label = ctk.CTkLabel(self.coordenadores_ativos_frame, image=self.icon_coord_ativo, text='',
-                                      fg_color='#4169E1')
-        self.img_label.grid(row=0, column=0, sticky='ew')
-        self.coordenadores_ativos_titulo_label = ctk.CTkLabel(self.coordenadores_ativos_frame,
-                                                              text="Coordenadores Ativos",
-                                                              font=('Bahnschrift', 20, 'bold'),
-                                                              fg_color='#4169E1').grid(row=1, column=0, sticky='ew')
+        icon_label = ctk.CTkLabel(
+            header_frame,
+            image=icon,
+            text=""
+        )
+        icon_label.pack(side="left", padx=(15, 10))
 
-        if 'Coordenador Titular' in dict_coordenadores.keys():
-            nome_coordenador_titular = dict_coordenadores['Coordenador Titular'].upper()
-        else:
-            nome_coordenador_titular = 'Sem Coordenador Titular Ativo no Momento'
-        self.coordenador_titular_label = ctk.CTkLabel(self.coordenadores_ativos_frame, text=nome_coordenador_titular,
-                                                      font=("Segoe UI", 18, 'underline')) \
-            .grid(row=2, column=0, pady=10, padx=5)
+        titulo_label = ctk.CTkLabel(
+            header_frame,
+            text="Coordenadores Ativos",
+            font=("Segoe UI", 20, "bold"),
+            text_color="#1F2A44"
+        )
+        titulo_label.pack(side="left")
 
-        if 'Vice-Coordenador' in dict_coordenadores.keys():
-            nome_vice_coordenador = f"{dict_coordenadores['Vice-Coordenador']} (Vice-Coordenador)"
-        else:
-            nome_vice_coordenador = 'Sem Vice-Coordenador Ativo no Momento'
-        self.voce_coordenador_label = ctk.CTkLabel(self.coordenadores_ativos_frame,
-                                                   text=nome_vice_coordenador, font=("Segoe UI", 14, 'italic')) \
-            .grid(row=3, column=0, pady=5, padx=5)
+        # Linha divisória
+        divider = ctk.CTkFrame(card, height=2, fg_color="#DADDE5")
+        divider.pack(fill="x", padx=15, pady=(0, 15))
+
+        # =========================
+        # CONTEÚDO
+        # =========================
+        content_frame = ctk.CTkFrame(card, fg_color="transparent")
+        content_frame.pack(fill="both", expand=True, padx=20, pady=10)
+
+        content_frame.grid_columnconfigure(0, weight=1)
+        content_frame.grid_columnconfigure(1, weight=1)
+
+        # ---- TITULAR ----
+        titular_nome = dict_coordenadores.get(
+            'titular',
+            'Nenhum Coordenador Titular Ativo'
+        )
+
+        titular_card = ctk.CTkFrame(
+            content_frame,
+            corner_radius=10,
+            fg_color="white"
+        )
+        titular_card.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+        ctk.CTkLabel(
+            titular_card,
+            text="Coordenador Titular",
+            font=("Segoe UI", 14, "bold"),
+            text_color="#749619"
+        ).pack(pady=(15, 5))
+
+        ctk.CTkLabel(
+            titular_card,
+            text=titular_nome,
+            font=("Segoe UI", 16),
+            wraplength=250,
+            justify="center"
+        ).pack(pady=(0, 15))
+
+        # ---- VICE ----
+        vice_nome = dict_coordenadores.get(
+            'vice',
+            'Nenhum Vice-Coordenador Ativo'
+        )
+
+        vice_card = ctk.CTkFrame(
+            content_frame,
+            corner_radius=10,
+            fg_color="white"
+        )
+        vice_card.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+        ctk.CTkLabel(
+            vice_card,
+            text="Vice-Coordenador",
+            font=("Segoe UI", 14, "bold"),
+            text_color="#6C757D"
+        ).pack(pady=(15, 5))
+
+        ctk.CTkLabel(
+            vice_card,
+            text=vice_nome,
+            font=("Segoe UI", 16),
+            wraplength=250,
+            justify="center"
+        ).pack(pady=(0, 15))
 
     def spam_top_level(self, action, infos=None):
         self.top_level = ctk.CTkToplevel()

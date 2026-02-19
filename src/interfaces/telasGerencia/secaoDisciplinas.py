@@ -13,15 +13,15 @@ class SecaoDisciplinas(ctk.CTkFrame):
         self.criar_widgets_disciplinas()
 
     def criar_widgets_disciplinas(self):
-        self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)  # coluna do conteúdo (expande)
+        self.grid_rowconfigure(1, weight=0)
 
         # =================
         # FRAME DINAMICO
         # =================
 
-        self.carregar_disciplinas_button = ctk.CTkButton(self, text="Carregar Disciplinas",
+        self.carregar_disciplinas_button = ctk.CTkButton(self, text="⬇️ Carregar Disciplinas", text_color="white",
                                                         command=self.carregar_disciplinas)
         self.carregar_disciplinas_button.grid(row=0, column=0, pady=10, sticky='e')
 
@@ -72,62 +72,58 @@ class SecaoDisciplinas(ctk.CTkFrame):
 
         return 3  # linha atual do grid
 
-
     def listar_disciplinas_cadastradas(self):
 
         disciplinas = DisciplinaController.listar_todos()[0]
 
-        self.headers_disciplinas_frame = ctk.CTkFrame(self.disciplinas_cadastradas_frame)
-        self.headers_disciplinas_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
-        self.headers_disciplinas_frame.grid_columnconfigure(0, minsize=50)
-        self.headers_disciplinas_frame.grid_columnconfigure(1, minsize=500)
-        self.headers_disciplinas_frame.grid_columnconfigure(2, minsize=100)
-        self.headers_disciplinas_frame.grid_columnconfigure(3, minsize=100)
+        # Limpa conteúdo anterior
+        for widget in self.disciplinas_cadastradas_frame.winfo_children():
+            widget.destroy()
 
+        # =========================
+        # CONFIGURAÇÃO DAS COLUNAS (UMA ÚNICA VEZ)
+        # =========================
+        self.disciplinas_cadastradas_frame.grid_columnconfigure(0, minsize=50)  # ID
+        self.disciplinas_cadastradas_frame.grid_columnconfigure(1, weight=3)  # Nome
+        self.disciplinas_cadastradas_frame.grid_columnconfigure(2, minsize=120)  # Carga Horária
+        self.disciplinas_cadastradas_frame.grid_columnconfigure(3, minsize=100)  # Créditos
 
         headers = ["ID", "Nome", "Carga-Horária", "Créditos"]
 
-        tam_cols = [50, 500, 100, 100]
-        qtde_headers = len(headers)
+        # =========================
+        # HEADER (linha 0)
+        # =========================
+        for col, header in enumerate(headers):
+            ctk.CTkLabel(
+                self.disciplinas_cadastradas_frame,
+                text=header,
+                text_color="white",
+                font=("Arial", 14, "bold"),
+                fg_color="#4F6416"
+            ).grid(row=0, column=col, padx=5, pady=8, sticky="ew")
 
-        # CONSTRÓI CABEÇALHO
-        for i, header in enumerate(headers):
-            ctk.CTkLabel(self.headers_disciplinas_frame, text=header, font=("Arial", 14, "bold"),
-                         width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
+        # =========================
+        # REGISTROS
+        # =========================
+        for row_index, disciplina in enumerate(disciplinas, start=1):
 
-        # CONSTRÓI REGISTROS
-        for index, disciplina in enumerate(disciplinas):
-            id_disciplina = disciplina[0]
+            cor_fundo = ["transparent", "#E6E6E6"]
 
-            self.disciplina_cadastrada_frame = ctk.CTkFrame(self.disciplinas_cadastradas_frame)
-            # print("Nome Frame: ", nome)
-            self.disciplina_cadastrada_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
+            for col_index, atr in enumerate(disciplina):
+                atr = self.gerenciador.encurta_texto(atr, 75)
 
-            self.disciplina_cadastrada_frame.grid_columnconfigure(0, minsize=50) # ID
-            self.disciplina_cadastrada_frame.grid_columnconfigure(1, minsize=500)
-            self.disciplina_cadastrada_frame.grid_columnconfigure(2, minsize=100)
-            self.disciplina_cadastrada_frame.grid_columnconfigure(3, minsize=100)
-            self.disciplina_cadastrada_frame.grid_columnconfigure(qtde_headers, weight=1)
-
-            # Loop p/ cada atributo
-            for i, atr in enumerate(disciplina):
-                atr = self.gerenciador.encurta_texto(atr, 50)
-                ctk.CTkLabel(self.disciplina_cadastrada_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
-                                                                                                 padx=5)
-
-            #self.operacoes_frame = ctk.CTkFrame(self.disciplina_cadastrada_frame, fg_color='transparent')
-            #self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
-
-            #self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
-            #                                   command=partial(self.spam_top_level, "editar",
-            #                                                   {'id': disciplina[0], 'nome': disciplina[1],
-            #                                                    'area': disciplina[2], 'linha': disciplina[3]}))
-            #self.update_button.grid(row=0, column=0, padx=5)
-            #self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
-                                               # command=partial(self.spam_top_level, "excluir", {'id': disciplina[
-                                               #     0]}))  # partial(self.excluir_professor, professor[0]))
-
-            #self.delete_button.grid(row=0, column=1, padx=5)
+                ctk.CTkLabel(
+                    self.disciplinas_cadastradas_frame,
+                    text=atr,
+                    fg_color=cor_fundo[row_index % 2],
+                    anchor="center"
+                ).grid(
+                    row=row_index,
+                    column=col_index,
+                    padx=5,
+                    pady=5,
+                    sticky="ew"
+                )
 
     def selecionar_csv(self):
         caminho = filedialog.askopenfilename(
