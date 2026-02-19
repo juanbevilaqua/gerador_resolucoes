@@ -93,7 +93,7 @@ class TelaInicial(ctk.CTkFrame):
             size=(30, 30)
         )
 
-        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", image=self.criar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, font=('Manrope', 22), corner_radius=15,
+        self.criar_button = ctk.CTkButton(self.botoes_frame, text="Criar Resoluções", image=self.criar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, text_color="white", font=('Manrope', 22, "bold"), corner_radius=15,
                                           command=self.master.exibir_tela_principal)
         self.criar_button.grid(row=0, column=0, pady=10)
 
@@ -104,7 +104,7 @@ class TelaInicial(ctk.CTkFrame):
             size=(30, 30)
         )
 
-        self.gerenciar_button = ctk.CTkButton(self.botoes_frame, text="Gerenciar", image=self.gerenciar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, font=('Manrope', 22), corner_radius=15,
+        self.gerenciar_button = ctk.CTkButton(self.botoes_frame, text="Gerenciar", image=self.gerenciar_icon, compound='left', fg_color='#749619', border_color='black', hover_color='#4F6416', border_width=2, width=250, height=80, text_color="white", font=('Manrope', 22, "bold"), corner_radius=15,
                                               command=self.master.exibir_tela_gerencia)
         self.gerenciar_button.grid(row=1, column=0)
 

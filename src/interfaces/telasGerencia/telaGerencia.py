@@ -26,33 +26,39 @@ class TelaGerencia(ctk.CTkFrame):
         # =================
         # CABEÇALHO DA TELA DE GERÊNCIA
         # =================
-        self.cabecalho_frame = ctk.CTkFrame(self)
+        self.cabecalho_frame = ctk.CTkFrame(self, fg_color="#E6E6E6", border_width=1, border_color="#4F6416", corner_radius=0)
         self.cabecalho_frame.grid_columnconfigure(0, weight=0)
         self.cabecalho_frame.grid_columnconfigure(1, weight=1)
         self.cabecalho_frame.grid_columnconfigure(2, weight=0)
         self.cabecalho_frame.grid(row=0, column=0, columnspan=2, sticky='ew')
 
-        self.voltar_button = ctk.CTkButton(self.cabecalho_frame, text="⬅️", width=30,
+        self.voltar_button = ctk.CTkButton(self.cabecalho_frame, text="⬅️", width=30, text_color="white",
                                            command=self.master.exibir_tela_inicial).grid(row=0, column=0, pady=10,
                                                                                          padx=15)
-        self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="GERÊNCIA DO SISTEMA").grid(
-            row=0, column=1, pady=10, sticky='ew')
+        self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="GERÊNCIA DO SISTEMA", font=("Segoe UI", 20, "bold"),
+                                              text_color="#4F6416").grid(
+            row=0, column=1, pady=20, sticky='ew')
         self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
-        self.placeholder.grid(row=0, column=2, padx=5)
+        self.placeholder.grid(row=0, column=2, padx=10)
 
         # =================
         # MENU LATERAL DE CONFIGURAÇÕES
         # =================
-        self.menu_config_frame = ctk.CTkFrame(self, fg_color="#4F6416")
+        self.menu_config_frame = ctk.CTkFrame(self, fg_color="#E6E6E6", border_width=1, border_color="#4F6416", corner_radius=0)#"#4F6416")
         self.menu_config_frame.grid(row=1, column=0, sticky='nsw')
 
-        self.op_professores_button = ctk.CTkButton(self.menu_config_frame, text="Professores", width=60, command=lambda: self.alterar_secao('professores'))
-        self.op_professores_button.grid(row=0, column=0, pady=5)
-        self.op_disciplinas_button = ctk.CTkButton(self.menu_config_frame, text="Disciplinas", width=60, command= lambda: self.alterar_secao('disciplinas')).grid(row=1, column=0,
-                                                                                                    pady=5)
-        self.op_coordenadores_button = ctk.CTkButton(self.menu_config_frame, text="Coordenadores", width=60, command=lambda: self.alterar_secao('coordenadores'))
-        self.op_coordenadores_button.grid(row=2, column=0,
-                                                                                                    pady=5)
+
+        self.op_professores_button = ctk.CTkButton(self.menu_config_frame, text="👥 Professores", width=170, height=45, font=("Segoe UI", 14, "bold"), text_color="white", fg_color="#749619", corner_radius=0, border_width=1, border_color="#749619",
+                                                   command=lambda: [self.selecionar_botao_ativo(self.op_professores_button), self.alterar_secao('professores')])
+        self.op_professores_button.grid(row=0, column=0, pady=(40, 15))
+
+        self.op_disciplinas_button = ctk.CTkButton(self.menu_config_frame, text="📚 Disciplinas", width=170, height=45, font=("Segoe UI", 14, "bold"), fg_color="transparent", corner_radius=0, border_width=1, border_color="#749619",
+                                                   command= lambda: [self.selecionar_botao_ativo(self.op_disciplinas_button), self.alterar_secao('disciplinas')])
+        self.op_disciplinas_button.grid(row=1, column=0, pady=15)
+
+        self.op_coordenadores_button = ctk.CTkButton(self.menu_config_frame, text="️🖊 Coordenadores", width=170, height=45, font=("Segoe UI", 14, "bold"), fg_color="transparent", corner_radius=0, border_width=1, border_color="#749619",
+                                                     command=lambda: [self.selecionar_botao_ativo(self.op_coordenadores_button), self.alterar_secao('coordenadores')])
+        self.op_coordenadores_button.grid(row=2, column=0, pady=15)
 
         # =================
         # FRAME DINAMICO
@@ -78,6 +84,13 @@ class TelaGerencia(ctk.CTkFrame):
 
 
         self.secao_atual.grid(row=0, column=0, sticky="nsew")
+
+    def selecionar_botao_ativo(self, botao):
+        for widget in self.menu_config_frame.winfo_children():
+            if isinstance(widget, ctk.CTkButton):
+                widget.configure(fg_color="transparent", text_color="black")
+
+        botao.configure(fg_color="#749619", text_color="white")
 
 
     @staticmethod

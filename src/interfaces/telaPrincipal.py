@@ -75,7 +75,7 @@ class TelaPrincipal(ctk.CTkFrame):
         #self.cabecalho_frame.grid(row=0, column=0, sticky='ew')
         self.barra_lateral_frame.grid(row=0, column=0, sticky='nsw')
 
-        self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", width=30, command=self.master.exibir_tela_inicial, font=("Segoe UI", 20), border_color="#4F6416").grid(row=0, column=0, pady=10, padx=15, sticky='w')
+        self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", text_color="white", width=30, command=self.master.exibir_tela_inicial, font=("Segoe UI", 20), border_color="#4F6416").grid(row=0, column=0, pady=10, padx=15, sticky='w')
         #self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="TELA PRINCIPAL - CRIAR RESOLUÇÕES").grid(row=0, column=1, pady=10, sticky='ew')
         # self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
         # self.placeholder.grid(row=0, column=2, padx=5)
