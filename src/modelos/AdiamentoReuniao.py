@@ -9,6 +9,7 @@ import yaml
 
 def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
+
     n_reuniao = dados_dinamicos["Nº. da Reunião"]
     data_inicial = dados_dinamicos["Data Inicial"]
     resolucao = dados_dinamicos["Resolução de Aprovação"]
@@ -50,3 +51,4 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
         titulo_doc = f'Resolução nº {n_res} - Adia {n_reuniao}a reunião ordinária.docx'
 
     Armazenador.salvar(dir_res, document, titulo_doc)
+

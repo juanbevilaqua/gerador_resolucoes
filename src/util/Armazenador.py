@@ -41,4 +41,5 @@ def salvar(diretorio, document, titulo):
         if pdf:
             ManipuladorDeArquivos.converterDocxPdf(titulo_docx_path, titulo_pdf_path)
     except Exception as e:
-        print(f"Ocorreu um erro ao salvar o arquivo: {e}")
+        raise e
+        #print(f"Ocorreu um erro ao salvar o arquivo: {e}")

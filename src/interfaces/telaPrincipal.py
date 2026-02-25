@@ -98,16 +98,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.data_res_entry = ctk.CTkEntry(self.frame_fixo, width=200, placeholder_text="dd/mm/aaaa")
         self.data_res_entry.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
-        default_colors_data_reuniao = {}
-        self.data_reuniao_label = ctk.CTkLabel(self.frame_fixo, text="Data da Reunião", text_color='white')
-        self.data_reuniao_label.grid(row=2, column=0, padx=10, pady=10, sticky="e")
-        default_colors_data_reuniao["label"] = self.data_reuniao_label.cget("text_color")#armazena a cor padrão do label
-        #default_colors_data_reuniao.append(default_color)
-        self.data_reuniao_entry = ctk.CTkEntry(self.frame_fixo, width=200, placeholder_text="dd/mm/aaaa")
-        self.data_reuniao_entry.grid(row=2, column=1, padx=10, pady=10, sticky="w")
-        default_colors_data_reuniao["entry"] = self.data_reuniao_entry.cget("fg_color")#armazena a cor padrão do entry
-        #default_colors_data_reuniao.append(default_color)
-
         # Checkbox Ad Referendum
         self.ad_referendum_var = ctk.BooleanVar(value=False)
         self.ad_referendum_checkbox = ctk.CTkCheckBox(
@@ -115,9 +105,30 @@ class TelaPrincipal(ctk.CTkFrame):
             text="Ad Referendum",
             text_color='white',
             variable=self.ad_referendum_var,
-            command = lambda: self.alternar_ativacao_dos_campos(False, self.ad_referendum_checkbox, [self.data_reuniao_label, self.data_reuniao_entry], default_colors_data_reuniao)
+            command=lambda: self.alternar_ativacao_dos_campos(False, self.ad_referendum_checkbox,
+                                                              [self.data_reuniao_label, self.data_reuniao_entry,
+                                                               self.numero_reuniao_label, self.numero_reuniao_entry],
+                                                              default_colors_data_reuniao)
         )
-        self.ad_referendum_checkbox.grid(row=3, column=1, pady=10, sticky="w")
+        self.ad_referendum_checkbox.grid(row=2, column=1, pady=10, sticky="w")
+
+
+        default_colors_data_reuniao = {}
+        self.numero_reuniao_label = ctk.CTkLabel(self.frame_fixo, text="Nº da Reunião", text_color='white')
+        self.numero_reuniao_label.grid(row=3, column=0, padx=10, pady=10, sticky="e")
+        self.numero_reuniao_entry = ctk.CTkEntry(self.frame_fixo, width=200)
+        self.numero_reuniao_entry.grid(row=3, column=1, padx=10, pady=10, sticky="w")
+
+        self.data_reuniao_label = ctk.CTkLabel(self.frame_fixo, text="Data da Reunião", text_color='white')
+        self.data_reuniao_label.grid(row=4, column=0, padx=10, pady=10, sticky="e")
+        default_colors_data_reuniao["label"] = self.data_reuniao_label.cget("text_color")#armazena a cor padrão do label
+        #default_colors_data_reuniao.append(default_color)
+        self.data_reuniao_entry = ctk.CTkEntry(self.frame_fixo, width=200, placeholder_text="dd/mm/aaaa")
+        self.data_reuniao_entry.grid(row=4, column=1, padx=10, pady=10, sticky="w")
+        default_colors_data_reuniao["entry"] = self.data_reuniao_entry.cget("fg_color")#armazena a cor padrão do entry
+        #default_colors_data_reuniao.append(default_color)
+
+
 
         # -----------------
         # Menu de Config. Avançadas
@@ -438,7 +449,7 @@ class TelaPrincipal(ctk.CTkFrame):
                     campo.configure(text_color="gray")
                 else:# elementos clicáveis
                     campo.configure(state="disabled")# desabilita se marcado
-                    campo.configure(fg_color="#4F4F4F")
+                    campo.configure(fg_color="#C0C0C0")
         # ativado
         else:
             for campo in campos:
@@ -1308,44 +1319,113 @@ class TelaPrincipal(ctk.CTkFrame):
             )
             checkbox.pack(pady=10)
 
-    def gerar_popup(self, msg, type):
-        popup = ctk.CTkToplevel()
-        width = 300
-        height = 150
-        # centralizar o popup
-        x = (popup.winfo_screenwidth() // 2) - (width // 2)
-        y = (popup.winfo_screenheight() // 2) - (height // 2)
-        popup.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    # def gerar_popup(self, msg, type):
+    #     popup = ctk.CTkToplevel()
+    #     width = 300 if type != 'success' else 250
+    #     height = 150 if type != 'success' else 80
+    #     # centralizar o popup
+    #     x = (popup.winfo_screenwidth() // 2) - (width // 2) if type != 'success' else 1600
+    #     y = (popup.winfo_screenheight() // 2) - (height // 2) if type != 'success' else 110
+    #
+    #     popup.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    #     popup.resizable(False, False)
+    #
+    #     if type == 'warning':
+    #         icon = '⚠️'
+    #     elif type == 'error':
+    #         icon = '❌'
+    #     elif type == 'success':
+    #         icon = '✅'
+    #
+    #         popup.overrideredirect(True)
+    #         popup.attributes("-topmost", True)
+    #         popup.configure(fg_color="green")
+    #
+    #     else:
+    #         icon = '✉️'
+    #
+    #     popup.title(f"{icon} Mensagem")
+    #
+    #     label = ctk.CTkLabel(popup, text=f'{icon} {msg}', wraplength=250)
+    #     label.pack(pady=20)
+    #
+    #     button = ctk.CTkButton(popup, text="OK", command=popup.destroy)
+    #     button.pack(pady=10)
+    #
+    #     if type != "success":
+    #         popup.grab_set()
+    #     else:
+    #         popup.after(5000, popup.destroy)
+
+    def gerar_popup(self, msg, tipo):
+
+        # 🔹 Configuração por tipo
+        config = {
+            "warning": {"icon": "⚠️", "size": (300, 150), "color": "#FFFEEF"},
+            "error": {"icon": "❌", "size": (300, 150), "color": "#F08080"},
+            "success": {"icon": "✅", "size": (250, 80), "color": "#90EE90"},#32CD32
+            "info": {"icon": "✉️", "size": (300, 150), "color": "#FFFEEF"},
+        }
+
+        dados = config.get(tipo, config["info"])
+        icon = dados["icon"]
+        width, height = dados["size"]
+        color = dados["color"]
+
+        popup = ctk.CTkToplevel(self)
         popup.resizable(False, False)
 
-        if type == 'warning':
-            icon = '⚠️'
-        elif type == 'succes':
-            icon = '✅'
+        screen_w = popup.winfo_screenwidth()
+        screen_h = popup.winfo_screenheight()
+
+        # SUCCESS or ERROR = notificação canto superior direito
+        if tipo in ("success", "error"):
+            x = screen_w - width + 270
+            y = 115
+
+            popup.overrideredirect(True)
+            popup.attributes("-topmost", True)
+            popup.configure(fg_color=color, corner_radius=10)
         else:
-            icon = '✉️'
+            # Centralizado
+            x = (screen_w // 2) - (width // 2)
+            y = (screen_h // 2) - (height // 2)
+            popup.title(f"{icon} Mensagem")
+            popup.grab_set()
 
-        popup.title(f"{icon} Mensagem")
+        popup.geometry(f"{width}x{height}+{x}+{y}")
 
-        label = ctk.CTkLabel(popup, text=f'{icon} {msg}', wraplength=250)
-        label.pack(pady=20)
+        # Conteúdo
+        label = ctk.CTkLabel(
+            popup,
+            text=f"{icon}  {msg}",
+            wraplength=width - 40
+        )
+        label.pack(expand=True, pady=20, padx=20)
 
-        button = ctk.CTkButton(popup, text="OK", command=popup.destroy)
-        button.pack(pady=10)
-
-        popup.grab_set()
+        # Botão apenas se NÃO for success ou error
+        if tipo not in ("success", "error"):
+            button = ctk.CTkButton(
+                popup,
+                text="OK",
+                command=popup.destroy
+            )
+            button.pack(pady=(0, 15))
+        else:
+            popup.after(5000, popup.destroy)
 
     def capturar_dados(self):
 
         # LEITURA DOS DADOS FIXOS
         numero_res = self.numero_res_entry.get() if self.frame_fixo_opened else self.numero_res_entry_reduzido.get()
         data_res = self.data_res_entry.get()
+        numero_reuniao = self.numero_reuniao_entry.get()
         data_reuniao = self.data_reuniao_entry.get()
         ad_referendum = self.ad_referendum_var.get()
 
 
         # VALIDAÇÃO DO PREENCHIMENTO DOS DADOS FIXOS
-        if not numero_res or not data_res or (ad_referendum is False and not data_reuniao):
+        if not numero_res or not data_res or (ad_referendum is False and (not data_reuniao or not numero_reuniao)):
             print("** Existem dados fixos sem preenchimento")
             self.gerar_popup("Existem campos sem preenchimento!!", "warning")
             return
@@ -1365,7 +1445,11 @@ class TelaPrincipal(ctk.CTkFrame):
             if data_reuniao_ok is False and ad_referendum is False: # se for ad referendum, deverá ignorar o que está no campo data
                 self.gerar_popup("Preenchimento inválido: Use: dd/mm/aaaa nos campos de data", "warning")
                 return
-
+        if numero_reuniao:
+            numero_reuniao_ok = numero_reuniao.isdigit()
+            if numero_reuniao_ok is False and ad_referendum is False:
+                self.gerar_popup("Preenchimento inválido: o número da reunião deve ser um algarismo", "warning")
+                return
 
         # LEITURA DAS CONFIGURAÇÕES
         configs_avancadas = {
@@ -1458,13 +1542,23 @@ class TelaPrincipal(ctk.CTkFrame):
         return numero_res, data_res, data_reuniao, ad_referendum, valores_dinamicos, configs_avancadas
 
     def gerar_resolucao(self):
+
         # Captura os dados
         numero_res, data_res, data_reuniao, ad_referendum, valores_dinamicos, configs_avancadas = self.capturar_dados()
         print("**VALORES DINAMICOS: ", valores_dinamicos)
 
-        # modelos.tipo_resolução.geraModelo
-        getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
-            numero_res, data_res, ad_referendum, data_reuniao, valores_dinamicos)
+        self.botao_gerar.configure(text="Gerando...✏️", state="disabled")
+        self.update_idletasks()
+
+        try:
+            getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
+                numero_res, data_res, ad_referendum, data_reuniao, valores_dinamicos)
+
+            self.gerar_popup("Resolução gerada com sucesso", "success")
+        except Exception as e:
+            self.gerar_popup(f"ERRO ao gerar resolução: {e}", "error")
+
+        self.botao_gerar.configure(text="Gerar Resolução", state="normal")
 
     # def iniciar(self):
     #     self.janela.mainloop()
