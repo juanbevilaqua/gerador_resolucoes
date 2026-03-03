@@ -466,19 +466,30 @@ class TelaPrincipal(ctk.CTkFrame):
         #element é um elemento gráfico que pode ser: checkbox ou dropdown
 
         valor = element.get()
-        frame = frame_extra["frame"]
+        frame_pai = frame_extra["frame"]
+        frame = frame_pai.winfo_children()[0]
+        print("Frame filho: ", frame)
 
         if not valor or isinstance(element, ctk.CTkOptionMenu) and valor not in frame_extra["palavra_ativacao"]:#(isinstance(element, ctk.CTkOptionMenu) and valor != element._values[-1]):#pega o último valor por padrão
+            #print("Entrou IF ativacao")
             for widget in frame.winfo_children():#limpa os valores preenchdios nos entries
+                #print("Entrou FOR (IF) ativacao")
+                #print("Widget:", widget)
                 if isinstance(widget, ctk.CTkEntry):
+                    #print("Entrou IF IF ativacao")
                     widget.delete(0, ctk.END)
                     widget.insert(0, "null")# atribui um valor padrão p/ verif. que o campo foi ignorado(fica apenas no background)
-            frame.pack_forget()
+            frame_pai.pack_forget()
         else:
+            #print("Entrou ELSE ativacao")
             for widget in frame.winfo_children():
+                #print("Entrou FOR (ELSE) ativacao")
+                #print("Widget:", widget)
                 if isinstance(widget, ctk.CTkEntry):# limpa o campo p/ não exibir o valor "null" na interface
+                    #print("Entrou ELSE ELSE ativacao")
+                    #print("VALOR AO REAPARECER:", widget.get())
                     widget.delete(0, ctk.END)
-            frame.pack(pady=10)
+            frame_pai.pack(pady=10)
 
     def duplicar_elementos(self, elementos, botao, frame, listbox):
 
@@ -1473,11 +1484,27 @@ class TelaPrincipal(ctk.CTkFrame):
 
         # GRAVAÇÃO NO ARQUIVO DE CONFIGURAÇÕES (.yaml)
         CAMINHO_CONFIG = './src/config/configs.yaml'
-        print("CAMINHO CONFIG: ", CAMINHO_CONFIG)
 
         with open(CAMINHO_CONFIG, "r", encoding="utf-8") as file:
             file_parts = list(yaml.safe_load_all(file))
         file_parts[1] = configs_avancadas
+
+        save_infos = {}
+        #file_parts_list = file_parts[2]
+        keys = list(file_parts[2].keys())
+        #keys_list = list(keys)
+        for i, info in enumerate(file_parts[2]):
+            save_infos[keys[i]] = file_parts[2][keys[i]]
+
+
+        if not ad_referendum:
+            save_infos['final_directory_drive_pdf'] = f"{data_reuniao.split('/')[-1]} - {self.numero_reuniao_entry.get()}ª reunião ({data_reuniao})" # ano - nº reunião (data)
+        else:
+            save_infos['final_directory_drive_pdf'] = ""
+
+        file_parts[2] = save_infos
+
+        print("**SAVE INFOS: ",save_infos)
 
         with open(CAMINHO_CONFIG, "w", encoding="utf-8") as file:
             yaml.dump_all(file_parts, file, sort_keys=False, allow_unicode=True)
@@ -1491,8 +1518,8 @@ class TelaPrincipal(ctk.CTkFrame):
             if isinstance(widget, (ctk.CTkEntry, ctk.CTkOptionMenu)):
                 valor = widget.get()
 
-                if not valor or valor == 'Selecione':
-                    print("**Existem campos sem preenchimento**")
+                if valor == 'Selecione':
+                    print(f"**Existem campos sem preenchimento**[{nome}]: {valor}")
                     self.gerar_popup("Existem campos sem preenchimento!!", "warning")
                     return
 
@@ -1552,10 +1579,12 @@ class TelaPrincipal(ctk.CTkFrame):
 
         try:
             getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
-                numero_res, data_res, ad_referendum, data_reuniao, valores_dinamicos)
+                numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
 
             self.gerar_popup("Resolução gerada com sucesso", "success")
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             self.gerar_popup(f"ERRO ao gerar resolução: {e}", "error")
 
         self.botao_gerar.configure(text="Gerar Resolução", state="normal")

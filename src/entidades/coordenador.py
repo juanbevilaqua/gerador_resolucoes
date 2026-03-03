@@ -138,3 +138,6 @@ class Coordenador:
             return False, e
         finally:
             conn.close()
+
+    def to_tuple(self):
+        return (self.id, self.nome, self.modalidade, self.inicio_vigencia, self.fim_vigencia)

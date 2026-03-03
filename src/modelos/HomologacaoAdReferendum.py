@@ -1,6 +1,8 @@
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
+
+import util.Data
 from src.util.Titulo import geraTitulo
 from src.util.Cabecalho import geraCabecalho
 from src.util import Armazenador, ManipuladorDeArquivos, ColetorDeDados, Assinatura, BuscadorDeArquivos, FormatadorTexto
@@ -48,7 +50,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     #titulo_doc = f'Resolução nº {n_res} - Homologa resoluções Ad Referendum - {conj_res}.docx'
 
-    dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+    dir_res = util.Data.extraiAnoResolucao(data_res)
 
     titulo_doc = f'Resolução nº {n_res} - Homologa resoluções Ad Referendum - {conj_res}.docx'
 

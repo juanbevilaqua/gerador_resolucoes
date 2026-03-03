@@ -23,3 +23,7 @@ PIL(para uso de imagens) = pip install pillow
 
 pywinstyles(p/ configurar opacidade): pip install pywinstyles
 
+cx-Freeze(para gerar o exe): pip install cx-Freeze
+
+
+

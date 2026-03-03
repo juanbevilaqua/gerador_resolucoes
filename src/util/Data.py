@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox
 from datetime import datetime
 
-def numeroParaMes(numero):
+def numero_para_mes(numero):
     meses = {
         1: 'JANEIRO',
         2: 'FEVEREIRO',
@@ -21,16 +21,13 @@ def numeroParaMes(numero):
 
     return meses.get(numero, 'Número do mês inválido')
 
-def coletaData(data, extenso):
+def converter_data_extenso(data):
 
-    #data = input(f'Data {tipo}(DD/MM/AAAA): ')
     dia, mes, ano = data.split('/')
 
-    if extenso:
-        nome_mes = numeroParaMes(int(mes))
-        return dia + ' DE ' + nome_mes + ' DE ' + ano
-    else:
-        return data
+    nome_mes = numero_para_mes(int(mes))
+    return dia + ' DE ' + nome_mes + ' DE ' + ano
+
 
 def validar_data(data):
     #data = entry.get()
@@ -45,3 +42,11 @@ def validar_data(data):
 # *** formato de data DD/MM/AA e usa split para dividir a data e utilzar o valor das variaveis
 
 
+def extraiAnoResolucao(data):
+    try:
+        datetime.strptime(data, "%d/%m/%Y") # se a data vier no formato DD/MM/AAAA, separa a string por '/'
+        partes = data.split("/")
+    except:
+        partes = data.split() # caso contrario, separa por espaco
+
+    return partes[-1]

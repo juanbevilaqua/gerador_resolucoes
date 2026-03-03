@@ -7,12 +7,15 @@ PLACE = 'LOCAL'
 #PLACE = 'DRIVE_DESKTOP'
 
 def salvar(diretorio, document, titulo):
+    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
+        configs = list(yaml.safe_load_all(file))
+
     if PLACE == 'LOCAL':
-        titulo_docx_path = f'./resolucoes/{diretorio}/{titulo}'
-        titulo_pdf_path = f'./resolucoes/{diretorio}'
+        titulo_docx_path = f"{configs[2]['path_local']}/{diretorio}/{titulo}"
+        titulo_pdf_path = f"{configs[2]['path_local']}/{diretorio}"
     elif PLACE == 'DRIVE_DESKTOP':
-        titulo_docx_path = f'G:/Meu Drive/Coordenadoria/Resoluções/{diretorio}/{titulo}'
-        titulo_pdf_path = f'G:/Meu Drive/Documentos p  Assinatura PPGCTA/P  Assinar/Resoluções'
+        titulo_docx_path = f"{configs[2]['path_drive_docx']}/{diretorio}/{titulo}"
+        titulo_pdf_path = f"{configs[2]['path_drive_pdf']}/{configs[2]['final_directory_drive_pdf']}"
 
 
     print("Tentando salvar em:", os.path.abspath(titulo_docx_path))
@@ -22,8 +25,6 @@ def salvar(diretorio, document, titulo):
     # document.save(titulo_path)
     # ConversorDocxPdf.converter(titulo_path, f'../../resolucoes/{diretorio}')
 
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        configs = list(yaml.safe_load_all(file))
 
     pdf = configs[1]['pdf_autosave']
 

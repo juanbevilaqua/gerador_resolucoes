@@ -1,6 +1,8 @@
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
+
+import util.Data
 from src.util.Titulo import geraTitulo
 from src.util.Cabecalho import geraCabecalho
 from src.util import Armazenador, ColetorDeDados, Assinatura, FormatadorTexto
@@ -40,7 +42,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
         geraRodapeRepublicacao(document)
 
     # Define o título da resolução que será salva
-    dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+    dir_res = util.Data.extraiAnoResolucao(data_res)
     nome_encurtado = ColetorDeDados.encurtaNome(nome)
     if ad_referendum:
         titulo_doc = f'Resolução nº {n_res} - AD REFERENDUM Aprova contratação de professor visitante - {nome_encurtado}.docx'

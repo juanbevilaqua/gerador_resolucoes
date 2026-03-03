@@ -1,10 +1,12 @@
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
+
+import util.Data
 from src.util.Cabecalho import geraCabecalho
 from src.util.Titulo import geraTitulo
 from src.util.RodapeRepublicacao import geraRodapeRepublicacao
-from src.util import Armazenador, ColetorDeDados, Assinatura
+from src.util import Armazenador, ColetorDeDados, Assinatura, Data
 import yaml
 
 def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
@@ -44,7 +46,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
         geraRodapeRepublicacao(document)
 
     # Define o diretório e título da resolução que será salva
-    dir_res = ColetorDeDados.extraiAnoResolucao(data_res)
+    dir_res = util.Data.extraiAnoResolucao(data_res)
     if ad_referendum:
         titulo_doc = f'Resolução nº {n_res} - AD REFERENDUM Adia {n_reuniao}a reunião ordinária.docx'
     else:

@@ -14,9 +14,20 @@ class CoordenadorController:
     def listar_todos():
         """Retorna todos os coordenadores cadastrados."""
         coordenadores = Coordenador.list_all()
+        coordenadores_conv = []
+
+        for coordenador in coordenadores:
+            coordenador_obj = Coordenador(*coordenador)
+            data_inicio_conv = datetime.datetime.strptime(coordenador_obj.inicio_vigencia, "%Y-%m-%d").strftime("%d/%m/%Y")
+            data_fim_conv = datetime.datetime.strptime(coordenador_obj.fim_vigencia, "%Y-%m-%d").strftime("%d/%m/%Y")
+            coordenador_obj.inicio_vigencia = data_inicio_conv
+            coordenador_obj.fim_vigencia = data_fim_conv
+
+            coordenadores_conv.append(coordenador_obj.to_tuple())
+
         if not coordenadores:
             return [], "Nenhum coordenador encontrado."
-        return coordenadores, None
+        return coordenadores_conv, None
 
     @staticmethod
     def listar_ativos():
@@ -82,19 +93,22 @@ class CoordenadorController:
 
         # Verficação e Conversão do formato das datas se necessário
         try:
-            datetime.datetime.strptime(inicio_vigencia, "%Y-%m-%d")
-            inicio_vigencia_conv = inicio_vigencia
-        except ValueError: # Caso já esteja no formato %Y-%m-%d gera erro e entra na exceção
-            inicio_vigencia_conv = datetime.datetime.strptime(inicio_vigencia, "%d/%m/%Y").strftime("%Y-%m-%d")
+            inicio_vigencia_conv = datetime.datetime.strptime(inicio_vigencia, "%Y-%m-%d")
+        except ValueError:
+            inicio_vigencia_conv = datetime.datetime.strptime(inicio_vigencia, "%d/%m/%Y")
+
+        inicio_vigencia_conv = inicio_vigencia_conv.date()
+
 
         try:
-            datetime.datetime.strptime(inicio_vigencia, "%Y-%m-%d")
-            fim_vigencia_conv = fim_vigencia
+            fim_vigencia_conv = datetime.datetime.strptime(fim_vigencia, "%Y-%m-%d")
         except ValueError:
-            fim_vigencia_conv = datetime.datetime.strptime(fim_vigencia, "%d/%m/%Y").strftime("%Y-%m-%d")
+            fim_vigencia_conv = datetime.datetime.strptime(fim_vigencia, "%d/%m/%Y")
+
+        fim_vigencia_conv = fim_vigencia_conv.date()
 
 
-        if inicio_vigencia_conv and fim_vigencia and fim_vigencia_conv < inicio_vigencia:
+        if inicio_vigencia_conv and fim_vigencia_conv and fim_vigencia_conv < inicio_vigencia_conv:
             return False, "A data de fim da vigência deve ser posterior à de início."
 
         sucesso, msg = Coordenador.update(
