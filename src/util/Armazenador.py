@@ -2,17 +2,33 @@
 from util import ManipuladorDeArquivos
 import os
 import yaml
+import sys
 
-PLACE = 'LOCAL'
-#PLACE = 'DRIVE_DESKTOP'
+#PLACE = 'LOCAL'
+PLACE = 'DRIVE_DESKTOP'
+
+
+def get_base_path():
+    if getattr(sys, "frozen", False):
+        # Se estiver rodando como .exe
+        return os.path.dirname(sys.executable)
+    else:
+        # Se estiver rodando pela IDE
+        return os.path.abspath(os.getcwd())
 
 def salvar(diretorio, document, titulo):
     with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
         configs = list(yaml.safe_load_all(file))
 
+    base_path = get_base_path()
+    base_resolucoes = os.path.join(base_path, "resolucoes")
+
     if PLACE == 'LOCAL':
-        titulo_docx_path = f"{configs[2]['path_local']}/{diretorio}/{titulo}"
-        titulo_pdf_path = f"{configs[2]['path_local']}/{diretorio}"
+        # titulo_docx_path = f"{configs[2]['path_local']}/{diretorio}/{titulo}"
+        # titulo_pdf_path = f"{configs[2]['path_local']}/{diretorio}"
+
+        titulo_docx_path = os.path.join(base_resolucoes, diretorio, titulo)
+        titulo_pdf_path = os.path.join(base_resolucoes, diretorio)
     elif PLACE == 'DRIVE_DESKTOP':
         titulo_docx_path = f"{configs[2]['path_drive_docx']}/{diretorio}/{titulo}"
         titulo_pdf_path = f"{configs[2]['path_drive_pdf']}/{configs[2]['final_directory_drive_pdf']}"

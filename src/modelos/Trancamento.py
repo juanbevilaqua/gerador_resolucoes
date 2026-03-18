@@ -5,7 +5,7 @@ from docx.shared import Pt
 import util.Data
 from src.util.Titulo import geraTitulo
 from src.util.Cabecalho import geraCabecalho
-from src.util import Armazenador, ColetorDeDados, Assinatura
+from src.util import Armazenador, ColetorDeDados, Assinatura, CarregadorDeConfigs
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
@@ -19,9 +19,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     if motivo == "Outro(s)":
         motivo = dados_dinamicos["Outro(s)"]
 
-
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        file_parts = list(yaml.safe_load_all(file))
+    file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
     #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, rga, semestre, motivo = ColetorDeDados.coletaDados(2)
 

@@ -1,7 +1,7 @@
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-
+from src.util import CarregadorDeConfigs
 import util.Data
 from src.util.Titulo import geraTitulo
 from src.util.Cabecalho import geraCabecalho
@@ -25,8 +25,8 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     doc_origem = ManipuladorDeArquivos.converterPdfDocx(dados_dinamicos["Solicitação de Banca"])
     # Carrega ou cria o documento de destino
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        file_parts = list(yaml.safe_load_all(file))
+
+    file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
 
     #Seleciona a tabela 1 do documento padrão

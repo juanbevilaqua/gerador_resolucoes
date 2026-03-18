@@ -1,0 +1,5 @@
+setup.py
+src/Gerador_de_Resolu_es.egg-info/PKG-INFO
+src/Gerador_de_Resolu_es.egg-info/SOURCES.txt
+src/Gerador_de_Resolu_es.egg-info/dependency_links.txt
+src/Gerador_de_Resolu_es.egg-info/top_level.txt

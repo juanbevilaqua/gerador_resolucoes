@@ -5,7 +5,7 @@ from docx.shared import Pt
 import util.Data
 from src.util.Titulo import geraTitulo
 from src.util.Cabecalho import geraCabecalho
-from src.util import Armazenador, ColetorDeDados, Assinatura
+from src.util import Armazenador, ColetorDeDados, Assinatura, CarregadorDeConfigs
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
@@ -15,8 +15,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     ano_ingresso = dados_dinamicos["Ano de Ingresso"]
     data_limite = dados_dinamicos["Data Limite Aprovada"]
 
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        file_parts = list(yaml.safe_load_all(file))
+    file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
     #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, ano_ingresso, data_limite = ColetorDeDados.coletaDados(1)# 1 indica o tipo de resolução, nesse caso, Prorrogação de Qualificação
 

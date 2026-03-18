@@ -6,7 +6,7 @@ import util.Data
 from src.util.Cabecalho import geraCabecalho
 from src.util.Titulo import geraTitulo
 from src.util.RodapeRepublicacao import geraRodapeRepublicacao
-from src.util import Armazenador, ColetorDeDados, Assinatura, Data
+from src.util import Armazenador, CarregadorDeConfigs, Assinatura, Data
 import yaml
 
 def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
@@ -22,8 +22,10 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     else:
         previsao = f"para {nova_data}"
 
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        file_parts = list(yaml.safe_load_all(file))
+    # from src.util import CarregadorDeConfigs
+
+    #file_parts = CarregadorDeConfigs.carregar_config()    #     
+    file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
     #n_res, data_res, ad_referendum, data_reuniao, n_reuniao, data_inicial, resolucao, data_res_original, previsao = ColetorDeDados.coletaDados(9)# 1 indica o tipo de resolução, nesse caso, Prorrogação de Qualificação
 

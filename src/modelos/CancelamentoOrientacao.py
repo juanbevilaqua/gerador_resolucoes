@@ -5,7 +5,7 @@ from docx.shared import Pt
 import util.Data
 from src.util.Cabecalho import geraCabecalho
 from src.util.Titulo import geraTitulo
-from src.util import Armazenador, ColetorDeDados, Assinatura, FormatadorTexto
+from src.util import Armazenador, ColetorDeDados, Assinatura, CarregadorDeConfigs
 from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
@@ -15,8 +15,8 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     nome_professor = dados_dinamicos["Nome do Orientador"]
     prazo_regularizacao = dados_dinamicos["Prazo Para Regularização(em dias)"]
 
-    with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
-        file_parts = list(yaml.safe_load_all(file))
+
+    file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
 
     geraTitulo(document, n_res, data_res)

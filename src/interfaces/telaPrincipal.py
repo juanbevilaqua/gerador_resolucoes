@@ -7,6 +7,7 @@ from src import modelos
 import yaml
 from src.controladores import controladorProfessor, controladorDisciplina
 from src.util import Data
+import importlib
 
 # Verde Claro: #749619
 # Verde escuro: #4F6416
@@ -1578,8 +1579,12 @@ class TelaPrincipal(ctk.CTkFrame):
         self.update_idletasks()
 
         try:
-            getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
-                numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
+            # getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
+            #     numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
+
+            nome_modulo = self.tipos_resolucao[self.tipo_var.get()]
+            modulo = importlib.import_module(f"src.modelos.{nome_modulo}")
+            modulo.geraModelo(numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
 
             self.gerar_popup("Resolução gerada com sucesso", "success")
         except Exception as e:
