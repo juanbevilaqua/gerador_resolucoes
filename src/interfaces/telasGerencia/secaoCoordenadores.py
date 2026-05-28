@@ -36,23 +36,59 @@ class SecaoCoordenadores(ctk.CTkFrame):
         Centraliza os campos necessários para cadastro/edição de um coordenador.
         """
 
-        self.nome_coordenador_label = ctk.CTkLabel(frame, text="Nome do Coordenador").grid(row=0, column=0, padx=5,
-                                                                                       pady=10)
-        self.nome_coordenador_entry = ctk.CTkEntry(frame)
-        self.nome_coordenador_entry.grid(row=0, column=1, padx=5, pady=10)
+        # self.nome_coordenador_label = ctk.CTkLabel(frame, text="Nome do Coordenador").grid(row=0, column=0, padx=5,
+        #                                                                                pady=10)
+        # self.nome_coordenador_entry = ctk.CTkEntry(frame)
+        # self.nome_coordenador_entry.grid(row=0, column=1, padx=5, pady=10)
+        #
+        # self.modalidade_label = ctk.CTkLabel(frame, text="Modalidade").grid(row=1, column=0, padx=5, pady=5)
+        # self.modalidade_var = ctk.StringVar(value="Selecione")
+        # self.modalidade_dropdown = ctk.CTkOptionMenu(frame, values=['Coordenador Titular', 'Vice-Coordenador'], variable=self.modalidade_var)
+        # self.modalidade_dropdown.grid(row=1, column=1, padx=5, pady=10)
+        #
+        # self.inicio_vigencia_label = ctk.CTkLabel(frame, text="Início da Vigência do Mandato").grid(row=2, column=0)
+        # self.inicio_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
+        # self.inicio_vigencia_entry.grid(row=2, column=1, pady=10)
+        #
+        # self.fim_vigencia_label = ctk.CTkLabel(frame, text="Fim da Vigência do Mandato").grid(row=3, column=0)
+        # self.fim_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
+        # self.fim_vigencia_entry.grid(row=3, column=1, pady=10)
 
-        self.modalidade_label = ctk.CTkLabel(frame, text="Modalidade").grid(row=1, column=0, padx=5, pady=5)
+        # Configurar as colunas para expansão simétrica
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
+
+        # Nome do Coordenador
+        self.nome_coordenador_label = ctk.CTkLabel(frame, text="Nome do Coordenador", font=ctk.CTkFont(weight="bold"))
+        self.nome_coordenador_label.grid(row=0, column=0, padx=(5, 5), pady=10, sticky="e")
+
+        self.nome_coordenador_entry = ctk.CTkEntry(frame, width=150)
+        self.nome_coordenador_entry.grid(row=0, column=1, padx=(5, 5), pady=10, sticky="w")
+
+        # Modalidade
+        self.modalidade_label = ctk.CTkLabel(frame, text="Modalidade", font=ctk.CTkFont(weight="bold"))
+        self.modalidade_label.grid(row=1, column=0, padx=(5, 5), pady=5, sticky="e")
+
         self.modalidade_var = ctk.StringVar(value="Selecione")
-        self.modalidade_dropdown = ctk.CTkOptionMenu(frame, values=['Coordenador Titular', 'Vice-Coordenador'], variable=self.modalidade_var)
-        self.modalidade_dropdown.grid(row=1, column=1, padx=5, pady=10)
+        self.modalidade_dropdown = ctk.CTkOptionMenu(frame, values=['Coordenador Titular', 'Vice-Coordenador'], width=150,
+                                                     variable=self.modalidade_var)
+        self.modalidade_dropdown.grid(row=1, column=1, padx=(5, 5), pady=10, sticky="w")
 
-        self.inicio_vigencia_label = ctk.CTkLabel(frame, text="Início da Vigência do Mandato").grid(row=2, column=0)
-        self.inicio_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
-        self.inicio_vigencia_entry.grid(row=2, column=1, pady=10)
+        # Início da Vigência
+        self.inicio_vigencia_label = ctk.CTkLabel(frame, text="Início do Mandato",
+                                                  font=ctk.CTkFont(weight="bold"))
+        self.inicio_vigencia_label.grid(row=2, column=0, padx=(5, 5), pady=5, sticky="e")
 
-        self.fim_vigencia_label = ctk.CTkLabel(frame, text="Fim da Vigência do Mandato").grid(row=3, column=0)
-        self.fim_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
-        self.fim_vigencia_entry.grid(row=3, column=1, pady=10)
+        self.inicio_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA', width=150)
+        self.inicio_vigencia_entry.grid(row=2, column=1, padx=(5, 5), pady=10, sticky="w")
+
+        # Fim da Vigência
+        self.fim_vigencia_label = ctk.CTkLabel(frame, text="Fim do Mandato",
+                                               font=ctk.CTkFont(weight="bold"))
+        self.fim_vigencia_label.grid(row=3, column=0, padx=(5, 5), pady=5, sticky="e")
+
+        self.fim_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA', width=150)
+        self.fim_vigencia_entry.grid(row=3, column=1, padx=(5, 5), pady=10, sticky="w")
 
         return 4  # linha atual do grid
 
@@ -65,13 +101,13 @@ class SecaoCoordenadores(ctk.CTkFrame):
             widget.destroy()
 
         # =========================
-        # CONFIGURAÇÃO DAS COLUNAS (UMA ÚNICA VEZ)
+        # CONFIGURAÇÃO DAS COLUNAS
         # =========================
         self.coordenadores_cadastrados_frame.grid_columnconfigure(0, minsize=50)  # ID
         self.coordenadores_cadastrados_frame.grid_columnconfigure(1, weight=2)  # Nome
         self.coordenadores_cadastrados_frame.grid_columnconfigure(2, weight=2)  # Modalidade
-        self.coordenadores_cadastrados_frame.grid_columnconfigure(3, minsize=120)  # Início
-        self.coordenadores_cadastrados_frame.grid_columnconfigure(4, minsize=120)  # Fim
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(3, minsize=150)  # Início
+        self.coordenadores_cadastrados_frame.grid_columnconfigure(4, minsize=150)  # Fim
         self.coordenadores_cadastrados_frame.grid_columnconfigure(5, minsize=120)  # Operações
 
         headers = [
@@ -375,10 +411,10 @@ class SecaoCoordenadores(ctk.CTkFrame):
 
             buttons_frame = ctk.CTkFrame(self.top_level)
             buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
-            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=confirm_action)
             ok_button.grid(row=0, column=0, padx=5)
 
-            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=self.top_level.destroy, width=80)
             cancel_button.grid(row=0, column=1, padx=5)
 
         elif action == "editar":
@@ -406,10 +442,10 @@ class SecaoCoordenadores(ctk.CTkFrame):
 
             buttons_frame = ctk.CTkFrame(self.top_level)
             buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
-            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=confirm_action)
             ok_button.grid(row=0, column=0, padx=5)
 
-            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar",  width=80, height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=self.top_level.destroy)
             cancel_button.grid(row=0, column=1, padx=5)
 
             # inserção dos dados do professor selecionado nos campos

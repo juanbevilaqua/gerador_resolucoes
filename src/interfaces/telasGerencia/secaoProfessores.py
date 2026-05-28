@@ -46,36 +46,73 @@ class SecaoProfessores(ctk.CTkFrame):
                                      'POTENCIAL TECNOLÓGICO DE MATÉRIAS-PRIMAS E DE RESÍDUOS AGROINDUSTRIAIS']
         }
 
-        self.nome_professor_label = ctk.CTkLabel(frame, text="Nome do Professor").grid(row=0, column=0, padx=5,
-                                                                                       pady=10)
-        self.nome_professor_entry = ctk.CTkEntry(frame)
-        self.nome_professor_entry.grid(row=0, column=1, padx=5, pady=10)
-
-        self.area_concentracao_professor_label = ctk.CTkLabel(frame, text="Área de Concentração").grid(row=1,
-                                                                                                       column=0,
-                                                                                                       padx=5,
-                                                                                                       pady=5)
-        self.area_concentracao_var = ctk.StringVar(value="Selecione")
-        self.area_concentracao_professor_dropdown = ctk.CTkOptionMenu(frame, values=list(
-            self.dict_areas_concentracao.keys()), variable=self.area_concentracao_var, command=lambda
-            valor: self.atualizar_dropdown_linhas_pesquisa())
-        self.area_concentracao_professor_dropdown.grid(row=1, column=1, padx=5, pady=10)
-
-        self.linha_pesquisa_professor_label = ctk.CTkLabel(frame, text="Linha de Pesquisa").grid(row=2, column=0,
-                                                                                                 padx=5, pady=5)
-        frame_aux_linha = ctk.CTkFrame(frame, width=350, height=30)
-        frame_aux_linha.grid(row=2, column=1, padx=5, pady=10, sticky='ew')
-        frame_aux_linha.grid_propagate(False)
-        self.linha_pesquisa_var = ctk.StringVar(value="Selecione")
-        self.linha_pesquisa_professor_dropdown = ctk.CTkOptionMenu(frame_aux_linha, values=[],
-                                                                   variable=self.linha_pesquisa_var,
-                                                                   font=("Segoe UI", 10))
-        self.linha_pesquisa_professor_dropdown.grid(row=0, column=0, sticky='ew')
+        # self.nome_professor_label = ctk.CTkLabel(frame, text="Nome do Professor").grid(row=0, column=0, padx=5,
+        #                                                                                pady=10)
+        # self.nome_professor_entry = ctk.CTkEntry(frame)
+        # self.nome_professor_entry.grid(row=0, column=1, padx=5, pady=10)
+        #
+        # self.area_concentracao_professor_label = ctk.CTkLabel(frame, text="Área de Concentração").grid(row=1,
+        #                                                                                                column=0,
+        #                                                                                                padx=5,
+        #                                                                                                pady=5)
+        # self.area_concentracao_var = ctk.StringVar(value="Selecione")
+        # self.area_concentracao_professor_dropdown = ctk.CTkOptionMenu(frame, values=list(
+        #     self.dict_areas_concentracao.keys()), variable=self.area_concentracao_var, command=lambda
+        #     valor: self.atualizar_dropdown_linhas_pesquisa())
+        # self.area_concentracao_professor_dropdown.grid(row=1, column=1, padx=5, pady=10)
+        #
+        # self.linha_pesquisa_professor_label = ctk.CTkLabel(frame, text="Linha de Pesquisa").grid(row=2, column=0,
+        #                                                                                          padx=5, pady=5)
+        # #frame_aux_linha = ctk.CTkFrame(frame, width=350, height=30)
+        # #frame_aux_linha.grid(row=2, column=1, padx=5, pady=10, sticky='ew')
+        # #frame_aux_linha.grid_propagate(False)
+        # self.linha_pesquisa_var = ctk.StringVar(value="Selecione")
+        # self.linha_pesquisa_professor_dropdown = ctk.CTkOptionMenu(frame, values=[],
+        #                                                            variable=self.linha_pesquisa_var,
+        #                                                            font=("Segoe UI", 10))
         # self.linha_pesquisa_professor_dropdown.grid(row=2, column=1, padx=5, pady=10)
 
-        # frame.after(100, lambda: self.linha_pesquisa_professor_dropdown.configure(width=150))
+        # Configurar as colunas para expansão simétrica
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
 
-        return 3  # linha atual do grid
+        # Nome do Professor
+        self.nome_professor_label = ctk.CTkLabel(frame, text="Nome do Professor", font=ctk.CTkFont(weight="bold"))
+        self.nome_professor_label.grid(row=0, column=0, padx=(5, 5), pady=(15, 30), sticky="e")
+
+        self.nome_professor_entry = ctk.CTkEntry(frame, width=250)
+        self.nome_professor_entry.grid(row=0, column=1, padx=(5, 5), pady=(15, 30), sticky="w")
+
+        # Área de Concentração
+        self.area_concentracao_professor_label = ctk.CTkLabel(frame, text="Área de Concentração", font=ctk.CTkFont(weight="bold"))
+        self.area_concentracao_professor_label.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
+        self.area_concentracao_var = ctk.StringVar(value="Selecione")
+        self.area_concentracao_professor_dropdown = ctk.CTkOptionMenu(
+            frame,
+            values=list(self.dict_areas_concentracao.keys()),
+            variable=self.area_concentracao_var,
+            command=lambda valor: self.atualizar_dropdown_linhas_pesquisa(),
+            width=200,
+        )
+        self.area_concentracao_professor_dropdown.grid(row=2, column=0, padx=(5, 5), columnspan=2, pady=10)
+
+        # Linha de Pesquisa
+        self.linha_pesquisa_professor_label = ctk.CTkLabel(frame, text="Linha de Pesquisa", font=ctk.CTkFont(weight="bold"))
+        self.linha_pesquisa_professor_label.grid(row=3, column=0, columnspan=2, padx=(5, 5), pady=5)
+
+        self.linha_pesquisa_var = ctk.StringVar(value="Selecione")
+        self.linha_pesquisa_professor_dropdown = ctk.CTkOptionMenu(
+            frame,
+            values=[],
+            variable=self.linha_pesquisa_var,
+            width=200,
+            #font=("Segoe UI", 10)
+        )
+        self.linha_pesquisa_professor_dropdown.grid(row=4, column=0, columnspan=2, padx=(5, 5), pady=5)
+
+
+        return 5  # linha atual do grid
 
     def atualizar_dropdown_linhas_pesquisa(self):
 
@@ -130,8 +167,8 @@ class SecaoProfessores(ctk.CTkFrame):
 
     def spam_top_level(self, action, infos=None):
         self.top_level = ctk.CTkToplevel()
-        width = 500 if action in ("cadastrar", "editar") else 300
-        height = 300 if action in ("cadastrar", "editar") else 150
+        width = 575 if action in ("cadastrar", "editar") else 300
+        height = 350 if action in ("cadastrar", "editar") else 150
         # centralizar o popup
         x = (self.top_level.winfo_screenwidth() // 2) - (width // 2)
         y = (self.top_level.winfo_screenheight() // 2) - (height // 2)
@@ -156,10 +193,10 @@ class SecaoProfessores(ctk.CTkFrame):
 
             buttons_frame = ctk.CTkFrame(self.top_level)
             buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
-            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=confirm_action)
             ok_button.grid(row=0, column=0, padx=5)
 
-            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=self.top_level.destroy, width=80, height=35)
             cancel_button.grid(row=0, column=1, padx=5)
 
         elif action == "editar":
@@ -185,10 +222,10 @@ class SecaoProfessores(ctk.CTkFrame):
 
             buttons_frame = ctk.CTkFrame(self.top_level)
             buttons_frame.grid(row=line, column=0, pady=50, columnspan=2)
-            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, command=confirm_action)
+            ok_button = ctk.CTkButton(buttons_frame, text="OK", width=80, height=35, font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=confirm_action)
             ok_button.grid(row=0, column=0, padx=5)
 
-            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", command=self.top_level.destroy, width=80)
+            cancel_button = ctk.CTkButton(buttons_frame, text="Cancelar", font=ctk.CTkFont(weight="bold", size=16), text_color="white", border_width=1, border_color="black", command=self.top_level.destroy, width=80, height=35)
             cancel_button.grid(row=0, column=1, padx=5)
 
             # inserção dos dados do professor selecionado nos campos

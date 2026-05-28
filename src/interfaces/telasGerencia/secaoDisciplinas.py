@@ -81,11 +81,11 @@ class SecaoDisciplinas(ctk.CTkFrame):
             widget.destroy()
 
         # =========================
-        # CONFIGURAÇÃO DAS COLUNAS (UMA ÚNICA VEZ)
+        # CONFIGURAÇÃO DAS COLUNAS
         # =========================
         self.disciplinas_cadastradas_frame.grid_columnconfigure(0, minsize=50)  # ID
         self.disciplinas_cadastradas_frame.grid_columnconfigure(1, weight=3)  # Nome
-        self.disciplinas_cadastradas_frame.grid_columnconfigure(2, minsize=120)  # Carga Horária
+        self.disciplinas_cadastradas_frame.grid_columnconfigure(2, minsize=150)  # Carga Horária
         self.disciplinas_cadastradas_frame.grid_columnconfigure(3, minsize=100)  # Créditos
 
         headers = ["ID", "Nome", "Carga-Horária", "Créditos"]

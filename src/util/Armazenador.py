@@ -5,7 +5,7 @@ import yaml
 import sys
 
 #PLACE = 'LOCAL'
-PLACE = 'DRIVE_DESKTOP'
+#PLACE = 'DRIVE_DESKTOP'
 
 
 def get_base_path():
@@ -19,6 +19,11 @@ def get_base_path():
 def salvar(diretorio, document, titulo):
     with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
         configs = list(yaml.safe_load_all(file))
+
+    if configs[1]["gdrive_save"] is True:
+        PLACE = 'DRIVE_DESKTOP'
+    else:
+        PLACE = 'LOCAL'
 
     base_path = get_base_path()
     base_resolucoes = os.path.join(base_path, "resolucoes")
@@ -44,19 +49,15 @@ def salvar(diretorio, document, titulo):
 
     pdf = configs[1]['pdf_autosave']
 
+    # Garante que o diretório pai existe antes de tentar salvar
+    novo_diretorio = os.path.dirname(titulo_docx_path)
+    if not os.path.exists(novo_diretorio):
+        print(f"Diretório '{diretorio}' não encontrado. Criando o diretório...")
+        os.makedirs(novo_diretorio, exist_ok=True)
+
     try:
         document.save(titulo_docx_path)
         if pdf:
             print(ManipuladorDeArquivos.converterDocxPdf(titulo_docx_path, titulo_pdf_path))
-    except FileNotFoundError:
-        print(f"Diretório '{diretorio}' não encontrado. Criando o diretório...")
-
-        # Cria o diretório e tenta salvar o documento novamente
-        novo_diretorio = titulo_docx_path.rsplit('/', 1)[0] # Ex: ./resolucoes/{diretorio}
-        os.makedirs(novo_diretorio, exist_ok=True)
-        document.save(titulo_docx_path)
-        if pdf:
-            ManipuladorDeArquivos.converterDocxPdf(titulo_docx_path, titulo_pdf_path)
     except Exception as e:
         raise e
-        #print(f"Ocorreu um erro ao salvar o arquivo: {e}")

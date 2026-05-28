@@ -28,6 +28,8 @@ def converter_data_extenso(data):
     nome_mes = numero_para_mes(int(mes))
     return dia + ' DE ' + nome_mes + ' DE ' + ano
 
+def converter_data_hifen(data):
+    return data.replace("/", "-")
 
 def validar_data(data):
     #data = entry.get()

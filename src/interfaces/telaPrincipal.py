@@ -69,7 +69,7 @@ class TelaPrincipal(ctk.CTkFrame):
         # =================
         # CABEÇALHO DA TELA PRINCIPAL
         # =================
-        self.barra_lateral_frame = ctk.CTkFrame(self, fg_color='#749619')
+        self.barra_lateral_frame = ctk.CTkFrame(self, fg_color="#E6E6E6", border_width=1, border_color="black")#'#749619')
         # self.cabecalho_frame.grid_columnconfigure(0, weight=0)
         # self.cabecalho_frame.grid_columnconfigure(1, weight=1)
         # self.cabecalho_frame.grid_columnconfigure(2, weight=0)
@@ -134,13 +134,20 @@ class TelaPrincipal(ctk.CTkFrame):
         # -----------------
         # Menu de Config. Avançadas
         # -----------------
-        self.config_avancadas_frame = ctk.CTkFrame(self.barra_lateral_frame, border_width=2, border_color='black', fg_color='#4F6416')#, width=100)
+        self.config_avancadas_frame = ctk.CTkFrame(self.barra_lateral_frame, fg_color="transparent")#, width=100)
         self.config_avancadas_frame.grid_columnconfigure(0, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(1, weight=1)
         self.config_avancadas_frame.grid_columnconfigure(2, weight=1)
 
         #self.frame_fixo.grid_columnconfigure(0, weight=1)
-        self.config_avancadas_button = ctk.CTkButton(self.barra_lateral_frame, text="⚙️ Config. Avançadas ▶", fg_color="transparent", border_width=2, border_color = "black", command=lambda: self.alternar_abertura_menu_config_avancadas())
+        estado_configs_avancadas_button = {"ativo" : False}
+        self.config_avancadas_button = ctk.CTkButton(self.barra_lateral_frame, text="⚙️ Config. Avançadas ▶", border_width=2, fg_color="transparent", text_color="#4F6416", border_color = "#4F6416",  hover_color="white",
+                                                     command=lambda: (
+                                                         estado_configs_avancadas_button.update({"ativo": not estado_configs_avancadas_button["ativo"]}),
+                                                         self.config_avancadas_button.configure(
+                                                             fg_color="#4F6416" if estado_configs_avancadas_button["ativo"] else "transparent", text_color="white" if estado_configs_avancadas_button["ativo"] else "#4F6416",
+                                                         hover_color="#4F6416" if estado_configs_avancadas_button["ativo"] else "white"),
+                                                         self.alternar_abertura_menu_config_avancadas()))
         self.config_avancadas_button.grid(row=2, column=0, columnspan=2, pady=10)
 
         self.estruturar_menu_config_avancadas()
@@ -195,7 +202,7 @@ class TelaPrincipal(ctk.CTkFrame):
         # BOTÃO GERAR RESOUÇÃO
         # =================
         # Desabilitado inicialmente
-        self.botao_gerar = ctk.CTkButton(self.area_trabalho_frame, text="Gerar Resolução", fg_color="#C7D300", width=150, height=50, command=self.gerar_resolucao)#.janela
+        self.botao_gerar = ctk.CTkButton(self.area_trabalho_frame, text="Gerar Resolução", fg_color="#C7D300", width=150, height=50, font=ctk.CTkFont(weight='bold', size=16), command=self.gerar_resolucao)#.janela
         #self.botao_gerar.pack(pady=10)
         self.botao_gerar.grid(row=2, column=0, pady=10)
         self.botao_gerar.configure(state="disabled")  # ativa só após escolher tipo
@@ -291,11 +298,13 @@ class TelaPrincipal(ctk.CTkFrame):
     def gera_barra_pesq_professores(self, frame):
         frame_pesquisa_professor = ctk.CTkFrame(frame)
         #self.frame_pesquisa_professor.grid(row=row, column=0, pady=10)
-        frame_pesquisa_professor.pack(pady=10)
+        # ANTIGO frame_pesquisa_professor.pack(pady=10)
+        frame_pesquisa_professor.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
         #self.frame_pesquisa_professor.grid_columnconfigure(0, weight=1)
         #self.frame_pesquisa_professor.grid_columnconfigure(1, weight=1)
         #ctk.CTkLabel(self.frame_pesquisa_professor, text="Tipo de Resolução").grid(row=0, column=0, columnspan=2)
-        professores_entry = ctk.CTkEntry(frame_pesquisa_professor, height=30, width=200,
+        professores_entry = ctk.CTkEntry(frame_pesquisa_professor, height=30, width=250,
                                                   #font=('Segoe UI', 15), border_color="#0088E3",
                                                   placeholder_text="Digite o nome do professor")
         professores_entry.grid(row=0, column=0)
@@ -370,8 +379,10 @@ class TelaPrincipal(ctk.CTkFrame):
 
     def gera_barra_pesq_disciplinas(self, frame):
         frame_pesquisa_disciplina = ctk.CTkFrame(frame)
-        frame_pesquisa_disciplina.pack(pady=10)
-        disciplinas_entry = ctk.CTkEntry(frame_pesquisa_disciplina, height=30, width=200,
+        # ANTIGO frame_pesquisa_disciplina.pack(pady=10)
+        frame_pesquisa_disciplina.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
+        disciplinas_entry = ctk.CTkEntry(frame_pesquisa_disciplina, height=30, width=250,
                                                   placeholder_text="Digite o nome da disciplina")
         disciplinas_entry.grid(row=0, column=0)
 
@@ -660,34 +671,43 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_fixo_opened = not self.frame_fixo_opened
 
     def estruturar_menu_config_avancadas(self):
+        #div = ctk.CTkFrame(self.config_avancadas_frame, fg_color="black", height=2)
+        #div.grid(row=0, column=0, columnspan=3, sticky='ew')
+
         self.vice_coordenador_var = ctk.BooleanVar(value=False)
-        vice_coordenador_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Vice-Coordenador?", text_color="white", variable=self.vice_coordenador_var)
-        vice_coordenador_checkbox.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        vice_coordenador_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Vice-Coordenador?", text_color="black", variable=self.vice_coordenador_var)
+        vice_coordenador_checkbox.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
         default_colors = {}
         self.data_republicacao_entry = ctk.CTkEntry(self.config_avancadas_frame, placeholder_text="DD/MM/AAAA", width=100)
         self.data_republicacao_entry.configure(state="disabled")
         default_colors["entry"] = self.data_republicacao_entry.cget("fg_color")
-        self.data_republicacao_entry.grid(row=1, column=1, padx=(0, 5), pady=10)#, columnspan=1
+        self.data_republicacao_entry.grid(row=2, column=1, padx=(0, 5), pady=10)#, columnspan=1
         self.motivo_republicacao_var = ctk.StringVar(value="Selecione")
         motivo_republicacao_dropdown = ctk.CTkOptionMenu(self.config_avancadas_frame, fg_color="white", button_color="#C7D300", values=['Correção', 'Complementação'], variable=self.motivo_republicacao_var, width=120)
         motivo_republicacao_dropdown.configure(state="disabled")
         default_colors["dropdown"] = motivo_republicacao_dropdown.cget("fg_color")
-        motivo_republicacao_dropdown.grid(row=1, column=2, padx=(0, 5), pady=10, sticky='w')
+        motivo_republicacao_dropdown.grid(row=2, column=2, padx=(0, 5), pady=10, sticky='w')
         self.republicacao_var = ctk.BooleanVar(value=False)
-        republicacao_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Republicação?", text_color="white",
+        republicacao_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Republicação?", text_color="black",
                                                 variable=self.republicacao_var,
                                                 command=lambda: self.alternar_ativacao_dos_campos(True, republicacao_checkbox, [self.data_republicacao_entry, motivo_republicacao_dropdown], default_colors))
-        republicacao_checkbox.grid(row=1, column=0, padx=(10, 0), pady=10, sticky="w")
+        republicacao_checkbox.grid(row=2, column=0, padx=(10, 0), pady=10, sticky="w")
 
         self.extraordinaria_var = ctk.BooleanVar(value=False)
-        extraordinaria_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Reunião Extraordinária?", text_color="white",
+        extraordinaria_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Reunião Extraordinária?", text_color="black",
                                                     variable=self.extraordinaria_var)
-        extraordinaria_checkbox.grid(row=2, column=0, padx=10, pady=10, sticky="w")
+        extraordinaria_checkbox.grid(row=3, column=0, padx=10, pady=10, sticky="w")
 
         self.pdf_autosave_switch_var = ctk.BooleanVar(value=True)
-        pdf_autosave_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Gerar Versão PDF", text_color="white", variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False)
-        pdf_autosave_switch.grid(row=3, column=0, padx=10, pady=10, sticky="w")
+        pdf_autosave_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Gerar Versão PDF", text_color="black", button_color="#4F6416", button_hover_color= "#749619",
+                                            variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False,)
+        pdf_autosave_switch.grid(row=4, column=0, padx=10, pady=10, sticky="w")
+
+        self.gdrive_save_switch_var = ctk.BooleanVar(value=True)
+        gdrive_save_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Salvar no Google Drive", text_color="black", button_color="#4F6416", button_hover_color= "#749619",
+                                            variable=self.gdrive_save_switch_var, onvalue=True, offvalue=False)
+        gdrive_save_switch.grid(row=5, column=0, padx=10, pady=10, sticky="w")
 
     def estruturar_frame_dinamico(self,tipo, line, primeira_chamada):
         color_frames_flag_list = 'black'
@@ -702,7 +722,7 @@ class TelaPrincipal(ctk.CTkFrame):
             self.criar_campo("Data Inicial", tipo='entry_placeholder')
             self.criar_campo("Resolução de Aprovação", tipo='entry_placeholder')
             self.criar_campo("Data da Resolução Original", tipo='entry_placeholder')
-            frame_nova_data = ctk.CTkFrame(self.frame_dinamico)
+            frame_nova_data = ctk.CTkFrame(self.frame_dinamico, fg_color='transparent')
             frame_extra_dict = {}
             frame_extra_dict["frame"] = frame_nova_data
             self.criar_campo("Previsão da Nova Data?", tipo='checkbox', frame_extra=frame_extra_dict)
@@ -1082,12 +1102,28 @@ class TelaPrincipal(ctk.CTkFrame):
             container = ctk.CTkFrame(frame, fg_color='transparent')
             container.pack(pady=15)
 
-            label = ctk.CTkLabel(container, text=nome)
-            label.grid(row=0, column=0, padx=(0, 10), pady=10, sticky='w')#padx=(0, 0), , sticky="w"
-            #label.pack(side='left', padx=(0, 10), pady=10)#side=pos,
+            container.grid_columnconfigure(0, weight=1)
+            container.grid_columnconfigure(1, weight=1)
 
-            entry = ctk.CTkEntry(container, width=300)
-            entry.grid(row=0, column=1, pady=10, sticky='ew')#padx=(0, 0),
+            label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight='bold'))
+            label.grid(row=0, column=0, padx=(5, 5), pady=5, sticky="w")
+
+            entry = ctk.CTkEntry(container, width=250)
+            entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
+            # ---
+            # container = ctk.CTkFrame(frame, fg_color='transparent')
+            # container.pack(pady=15)
+            #
+            # label = ctk.CTkLabel(container, text=nome)
+            # label.grid(row=0, column=0, padx=(0, 10), pady=10, sticky='w')#padx=(0, 0), , sticky="w"
+            # #label.pack(side='left', padx=(0, 10), pady=10)#side=pos,
+            #
+            # entry = ctk.CTkEntry(container, width=300)
+            # entry.grid(row=0, column=1, pady=10, sticky='ew')#padx=(0, 0),
+            #
+            # ----
+
             #entry.pack(side='left', pady=10)#, pady=(5, 0))#side=pos,
 
             if flag_list is True:
@@ -1120,7 +1156,7 @@ class TelaPrincipal(ctk.CTkFrame):
             frame_entry_button.pack(padx=20, pady=10)#, fill="x"
             #frame_entry_button.pack(anchor="w", padx=10, pady=(5, 0))
 
-            label = ctk.CTkLabel(frame_entry_button, text=nome)#frame_entry_button
+            label = ctk.CTkLabel(frame_entry_button, text=nome, font=ctk.CTkFont(weight='bold'))#frame_entry_button
             label.pack(side="left", padx=2, pady=(5, 0))
 
             entry = ctk.CTkEntry(frame_entry_button, width=150)
@@ -1147,7 +1183,7 @@ class TelaPrincipal(ctk.CTkFrame):
             frame_entry_file = ctk.CTkFrame(self.frame_entry_file_container)
             frame_entry_file.pack(pady=10)  # , fill="x"
 
-            label = ctk.CTkLabel(frame_entry_file, text=nome)  # frame_entry_button
+            label = ctk.CTkLabel(frame_entry_file, text=nome, font=ctk.CTkFont(weight='bold'))  # frame_entry_button
             label.pack(side="left", padx=10, pady=(5, 0))
 
             entry = ctk.CTkEntry(frame_entry_file, width=200)
@@ -1177,9 +1213,12 @@ class TelaPrincipal(ctk.CTkFrame):
             container = ctk.CTkFrame(frame, fg_color='transparent')
             container.pack(pady=25)
 
-            label = ctk.CTkLabel(container, text=nome)
+            container.grid_columnconfigure(0, weight=1)
+            container.grid_columnconfigure(1, weight=1)
+
+            label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight="bold"))
             # label.grid(row=linha, column=0, pady=10, padx=(5, 0))#padx=(0, 0), , sticky="w"
-            label.pack(padx=(0, 10), pady=10, side='left')  # side=pos,
+            label.grid(row=0, column=0, padx=(5, 5), pady=5, sticky="w")
 
             # CRIAÇÃO DO ENTRY NO FORMATO BARRA DE PESQUISA
             if any(termo in nome.lower() for termo in ("professor", "docente", "orientador")):
@@ -1267,23 +1306,53 @@ class TelaPrincipal(ctk.CTkFrame):
 
         elif tipo == 'entry_placeholder':
             container = ctk.CTkFrame(frame, fg_color='transparent')
-            container.pack(pady=25)
+            if frame == self.frame_dinamico:
+                container.pack(pady=15, padx=410, fill='x')
+            else:# quando não for o frame dinâmico. No geral é um frame menor
+                container.pack(pady=15, padx=205, fill='x')
 
-            label = ctk.CTkLabel(container, text=nome)
-                #label.grid(row=linha, column=0, pady=10, padx=(5, 0))#padx=(0, 0), , sticky="w"
-            label.pack(padx=(5, 10), pady=10, side='left')  # side=pos,
+
+            container.grid_columnconfigure(0, weight=1)
+            container.grid_columnconfigure(1, weight=1)
+
+            label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight='bold'))
+            label.grid(row=0, column=0, padx=(5, 5), pady=5, sticky="w")
 
             partes_nome = nome.split()
             if partes_nome[0] == "Data":
                 entry = ctk.CTkEntry(container, width=100, placeholder_text="dd/mm/aaaa")
-                entry.pack(pady=(0, 10), side='left')  # side=pos,
+                entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2, sticky="ew")
             #elif partes_nome[0] == "Resolução":
             elif partes_nome[0] == "Universidade":
                 entry = ctk.CTkEntry(container, width=200, placeholder_text="nome(sigla)")
-                entry.pack(pady=(0, 10), side='left')
+                entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2, sticky="ew")
             else:#formato para resolução
                 entry = ctk.CTkEntry(container, width=150, placeholder_text="nº-ano")
-                entry.pack(pady=(0, 10), side='left')  # side=pos,
+                entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2, sticky="ew")
+
+            #entry = ctk.CTkEntry(container, width=300)
+            #entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
+
+
+            # container = ctk.CTkFrame(frame, fg_color='transparent')
+            # container.pack(pady=25)
+            #
+            # label = ctk.CTkLabel(container, text=nome)
+            #     #label.grid(row=linha, column=0, pady=10, padx=(5, 0))#padx=(0, 0), , sticky="w"
+            # label.pack(padx=(5, 10), pady=10, side='left')  # side=pos,
+            #
+            # partes_nome = nome.split()
+            # if partes_nome[0] == "Data":
+            #     entry = ctk.CTkEntry(container, width=100, placeholder_text="dd/mm/aaaa")
+            #     entry.pack(pady=(0, 10), side='left')  # side=pos,
+            # #elif partes_nome[0] == "Resolução":
+            # elif partes_nome[0] == "Universidade":
+            #     entry = ctk.CTkEntry(container, width=200, placeholder_text="nome(sigla)")
+            #     entry.pack(pady=(0, 10), side='left')
+            # else:#formato para resolução
+            #     entry = ctk.CTkEntry(container, width=150, placeholder_text="nº-ano")
+            #     entry.pack(pady=(0, 10), side='left')  # side=pos,
 
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
@@ -1292,10 +1361,13 @@ class TelaPrincipal(ctk.CTkFrame):
 
         elif tipo == 'dropdown':
             container = ctk.CTkFrame(frame, fg_color='transparent')
-            container.pack(pady=25)
+            container.pack(pady=15)
 
-            label = ctk.CTkLabel(container, text=nome)#self.frame_dinamico
-            label.pack(padx=(0, 10), pady=10, side='left')
+            container.grid_columnconfigure(0, weight=1)
+            container.grid_columnconfigure(1, weight=1)
+
+            label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight='bold'))
+            label.grid(row=0, column=0, padx=(5, 5), pady=5, sticky="w")
 
             if not opcoes:
                 opcoes = ["Opção 1", "Opção 2"]# caso não sejam fornecidas opções como parametro
@@ -1305,14 +1377,34 @@ class TelaPrincipal(ctk.CTkFrame):
                 dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250)#self.frame_dinamico
             else:
                 dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250, command=lambda valor: self.ocultar_frame(dropdown, frame_extra))#self.frame_dinamico
-            dropdown.pack(pady=10, side='left')
+            dropdown.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
+
+
+
+            # -----
+            # container = ctk.CTkFrame(frame, fg_color='transparent')
+            # container.pack(pady=25)
+            #
+            # label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight='bold'))#self.frame_dinamico
+            # label.pack(padx=(0, 10), pady=10, side='left')
+            #
+            # if not opcoes:
+            #     opcoes = ["Opção 1", "Opção 2"]# caso não sejam fornecidas opções como parametro
+            # var = ctk.StringVar(value="Selecione")
+            # #var = ctk.StringVar(value=opcoes[0])
+            # if frame_extra is None:
+            #     dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250)#self.frame_dinamico
+            # else:
+            #     dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250, command=lambda valor: self.ocultar_frame(dropdown, frame_extra))#self.frame_dinamico
+            # dropdown.pack(pady=10, side='left')
+            # ------
 
             # if flag_list is True:
             #     self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = var
             # else:
             #     self.campos_dinamicos[nome] = var
             # #self.campos_dinamicos[nome] = var
-            print("PRINT DO VALOR DO DROPDOWN: ", dropdown.get())
+            # print("PRINT DO VALOR DO DROPDOWN: ", dropdown.get())
 
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
@@ -1327,7 +1419,8 @@ class TelaPrincipal(ctk.CTkFrame):
                 frame,
                 text=nome,
                 variable=checkbox_var,
-                command=lambda: self.ocultar_frame(checkbox, frame_extra)
+                command=lambda: self.ocultar_frame(checkbox, frame_extra),
+                font=ctk.CTkFont(weight='bold')
             )
             checkbox.pack(pady=10)
 
@@ -1468,7 +1561,8 @@ class TelaPrincipal(ctk.CTkFrame):
            "vice_coordenador" : self.vice_coordenador_var.get(),
             "republicacao" : [self.republicacao_var.get(), self.data_republicacao_entry.get(), self.motivo_republicacao_var.get()] if self.republicacao_var.get() else self.republicacao_var.get(),
             "extraordinaria": self.extraordinaria_var.get(),
-            "pdf_autosave": self.pdf_autosave_switch_var.get()
+            "pdf_autosave": self.pdf_autosave_switch_var.get(),
+            "gdrive_save": self.gdrive_save_switch_var.get()
         }
 
         # VALIDAÇÃO DO PREENCHIMENTO DAS CONFIGS. AVANÇADAS
@@ -1499,7 +1593,7 @@ class TelaPrincipal(ctk.CTkFrame):
 
 
         if not ad_referendum:
-            save_infos['final_directory_drive_pdf'] = f"{data_reuniao.split('/')[-1]} - {self.numero_reuniao_entry.get()}ª reunião ({data_reuniao})" # ano - nº reunião (data)
+            save_infos['final_directory_drive_pdf'] = f"{data_reuniao.split('/')[-1]} - {self.numero_reuniao_entry.get()}ª reunião ({Data.converter_data_hifen(data_reuniao)})" # ano - nº reunião (data)
         else:
             save_infos['final_directory_drive_pdf'] = ""
 

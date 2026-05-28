@@ -74,12 +74,12 @@ class TelaInicial(ctk.CTkFrame):
         self.bem_vindo_label = ctk.CTkLabel(self.texto_frame, text="Bem-vindo ao", text_color='black', font=('Poppins', 22), anchor='w')
         self.bem_vindo_label.grid(row=0, column=0, sticky='w')#.pack(pady=10, side='left')
 
-        self.gerador_resolucoes_label = ctk.CTkLabel(self.texto_frame, text="Gerador de Resoluções", width=300, text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
+        self.gerador_resolucoes_label = ctk.CTkLabel(self.texto_frame, text="SiGRe-CTA", width=300, text_color='#587800', font=('Poppins', 32, 'bold'), anchor='w')
         self.gerador_resolucoes_label.grid(row=1, column=0, sticky='w')#.pack(pady=5, side='left')
 
-        self.ppgcta_label = ctk.CTkLabel(self.texto_frame, text="do PPGCTA",
-                                                     text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
-        self.ppgcta_label.grid(row=2, column=0, sticky='w')  # .pack(pady=5, side='left')
+        #self.ppgcta_label = ctk.CTkLabel(self.texto_frame, text="do PPGCTA",
+        #                                             text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
+        #self.ppgcta_label.grid(row=2, column=0, sticky='w')  # .pack(pady=5, side='left')
 
 
         self.botoes_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')

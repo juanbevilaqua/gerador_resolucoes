@@ -4,6 +4,7 @@ vice_coordenador: false
 republicacao: false
 extraordinaria: false
 pdf_autosave: true
+gdrive_save: true
 ---
 path_local: ./resolucoes
 path_drive_docx: G:/Meu Drive/Coordenadoria/Resoluções
