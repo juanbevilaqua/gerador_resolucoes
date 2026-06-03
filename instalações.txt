@@ -25,5 +25,7 @@ pywinstyles(p/ configurar opacidade): pip install pywinstyles
 
 # cx-Freeze(para gerar o exe): pip install cx-Freeze
 
+tooltip (notificação com passar do mouse): pip install CTkTooTip
+
 
 

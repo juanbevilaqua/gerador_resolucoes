@@ -8,6 +8,8 @@ import yaml
 from src.controladores import controladorProfessor, controladorDisciplina
 from src.util import Data
 import importlib
+from CTkToolTip import CTkToolTip
+
 
 # Verde Claro: #749619
 # Verde escuro: #4F6416
@@ -708,6 +710,15 @@ class TelaPrincipal(ctk.CTkFrame):
         gdrive_save_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Salvar no Google Drive", text_color="black", button_color="#4F6416", button_hover_color= "#749619",
                                             variable=self.gdrive_save_switch_var, onvalue=True, offvalue=False)
         gdrive_save_switch.grid(row=5, column=0, padx=10, pady=10, sticky="w")
+
+        CTkToolTip(
+            gdrive_save_switch,
+            message="❗Habilite apenas se tiver acesso ao Drive do PPGCTA",
+            corner_radius = 4,
+            border_width=1,
+            border_color="black",
+            wraplength = 200
+        )
 
     def estruturar_frame_dinamico(self,tipo, line, primeira_chamada):
         color_frames_flag_list = 'black'
@@ -1613,7 +1624,7 @@ class TelaPrincipal(ctk.CTkFrame):
             if isinstance(widget, (ctk.CTkEntry, ctk.CTkOptionMenu)):
                 valor = widget.get()
 
-                if valor == 'Selecione':
+                if valor == 'Selecione' or valor.strip() == '':
                     print(f"**Existem campos sem preenchimento**[{nome}]: {valor}")
                     self.gerar_popup("Existem campos sem preenchimento!!", "warning")
                     return
