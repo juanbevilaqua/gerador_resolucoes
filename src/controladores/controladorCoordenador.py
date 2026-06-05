@@ -44,6 +44,19 @@ class CoordenadorController:
     #
 
     @staticmethod
+    def listar_titular_ativo():
+        coordenador = Coordenador.list_main_active()
+        if not coordenador:
+            return None
+        return coordenador
+
+    @staticmethod
+    def listar_vice_ativo():
+        coordenador = Coordenador.list_vice_active()
+        if not coordenador:
+            return None
+        return coordenador
+    @staticmethod
     def buscar_por_id(id_coordenador: int):
         """Retorna os dados de um coordenador pelo ID."""
         if not isinstance(id_coordenador, int):

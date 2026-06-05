@@ -48,6 +48,44 @@ class Coordenador:
             conn.close()
 
     @staticmethod
+    def list_main_active(): #busca o coordeandor titular ativo
+        conn = connect()
+        cursor = conn.cursor()
+
+        hoje = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        query = "SELECT * FROM Coordenadores WHERE inicio_vigencia <= ? AND fim_vigencia >= ? AND modalidade = 'Coordenador Titular'"
+
+        try:
+            cursor.execute(query, (hoje, hoje))
+            coordenador = cursor.fetchone()
+            return coordenador
+        except sqlite3.Error as e:
+            print(f"Erro ao BUSCAR coordenador titular ativo: {e}")
+            return None
+        finally:
+            conn.close()
+
+    @staticmethod
+    def list_vice_active():  # busca o vice-coordeandor ativo
+        conn = connect()
+        cursor = conn.cursor()
+
+        hoje = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        query = "SELECT * FROM Coordenadores WHERE inicio_vigencia <= ? AND fim_vigencia >= ? AND modalidade = 'Vice-Coordenador'"
+
+        try:
+            cursor.execute(query, (hoje, hoje))
+            coordenador = cursor.fetchone()
+            return coordenador
+        except sqlite3.Error as e:
+            print(f"Erro ao BUSCAR vice-coordenador ativo: {e}")
+            return None
+        finally:
+            conn.close()
+
+    @staticmethod
     def get_by_id(id):
         conn = connect()
         cursor = conn.cursor()
