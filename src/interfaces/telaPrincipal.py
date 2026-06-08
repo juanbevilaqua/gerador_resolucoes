@@ -640,7 +640,7 @@ class TelaPrincipal(ctk.CTkFrame):
                                             variable=self.pdf_autosave_switch_var, onvalue=True, offvalue=False,)
         pdf_autosave_switch.grid(row=4, column=0, padx=10, pady=10, sticky="w")
 
-        self.gdrive_save_switch_var = ctk.BooleanVar(value=True)
+        self.gdrive_save_switch_var = ctk.BooleanVar(value=False) # padrão com False para teste externo pela banca
         gdrive_save_switch = ctk.CTkSwitch(self.config_avancadas_frame, text="Salvar no Google Drive", text_color="black", button_color="#4F6416", button_hover_color= "#749619",
                                             variable=self.gdrive_save_switch_var, onvalue=True, offvalue=False)
         gdrive_save_switch.grid(row=5, column=0, padx=10, pady=10, sticky="w")

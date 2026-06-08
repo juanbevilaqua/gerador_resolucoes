@@ -27,7 +27,7 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     if vagas_dtd != '0':
         cont_col += 1
 
-    parts_semestre = semestre.split(".") # Formato: 2025.2
+    parts_semestre = semestre.split("-") # Formato: 2025.2
     if parts_semestre[-1] == "1":
         semestre_convert = f"primeiro semestre de {parts_semestre[0]}"
     else:
