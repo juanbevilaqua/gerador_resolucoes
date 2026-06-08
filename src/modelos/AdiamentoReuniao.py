@@ -22,12 +22,8 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     else:
         previsao = f"para {nova_data}"
 
-    # from src.util import CarregadorDeConfigs
-
-    #file_parts = CarregadorDeConfigs.carregar_config()    #     
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-    #n_res, data_res, ad_referendum, data_reuniao, n_reuniao, data_inicial, resolucao, data_res_original, previsao = ColetorDeDados.coletaDados(9)# 1 indica o tipo de resolução, nesse caso, Prorrogação de Qualificação
 
     geraTitulo(document, n_res, data_res)
 

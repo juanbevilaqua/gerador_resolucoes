@@ -4,10 +4,6 @@ import os
 import yaml
 import sys
 
-#PLACE = 'LOCAL'
-#PLACE = 'DRIVE_DESKTOP'
-
-
 def get_base_path():
     if getattr(sys, "frozen", False):
         # Se estiver rodando como .exe
@@ -40,11 +36,6 @@ def salvar(diretorio, document, titulo):
 
 
     print("Tentando salvar em:", os.path.abspath(titulo_docx_path))
-
-
-    # titulo_path = f'../../resolucoes/{diretorio}/{titulo}'
-    # document.save(titulo_path)
-    # ConversorDocxPdf.converter(titulo_path, f'../../resolucoes/{diretorio}')
 
 
     pdf = configs[1]['pdf_autosave']

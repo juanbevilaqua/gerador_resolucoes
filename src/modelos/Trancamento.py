@@ -21,7 +21,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, rga, semestre, motivo = ColetorDeDados.coletaDados(2)
 
     geraTitulo(document, n_res, data_res)
 
@@ -32,7 +31,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     p1.add_run(f', a pedido, do(a) acadêmico(a)')
     p1.add_run(f'{nome}').bold = True
     p1.add_run(f'(RGA: {rga}), por {motivo}.')
-    #p1.add_run(f'{data_limite}.').bold = True
     p1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     p1_format = p1.paragraph_format
     p1_format.space_after = Pt(100)

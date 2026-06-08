@@ -20,7 +20,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, exame, lingua = ColetorDeDados.coletaDados(14)# 1 indica o tipo de resolução
 
     geraTitulo(document, n_res, data_res)
 

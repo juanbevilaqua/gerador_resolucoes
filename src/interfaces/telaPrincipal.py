@@ -21,11 +21,6 @@ class TelaPrincipal(ctk.CTkFrame):
         super().__init__(master)
         self.master = master
         self.master.state("zoomed")
-        #self.janela = ctk.CTk()
-        #self.janela.title("Gerador de Resoluções")
-        #self.janela.geometry("950x750")
-        #self.janela.resizable(width=False, height=False)
-
 
 
         self.tipos_resolucao = {
@@ -79,9 +74,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.barra_lateral_frame.grid(row=0, column=0, sticky='nsw')
 
         self.voltar_button = ctk.CTkButton(self.barra_lateral_frame, text="⬅️", text_color="white", width=30, command=self.master.exibir_tela_inicial, font=("Segoe UI", 20), border_color="#4F6416").grid(row=0, column=0, pady=10, padx=15, sticky='w')
-        #self.titulo_tela_label = ctk.CTkLabel(self.cabecalho_frame, text="TELA PRINCIPAL - CRIAR RESOLUÇÕES").grid(row=0, column=1, pady=10, sticky='ew')
-        # self.placeholder = ctk.CTkLabel(self.cabecalho_frame, text="", width=30)
-        # self.placeholder.grid(row=0, column=2, padx=5)
 
 
         # =================
@@ -129,9 +121,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.data_reuniao_entry = ctk.CTkEntry(self.frame_fixo, width=200, placeholder_text="dd/mm/aaaa")
         self.data_reuniao_entry.grid(row=4, column=1, padx=10, pady=10, sticky="w")
         default_colors_data_reuniao["entry"] = self.data_reuniao_entry.cget("fg_color")#armazena a cor padrão do entry
-        #default_colors_data_reuniao.append(default_color)
-
-
 
         # -----------------
         # Menu de Config. Avançadas
@@ -153,9 +142,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.config_avancadas_button.grid(row=2, column=0, columnspan=2, pady=10)
 
         self.estruturar_menu_config_avancadas()
-
-        # self.guardar_dados_fixos_button = ctk.CTkButton(self.frame_fixo, text="✅ Guardar", command=lambda: self.alternar_abertura_frame_fixo())
-        # self.guardar_dados_fixos_button.grid(row=6, column=0, columnspan=2, pady=10)
 
         self.area_trabalho_frame = ctk.CTkFrame(self, fg_color='#FFFEEF')
         self.area_trabalho_frame.grid(row=0, column=1, sticky='nsew')
@@ -262,10 +248,6 @@ class TelaPrincipal(ctk.CTkFrame):
     def gera_barra_pesq_resolucoes(self):
         self.nova_res_button.grid_forget()
 
-        # ctk.CTkLabel(self.frame_pesquisa_resolucao, text="Tipo de Resolução").grid(row=0, column=0, columnspan=2)
-
-        # self.tipos_resolucao_entry = tk.Entry(self.frame_pesquisa_resolucao, width=35, font=15)
-        # self.tipo_var = ctk.StringVar()
         self.tipos_resolucao_entry = ctk.CTkEntry(self.frame_pesquisa_resolucao, height=50, width=300,
                                                   font=('Segoe UI', 15), border_color="#0088E3",
                                                   placeholder_text="Selecione o tipo de resolução")
@@ -300,7 +282,6 @@ class TelaPrincipal(ctk.CTkFrame):
     def gera_barra_pesq_professores(self, frame):
         frame_pesquisa_professor = ctk.CTkFrame(frame)
         #self.frame_pesquisa_professor.grid(row=row, column=0, pady=10)
-        # ANTIGO frame_pesquisa_professor.pack(pady=10)
         frame_pesquisa_professor.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
 
         #self.frame_pesquisa_professor.grid_columnconfigure(0, weight=1)
@@ -343,8 +324,6 @@ class TelaPrincipal(ctk.CTkFrame):
 
             else: # se a lista estiver vazia, o listbox desaparece p/ liberar espaço de tela
                 professores_listbox.grid_forget()
-                #self.frame_dinamico.focus_set()
-                #professores_entry.focus_set()
 
         def preencher_professor_entry(event=None):
             self.after(10, self._atualizar_valor_entry(professores_listbox, professores_entry))
@@ -442,9 +421,6 @@ class TelaPrincipal(ctk.CTkFrame):
             disciplinas_listbox.grid_forget()
             self.frame_dinamico.focus_set()
 
-        #disciplinas_entry.bind("<FocusIn>", lambda event: exibir_disciplinas_listbox(True, event))
-        #disciplinas_entry.bind("<FocusOut>", lambda event: exibir_disciplinas_listbox(False, event))
-        #atualizar_listbox_disciplinas(self.disciplinas_cadastradas)
         disciplinas_listbox.bind("<<ListboxSelect>>", preencher_disciplina_entry)
         disciplinas_entry.bind("<KeyRelease>", filtrar_disciplinas)
         disciplinas_entry.bind("<Escape>", fechar_listbox_disciplinas)
@@ -484,24 +460,17 @@ class TelaPrincipal(ctk.CTkFrame):
         frame = frame_pai.winfo_children()[0]
         print("Frame filho: ", frame)
 
-        if not valor or isinstance(element, ctk.CTkOptionMenu) and valor not in frame_extra["palavra_ativacao"]:#(isinstance(element, ctk.CTkOptionMenu) and valor != element._values[-1]):#pega o último valor por padrão
-            #print("Entrou IF ativacao")
+        if not valor or isinstance(element, ctk.CTkOptionMenu) and valor not in frame_extra["palavra_ativacao"]:#pega o último valor por padrão
             for widget in frame.winfo_children():#limpa os valores preenchdios nos entries
-                #print("Entrou FOR (IF) ativacao")
-                #print("Widget:", widget)
+
                 if isinstance(widget, ctk.CTkEntry):
                     #print("Entrou IF IF ativacao")
                     widget.delete(0, ctk.END)
                     widget.insert(0, "null")# atribui um valor padrão p/ verif. que o campo foi ignorado(fica apenas no background)
             frame_pai.pack_forget()
         else:
-            #print("Entrou ELSE ativacao")
             for widget in frame.winfo_children():
-                #print("Entrou FOR (ELSE) ativacao")
-                #print("Widget:", widget)
                 if isinstance(widget, ctk.CTkEntry):# limpa o campo p/ não exibir o valor "null" na interface
-                    #print("Entrou ELSE ELSE ativacao")
-                    #print("VALOR AO REAPARECER:", widget.get())
                     widget.delete(0, ctk.END)
             frame_pai.pack(pady=10)
 
@@ -542,37 +511,14 @@ class TelaPrincipal(ctk.CTkFrame):
 
         Ex. de uso: excluir um aluno inserido incorretamente da interface
         '''
-        #self.cont_entry_button -= 1 # decrementa o cont para controle
-
-        #self.list_divs[-1].destroy() # remoção das divisórias da interface(fins visuais)
-        #self.list_divs.pop(-1)
 
         grupo = [frame_base] # entry_button_container
         parent = frame_base.master # container_frame
         grand_parent = parent.master # frame_dinamico
 
-        # for widget in grand_parent.winfo_children():
-        #     if isinstance(widget, ctk.CTkFrame):
-        #         grupo.append(widget)
-
         #grupo.append(parent)
         parent.destroy()
 
-        # percorre a estrutura hierárquica, analisando os irmãos do frame_base
-        # for widget in parent.winfo_children():
-        #     info = widget.grid_info()
-        #     if info and "row" in info:
-        #         try:
-        #             base_row = frame_base.grid_info().get("row")
-        #             # se a linha do frame base for igual à do irmão, inclui na lista, pois estão relacionados
-        #             if info["row"] == base_row and widget != frame_base:
-        #                 grupo.append(widget)
-        #         except:
-        #             pass
-
-        # Exclusão do frame_base e seus irmãos
-        # for frame in grupo:
-        #     frame.destroy()
 
         # Inclusão das referências guardadas no dicionario(campos_dinamicos) numa lista de exclusão p/ evitar erro na captura de dados
         chaves_para_remover = []
@@ -580,16 +526,9 @@ class TelaPrincipal(ctk.CTkFrame):
             #try:
             if not widget.winfo_exists():#hasattr(widget, "name") and
                 chaves_para_remover.append(nome)
-                # else:
-                #     for frame in grupo:
-                #         if frame in widget.winfo_ancestors():
-                #             chaves_para_remover.append(nome)
-                #             break
-            # except: # assume que o widget não existe mais e inclui p/ remoção da referência também
-            #     chaves_para_remover.append(nome)
 
-        print("**Dicionario Original: ", self.campos_dinamicos)
-        print("**Chaves para remover: ", chaves_para_remover)
+        #print("**Dicionario Original: ", self.campos_dinamicos)
+        #print("**Chaves para remover: ", chaves_para_remover)
 
         # exclusão segura das referências
         for chave in chaves_para_remover:
@@ -603,14 +542,12 @@ class TelaPrincipal(ctk.CTkFrame):
         if caminho:
             entry.delete(0, "end")
             entry.insert(0, caminho)
-            #entry.configure(state="disabled")
 
     def check_tipo_res(self):#, _
         # Limpa frame dinâmico e campos anteriores
         for widget in self.frame_dinamico.winfo_children():
             widget.destroy()
-        # self.entry_button_container = ctk.CTkFrame(self.frame_dinamico)
-        # self.entry_button_container.pack(padx=10, pady=10, fill="x")
+
         self.campos_dinamicos.clear()
 
         # caso exista, é necessário excluir o atributo da classe. Lógica utilizada para implementar
@@ -620,7 +557,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.cont_entry_button = 0
         self.tipo_var = self.tipos_resolucao_entry # representa o tipo de resolucao selecionado
         self.estruturar_frame_dinamico(self.tipo_var.get(), 1, True)#
-
 
         # Ativa botão gerar resolução
         self.botao_gerar.configure(state="normal")
@@ -673,8 +609,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.frame_fixo_opened = not self.frame_fixo_opened
 
     def estruturar_menu_config_avancadas(self):
-        #div = ctk.CTkFrame(self.config_avancadas_frame, fg_color="black", height=2)
-        #div.grid(row=0, column=0, columnspan=3, sticky='ew')
 
         self.vice_coordenador_var = ctk.BooleanVar(value=False)
         vice_coordenador_checkbox = ctk.CTkCheckBox(self.config_avancadas_frame, text="Vice-Coordenador?", text_color="black", variable=self.vice_coordenador_var)
@@ -722,12 +656,7 @@ class TelaPrincipal(ctk.CTkFrame):
 
     def estruturar_frame_dinamico(self,tipo, line, primeira_chamada):
         color_frames_flag_list = 'black'
-        #self.tipo_var = self.tipos_resolucao_entry
-        # if not hasattr(self, 'container_entries'):
-        #     self.container_entries = ctk.CTkFrame(frame, width=500)
-        #     self.container_entries.pack(padx=20, pady=20)
-        #     self.container_entries.pack_propagate(False)
-        #
+
         if self.tipo_var.get() == "Adiamento de Reunião":
             self.criar_campo("Nº. da Reunião")
             self.criar_campo("Data Inicial", tipo='entry_placeholder')
@@ -769,8 +698,6 @@ class TelaPrincipal(ctk.CTkFrame):
         elif self.tipo_var.get() == "Aproveitamento de Suficiência":
             if primeira_chamada:
                 self.frame_superior = ctk.CTkFrame(self.frame_dinamico)  # cria um novo frame p/ o container
-                # self.frame_entry_button_container.pack(side="left", padx=10, pady=10)#, fill="y"
-                #self.frame_superior.place(relx=0.5)
                 self.frame_superior.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
                 self.criar_campo("Língua", tipo = 'dropdown', opcoes = ["Inglês", "Espanhol"], frame=self.frame_superior)#, linha=0
 
@@ -778,12 +705,10 @@ class TelaPrincipal(ctk.CTkFrame):
             self.container_frame.grid(row=line, column=0, padx=10, pady=10, columnspan=2)  # , sticky="nsew"
 
             self.frame_entry_button_container = ctk.CTkFrame(self.container_frame)#cria um novo frame p/ o container
-            #self.frame_entry_button_container.pack(side="left", padx=10, pady=10)#, fill="y"
             self.frame_entry_button_container.grid(row=0, column=0, padx=10, pady=10)#, sticky="nsew"
 
             # Frame da direita (campo de língua)
             self.frame_direito = ctk.CTkFrame(self.container_frame)
-            #self.frame_lingua.pack(side="left", padx=10, pady=10)#, fill="y"
             self.frame_direito.grid(row=0, column=1, padx=10, pady=10)#, sticky="nsew")#row=line, column=1, padx=(0, 10), pady=10
             self.criar_campo("Nome do Discente", tipo='entry_button', frame=self.frame_entry_button_container)
             self.criar_campo("Data do Exame", tipo='entry_placeholder', frame=self.frame_direito, flag_list=True)# linha=1,
@@ -806,8 +731,6 @@ class TelaPrincipal(ctk.CTkFrame):
             entry_n_reuniao = self.criar_campo("Nº da Reunião", tipo='entry_button', frame=self.frame_entry_button_container)
             n_reuniao = self.cont_entry_button+1
             entry_n_reuniao.insert(0, f"{n_reuniao}ª Ordinária")
-            #entry_n_reuniao.configure(state="disabled")  # desabilita se marcado
-            #entry_n_reuniao.configure(fg_color="#4F4F4F")
             self.criar_campo("Data da Reunião", tipo='entry_placeholder', frame=self.frame_direito, flag_list=True)
 
 
@@ -844,13 +767,11 @@ class TelaPrincipal(ctk.CTkFrame):
             self.criar_campo("Nome do Discente", tipo='entry_button', frame=self.frame_entry_button_container)
 
             self.frame_direito_superior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
-            #self.frame_direito_superior.grid(row=0, column=0, padx=10, pady=10)
             self.frame_direito_superior.pack(pady=10)
             self.criar_campo("Nível do Discente", tipo='dropdown', flag_list=True, opcoes=["Mestrado", "Doutorado"], frame=self.frame_direito_superior)
 
             self.frame_direito_inferior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
             self.frame_direito_inferior.tipo = "direito_inferior"
-            #self.frame_direito_inferior.grid(row=1, column=0, padx=10, pady=10)
             self.frame_direito_inferior.pack(pady=10, fill="x", anchor="w")
 
             self.excluir_botoes(self.frame_dinamico, "direito_inferior")
@@ -865,13 +786,6 @@ class TelaPrincipal(ctk.CTkFrame):
             flag_listbox = True
             button_add_disciplina = ctk.CTkButton(self.frame_direito_inferior, text="+", width=50, command=lambda: self.duplicar_elementos(elementos_frame_for_duplicate, button_add_disciplina, self.frame_direito_inferior, flag_listbox) )
             button_add_disciplina.pack(pady=20)
-
-            #ctk.CTkLabel(self.frame_direito_inferior, text="Disciplina Teste").pack(anchor="w")
-
-
-            # self.frame_direito_inferior_dir = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
-            # self.frame_direito_inferior_dir.grid(row=1, column=1, padx=10, pady=10)
-            # self.criar_campo("Professor", frame=self.frame_direito_inferior_dir)
 
         elif self.tipo_var.get() == "Cancelamento de Orientação":
             self.criar_campo("Nome do Orientador", tipo='entry_listbox')
@@ -992,15 +906,7 @@ class TelaPrincipal(ctk.CTkFrame):
 
             self.criar_campo("Disciplina", tipo='entry_button_listbox', frame=self.frame_entry_button_container)
 
-            #self.frame_direito_superior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
-            #self.frame_direito_superior.grid(row=0, column=0, padx=10, pady=10)
-            #self.frame_direito_superior.pack(pady=10)
-            #self.criar_campo("Docente responsável", tipo='dropdown', flag_list=True, opcoes=["Mestrado", "Doutorado"], frame=self.frame_direito_superior)
-
-            # self.frame_direito_inferior = ctk.CTkFrame(self.frame_direito)  # cria um novo frame p/ o container
             self.frame_direito.tipo = "direito" # CASO COMENTE ESSA LINHA, ELE LIBERA ADD NOVOS PROFESSORES (APARENTMENTE ESTÁ OK)
-            # #self.frame_direito_inferior.grid(row=1, column=0, padx=10, pady=10)
-            # self.frame_direito_inferior.pack(pady=10, fill="x", anchor="w")
 
             self.excluir_botoes(self.frame_dinamico, "direito")
 
@@ -1009,14 +915,11 @@ class TelaPrincipal(ctk.CTkFrame):
             frame_container_for_duplicate.pack(padx=20, pady=10)  #
             self.criar_campo("Professor Responsável", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)#self.frame_direito_inferior
             elementos_frame_for_duplicate.append("Professor Responsável")
-            #self.criar_campo("Professor", tipo='entry_listbox_for_duplicate', flag_list=True, frame=frame_container_for_duplicate)
-            #elementos_frame_for_duplicate.append("Professor")
             flag_listbox = True
             button_add_professor = ctk.CTkButton(self.frame_direito, text="+", width=50, command=lambda: self.duplicar_elementos(elementos_frame_for_duplicate, button_add_professor, self.frame_direito, flag_listbox) )
             button_add_professor.pack(pady=20)
 
         elif self.tipo_var.get() == "Número de Vagas Para Processo Seletivo":
-            #self.criar_campo("Processo Seletivo")
             self.criar_campo("Vagas de Mestrado")
             self.criar_campo("Vagas de Doutorado")
             self.criar_campo("Semestre(ano-nº semestre)")
@@ -1085,22 +988,13 @@ class TelaPrincipal(ctk.CTkFrame):
 
             if self.button_add:
                 self.button_add.destroy()
-            # self.div = ttk.Separator(self.frame_dinamico, orient="horizontal")
-            # self.list_divs.append(self.div)
-            #line_div = line+1
+
             line_button = line+2
-            #
-            # self.div.grid(row=line_div, column=0, columnspan=2, sticky="ew")
 
             self.button_add = ctk.CTkButton(self.frame_dinamico, text="➕", fg_color="#4F6416", text_color="white", hover_color= "#749619", width=50, height=50, corner_radius=50,
                                             command = lambda: self.estruturar_frame_dinamico(self.tipo_var.get(), line_button, False))
             self.button_add.grid(row=line_button, column=1, pady=15, padx=25, sticky="e")
             self.cont_entry_button += 1
-
-            # if frame_container_for_duplicate.winfo_exists():
-            #     print("ENTROU FOR DUPLICATE")
-            #     self.cont_entry_button -= 1
-
 
     def criar_campo(self, nome, tipo='entry', opcoes=None, frame=None, flag_list=False, frame_extra=None):
         if frame is None:
@@ -1121,21 +1015,6 @@ class TelaPrincipal(ctk.CTkFrame):
 
             entry = ctk.CTkEntry(container, width=250)
             entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
-
-            # ---
-            # container = ctk.CTkFrame(frame, fg_color='transparent')
-            # container.pack(pady=15)
-            #
-            # label = ctk.CTkLabel(container, text=nome)
-            # label.grid(row=0, column=0, padx=(0, 10), pady=10, sticky='w')#padx=(0, 0), , sticky="w"
-            # #label.pack(side='left', padx=(0, 10), pady=10)#side=pos,
-            #
-            # entry = ctk.CTkEntry(container, width=300)
-            # entry.grid(row=0, column=1, pady=10, sticky='ew')#padx=(0, 0),
-            #
-            # ----
-
-            #entry.pack(side='left', pady=10)#, pady=(5, 0))#side=pos,
 
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
@@ -1206,10 +1085,6 @@ class TelaPrincipal(ctk.CTkFrame):
             self.campos_dinamicos[nome] = entry#f"{nome} {self.cont_entry_button}"
             #self.cont_entry_button += 1
 
-            # if self.button_add:
-            #     self.button_add.destroy()  # destrói a última referência de botão + criado
-            #     self.button_add = None
-
             self.button_search_file = ctk.CTkButton(frame_entry_file, text="Buscar", width=100,
                                             command=lambda: self.selecionar_arquivo(entry))
             self.button_search_file.pack(side="left")
@@ -1217,9 +1092,6 @@ class TelaPrincipal(ctk.CTkFrame):
         elif tipo == 'entry_listbox':
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
-                # self.campos_dinamicos[] = entry
-            # else:
-            #     self.campos_dinamicos[nome] = entry
 
             container = ctk.CTkFrame(frame, fg_color='transparent')
             container.pack(pady=25)
@@ -1241,15 +1113,12 @@ class TelaPrincipal(ctk.CTkFrame):
                 disciplinas_entry = self.gera_barra_pesq_disciplinas(container)
 
                 self.campos_dinamicos[nome] = disciplinas_entry
-            # entry.grid(row=linha, column=1, pady=10, padx=(0, 5))#padx=(0, 0),
-            #entry.pack(padx=10, pady=(0, 10))  # side=pos,
+
 
         elif tipo == 'entry_button_listbox':
             frame_entry_button = ctk.CTkFrame(frame)#self.frame_entry_button_container
             frame_entry_button.pack(padx=20, pady=10)#, fill="x"
             frame_barra_pesq = ctk.CTkFrame(frame_entry_button, fg_color='transparent')
-
-            #frame_entry_button.pack(anchor="w", padx=10, pady=(5, 0))
 
             label = ctk.CTkLabel(frame_entry_button, text=nome)#frame_entry_button
             label.pack(side="left", padx=2, pady=(10, 0))
@@ -1265,9 +1134,6 @@ class TelaPrincipal(ctk.CTkFrame):
 
                 self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = disciplinas_entry
 
-            #entry = ctk.CTkEntry(frame_entry_button, width=150)
-            #entry.pack(side="left", padx=(0, 2))
-            #self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = entry
             self.cont_entry_button_aux += 1 # cont auxiliar que será utilizado exclusivamente p/ o modelo "Cancelamento de Matrícula"(e caso surjam modelos na mesma estrutura posteriormente)
 
             if self.button_add:
@@ -1293,9 +1159,6 @@ class TelaPrincipal(ctk.CTkFrame):
             #label.grid(row=i, column=0, pady=10, padx=(0, 5))#padx=(0, 0),
             label.pack(side="left", padx=2, pady=(5, 0))
 
-            # entry = ctk.CTkEntry(frame, width=150)
-            # #entry.grid(row=i, column=1, pady=10, padx=(0, 5))#padx=(0, 0),
-            # entry.pack(side="left", padx=2, pady=(0, 10))
             frame_barra_pesq.pack(side="left")
 
             if any(termo in nome.lower() for termo in ("professor", "docente", "orientador")):
@@ -1309,11 +1172,6 @@ class TelaPrincipal(ctk.CTkFrame):
                 self.campos_dinamicos[f"{nome} {self.cont_entry_button_aux}_{self.cont_entry_for_duplicate}"] = disciplinas_entry
 
             self.cont_entry_for_duplicate += 1
-
-            # if flag_list is True:
-            #     self.campos_dinamicos[f"{nome} {self.cont_entry_button_aux}_{self.cont_entry_for_duplicate}"] = entry
-            # else:
-            #     self.campos_dinamicos[nome] = entry
 
         elif tipo == 'entry_placeholder':
             container = ctk.CTkFrame(frame, fg_color='transparent')
@@ -1341,29 +1199,6 @@ class TelaPrincipal(ctk.CTkFrame):
                 entry = ctk.CTkEntry(container, width=150, placeholder_text="nº-ano")
                 entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2, sticky="ew")
 
-            #entry = ctk.CTkEntry(container, width=300)
-            #entry.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
-
-
-
-            # container = ctk.CTkFrame(frame, fg_color='transparent')
-            # container.pack(pady=25)
-            #
-            # label = ctk.CTkLabel(container, text=nome)
-            #     #label.grid(row=linha, column=0, pady=10, padx=(5, 0))#padx=(0, 0), , sticky="w"
-            # label.pack(padx=(5, 10), pady=10, side='left')  # side=pos,
-            #
-            # partes_nome = nome.split()
-            # if partes_nome[0] == "Data":
-            #     entry = ctk.CTkEntry(container, width=100, placeholder_text="dd/mm/aaaa")
-            #     entry.pack(pady=(0, 10), side='left')  # side=pos,
-            # #elif partes_nome[0] == "Resolução":
-            # elif partes_nome[0] == "Universidade":
-            #     entry = ctk.CTkEntry(container, width=200, placeholder_text="nome(sigla)")
-            #     entry.pack(pady=(0, 10), side='left')
-            # else:#formato para resolução
-            #     entry = ctk.CTkEntry(container, width=150, placeholder_text="nº-ano")
-            #     entry.pack(pady=(0, 10), side='left')  # side=pos,
 
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
@@ -1390,33 +1225,6 @@ class TelaPrincipal(ctk.CTkFrame):
                 dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250, command=lambda valor: self.ocultar_frame(dropdown, frame_extra))#self.frame_dinamico
             dropdown.grid(row=1, column=0, padx=(5, 5), pady=5, columnspan=2)
 
-
-
-            # -----
-            # container = ctk.CTkFrame(frame, fg_color='transparent')
-            # container.pack(pady=25)
-            #
-            # label = ctk.CTkLabel(container, text=nome, font=ctk.CTkFont(weight='bold'))#self.frame_dinamico
-            # label.pack(padx=(0, 10), pady=10, side='left')
-            #
-            # if not opcoes:
-            #     opcoes = ["Opção 1", "Opção 2"]# caso não sejam fornecidas opções como parametro
-            # var = ctk.StringVar(value="Selecione")
-            # #var = ctk.StringVar(value=opcoes[0])
-            # if frame_extra is None:
-            #     dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250)#self.frame_dinamico
-            # else:
-            #     dropdown = ctk.CTkOptionMenu(container, values=opcoes, variable=var, width=250, command=lambda valor: self.ocultar_frame(dropdown, frame_extra))#self.frame_dinamico
-            # dropdown.pack(pady=10, side='left')
-            # ------
-
-            # if flag_list is True:
-            #     self.campos_dinamicos[f"{nome} {self.cont_entry_button}"] = var
-            # else:
-            #     self.campos_dinamicos[nome] = var
-            # #self.campos_dinamicos[nome] = var
-            # print("PRINT DO VALOR DO DROPDOWN: ", dropdown.get())
-
             if flag_list is True:
                 nome = f"{nome} {self.cont_entry_button}"
 
@@ -1434,44 +1242,6 @@ class TelaPrincipal(ctk.CTkFrame):
                 font=ctk.CTkFont(weight='bold')
             )
             checkbox.pack(pady=10)
-
-    # def gerar_popup(self, msg, type):
-    #     popup = ctk.CTkToplevel()
-    #     width = 300 if type != 'success' else 250
-    #     height = 150 if type != 'success' else 80
-    #     # centralizar o popup
-    #     x = (popup.winfo_screenwidth() // 2) - (width // 2) if type != 'success' else 1600
-    #     y = (popup.winfo_screenheight() // 2) - (height // 2) if type != 'success' else 110
-    #
-    #     popup.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-    #     popup.resizable(False, False)
-    #
-    #     if type == 'warning':
-    #         icon = '⚠️'
-    #     elif type == 'error':
-    #         icon = '❌'
-    #     elif type == 'success':
-    #         icon = '✅'
-    #
-    #         popup.overrideredirect(True)
-    #         popup.attributes("-topmost", True)
-    #         popup.configure(fg_color="green")
-    #
-    #     else:
-    #         icon = '✉️'
-    #
-    #     popup.title(f"{icon} Mensagem")
-    #
-    #     label = ctk.CTkLabel(popup, text=f'{icon} {msg}', wraplength=250)
-    #     label.pack(pady=20)
-    #
-    #     button = ctk.CTkButton(popup, text="OK", command=popup.destroy)
-    #     button.pack(pady=10)
-    #
-    #     if type != "success":
-    #         popup.grab_set()
-    #     else:
-    #         popup.after(5000, popup.destroy)
 
     def gerar_popup(self, msg, tipo):
 
@@ -1538,7 +1308,6 @@ class TelaPrincipal(ctk.CTkFrame):
         numero_reuniao = self.numero_reuniao_entry.get()
         data_reuniao = self.data_reuniao_entry.get()
         ad_referendum = self.ad_referendum_var.get()
-
 
         # VALIDAÇÃO DO PREENCHIMENTO DOS DADOS FIXOS
         if not numero_res or not data_res or (ad_referendum is False and (not data_reuniao or not numero_reuniao)):
@@ -1651,16 +1420,10 @@ class TelaPrincipal(ctk.CTkFrame):
 
                     # tratamento p/ atributos com cont acoplado simples. Ex: Aluno 1, Aluno 2, etc
                     else:
-                        # cont_discentes = int(partes_nome[-1])
-                        # valores_dinamicos["cont_discentes"] = cont_discentes#**posteriomente, posso usar o con_entry_button, após add um botão de remoção**
                         dict_dados_aux[chave_dicionario].append(valor)#armazena os valores em um dicionario de listas auxiliar
                         valores_dinamicos[chave_dicionario] = dict_dados_aux[chave_dicionario]#atualiza os valores dinamicos com os valores do dicionario aux
                 else:#se não houver cont, significa que é uma string simples e não utiliza lista
-                    #valores_dinamicos[nome] = None if valor == "Selecione" else valor
                     valores_dinamicos[nome] = valor
-
-                    # else:
-                    #     valores_dinamicos[nome] = valor
 
 
         # Debug: imprimir dados
@@ -1684,9 +1447,6 @@ class TelaPrincipal(ctk.CTkFrame):
         self.update_idletasks()
 
         try:
-            # getattr(modelos, self.tipos_resolucao[self.tipo_var.get()]).geraModelo(
-            #     numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
-
             nome_modulo = self.tipos_resolucao[self.tipo_var.get()]
             modulo = importlib.import_module(f"src.modelos.{nome_modulo}")
             modulo.geraModelo(numero_res, Data.converter_data_extenso(data_res), ad_referendum, data_reuniao, valores_dinamicos)
@@ -1698,6 +1458,3 @@ class TelaPrincipal(ctk.CTkFrame):
             self.gerar_popup(f"ERRO ao gerar resolução: {e}", "error")
 
         self.botao_gerar.configure(text="Gerar Resolução", state="normal")
-
-    # def iniciar(self):
-    #     self.janela.mainloop()

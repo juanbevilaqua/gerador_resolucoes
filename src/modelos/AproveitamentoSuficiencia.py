@@ -17,15 +17,8 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     datas = dados_dinamicos["Data do Exame"]
     resolucoes = dados_dinamicos["Resolução de Aprovação"]
 
-
-    # self.criar_campo("Data do Exame")
-    # self.criar_campo("Resolução de Aprovação")
-    # lingua, discentes, cont_discentes, datas, resolucoes
-
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-
-    #n_res, data_res, ad_referendum, data_reuniao, lingua, discentes, cont_discentes, datas, resolucoes = ColetorDeDados.coletaDados(13)
 
     geraTitulo(document, n_res, data_res)
 
@@ -67,14 +60,11 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     # Define o título da resolução que será salva
     dir_res = util.Data.extraiAnoResolucao(data_res)
-    #conj_nomes_encurtados = ', '.join(ColetorDeDados.encurtaNome(discente) for discente in discentes)
 
     if ad_referendum:
-        #titulo_doc = f'Resolução nº {n_res}  - AD REFERENDUM Aprova aproveitamento de suficiência em {lingua} - {conj_nomes_encurtados}.docx'
         titulo_doc = f'Resolução nº {n_res}  - AD REFERENDUM Aprova aproveitamento de suficiência em {lingua} - {discentes}.docx'
 
     else:
-        #titulo_doc = f'Resolução nº {n_res}  - Aprova aproveitamento de suficiência em {lingua} - {conj_nomes_encurtados}.docx'
         titulo_doc = f'Resolução nº {n_res}  - Aprova aproveitamento de suficiência em {lingua} - {discentes}.docx'
 
     Armazenador.salvar(dir_res, document, titulo_doc)

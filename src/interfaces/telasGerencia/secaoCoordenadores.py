@@ -36,24 +36,6 @@ class SecaoCoordenadores(ctk.CTkFrame):
         Centraliza os campos necessários para cadastro/edição de um coordenador.
         """
 
-        # self.nome_coordenador_label = ctk.CTkLabel(frame, text="Nome do Coordenador").grid(row=0, column=0, padx=5,
-        #                                                                                pady=10)
-        # self.nome_coordenador_entry = ctk.CTkEntry(frame)
-        # self.nome_coordenador_entry.grid(row=0, column=1, padx=5, pady=10)
-        #
-        # self.modalidade_label = ctk.CTkLabel(frame, text="Modalidade").grid(row=1, column=0, padx=5, pady=5)
-        # self.modalidade_var = ctk.StringVar(value="Selecione")
-        # self.modalidade_dropdown = ctk.CTkOptionMenu(frame, values=['Coordenador Titular', 'Vice-Coordenador'], variable=self.modalidade_var)
-        # self.modalidade_dropdown.grid(row=1, column=1, padx=5, pady=10)
-        #
-        # self.inicio_vigencia_label = ctk.CTkLabel(frame, text="Início da Vigência do Mandato").grid(row=2, column=0)
-        # self.inicio_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
-        # self.inicio_vigencia_entry.grid(row=2, column=1, pady=10)
-        #
-        # self.fim_vigencia_label = ctk.CTkLabel(frame, text="Fim da Vigência do Mandato").grid(row=3, column=0)
-        # self.fim_vigencia_entry = ctk.CTkEntry(frame, placeholder_text='DD/MM/AAAA')
-        # self.fim_vigencia_entry.grid(row=3, column=1, pady=10)
-
         # Configurar as colunas para expansão simétrica
         frame.grid_columnconfigure(0, weight=1)
         frame.grid_columnconfigure(1, weight=1)
@@ -198,67 +180,6 @@ class SecaoCoordenadores(ctk.CTkFrame):
                 )
             )
             delete_button.grid(row=0, column=1, padx=5)
-
-    # def listar_coordenadores_cadastrados(self):
-    #
-    #     coordenadores = CoordenadorController.listar_todos()[0]
-    #
-    #     self.headers_coordenadores_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
-    #     self.headers_coordenadores_frame.grid(row=0, column=0, sticky="ew", columnspan=1)
-    #     self.headers_coordenadores_frame.grid_columnconfigure(0, minsize=50)  # ID
-    #     self.headers_coordenadores_frame.grid_columnconfigure(1, minsize=200)  # Nome
-    #     self.headers_coordenadores_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
-    #     self.headers_coordenadores_frame.grid_columnconfigure(3, minsize=100)  # Inicio
-    #     self.headers_coordenadores_frame.grid_columnconfigure(4, minsize=100)  # Fim
-    #
-    #     headers = ["ID", "Nome", "Modalidade", "Início Vigência", "Fim Vigência", "Operações"]
-    #
-    #     tam_cols = [50, 200, 200, 100, 100, 100]
-    #     qtde_headers = len(headers)
-    #
-    #     # CONSTRÓI CABEÇALHO
-    #     for i, header in enumerate(headers):
-    #         ctk.CTkLabel(self.headers_coordenadores_frame, text=header, font=("Arial", 14, "bold"),
-    #                      width=tam_cols[i]).grid(row=0, column=i, padx=5, pady=5, sticky='ew')
-    #
-    #     # CONSTRÓI REGISTROS
-    #     # Loop p/ cada coordenador
-    #     for index, coordenador in enumerate(coordenadores):
-    #         id_coordenador = coordenador[0]
-    #         nome_frame = f"frame_coordenador_{id_coordenador}"
-    #
-    #         self.coordenador_cadastrado_frame = ctk.CTkFrame(self.coordenadores_cadastrados_frame)
-    #         # print("Nome Frame: ", nome)
-    #         self.coordenador_cadastrado_frame.grid(row=index + 1, column=0, pady=5, columnspan=1, sticky='ew')
-    #
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(0, minsize=50)  # ID
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(1, minsize=200)  # Nome
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(2, minsize=200)  # Modalidade
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(3, minsize=100)  # Inicio
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(4, minsize=100)  # Fim
-    #         self.coordenador_cadastrado_frame.grid_columnconfigure(qtde_headers, weight=1)
-    #
-    #         # Loop p/ cada atributo
-    #         for i, atr in enumerate(coordenador):
-    #             atr = self.gerenciador.encurta_texto(atr, 25)
-    #             ctk.CTkLabel(self.coordenador_cadastrado_frame, text=atr, width=tam_cols[i]).grid(row=0, column=i,
-    #                                                                                               padx=5)
-    #
-    #         self.operacoes_frame = ctk.CTkFrame(self.coordenador_cadastrado_frame, fg_color='transparent')
-    #         self.operacoes_frame.grid(row=0, column=qtde_headers, sticky='')
-    #
-    #         self.update_button = ctk.CTkButton(self.operacoes_frame, fg_color="orange", text='📝', width=30,
-    #                                            command=partial(self.spam_top_level, "editar",
-    #                                                            {'id': coordenador[0], 'nome': coordenador[1],
-    #                                                             'modalidade': coordenador[2], 'inicio_vigencia': coordenador[3],
-    #                                                             'fim_vigencia':coordenador[4]}))
-    #         self.update_button.grid(row=0, column=0, padx=5)
-    #         self.delete_button = ctk.CTkButton(self.operacoes_frame, fg_color="red", text='❌', width=30,
-    #                                            command=partial(self.spam_top_level, "excluir", {'id': coordenador[
-    #                                                0]}))  # partial(self.excluir_professor, professor[0]))
-    #         # self.dict_frames_professores[self.delete_button.winfo_name()] = professor[0]
-    #
-    #         self.delete_button.grid(row=0, column=1, padx=5)
 
     def listar_coordenadores_ativos(self):
 
@@ -477,28 +398,7 @@ class SecaoCoordenadores(ctk.CTkFrame):
             cancel_button.grid(row=1, column=1)
         self.top_level.grab_set()
 
-    # def spam_warning(self, msg):
-    #     self.warning_top_level = ctk.CTkToplevel()
-    #     width = 300
-    #     height = 150
-    #     # centralizar o popup
-    #     x = (self.warning_top_level.winfo_screenwidth() // 2) - (width // 2)
-    #     y = (self.warning_top_level.winfo_screenheight() // 2) - (height // 2)
-    #     self.warning_top_level.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-    #     self.warning_top_level.resizable(False, False)
-    #
-    #     self.warning_top_level.title('⚠️ Atenção')
-    #     self.warning_top_level.columnconfigure(0, weight=1)
-    #     self.warning_top_level.columnconfigure(1, weight=1)
-    #
-    #     self.msg_label = ctk.CTkLabel(self.warning_top_level,
-    #                                                    text=msg, wraplength=300)
-    #     self.msg_label.grid(row=0, column=0, pady=30)
-    #
-    #     ok_button = ctk.CTkButton(self.warning_top_level, text="OK", command=self.warning_top_level.destroy)
-    #     ok_button.grid(row=1, column=0)
-    #
-    #     self.top_level.grab_set()
+
     def atualizar_listagem_coordenadores(self):
         # Atualiza lista de coordenadores cadastrados
         for widget in self.coordenadores_cadastrados_frame.winfo_children():  # limpeza da tela
@@ -546,7 +446,5 @@ class SecaoCoordenadores(ctk.CTkFrame):
         self.atualizar_listagem_coordenadores()
         self.atualizar_listagem_coordenadores_ativos()
 
-        # if result is False:
-        #     self.gerenciador.spam_warning(msg, self.top_level)
 
         return result, msg

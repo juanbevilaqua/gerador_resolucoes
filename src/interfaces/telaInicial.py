@@ -9,10 +9,6 @@ class TelaInicial(ctk.CTkFrame):
         self.master = master
         self.master.geometry("800x600")
         self.master.state("normal")
-        #self.janela = ctk.CTk()
-        #self.title("Gerador de Resoluções - Tela Inicial")
-        #self.janela.geometry("950x750")
-        #self.janela.resizable(width=False, height=False)
 
         self.criar_widgets()
 
@@ -64,8 +60,6 @@ class TelaInicial(ctk.CTkFrame):
         self.conteudo_frame.grid(row=0, column=0)
         pywinstyles.set_opacity(self.conteudo_frame, color='#FFFBEC', value=1)
 
-        # self.conteudo_frame.grid_columnconfigure(0, weight=1)
-        # self.conteudo_frame.grid_columnconfigure(1, weight=1)
 
         # Conteúdo do frame direito
         self.texto_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
@@ -77,14 +71,9 @@ class TelaInicial(ctk.CTkFrame):
         self.gerador_resolucoes_label = ctk.CTkLabel(self.texto_frame, text="SiGRe-CTA", width=300, text_color='#587800', font=('Poppins', 32, 'bold'), anchor='w')
         self.gerador_resolucoes_label.grid(row=1, column=0, sticky='w')#.pack(pady=5, side='left')
 
-        #self.ppgcta_label = ctk.CTkLabel(self.texto_frame, text="do PPGCTA",
-        #                                             text_color='#587800', font=('Poppins', 22, 'bold'), anchor='w')
-        #self.ppgcta_label.grid(row=2, column=0, sticky='w')  # .pack(pady=5, side='left')
-
 
         self.botoes_frame = ctk.CTkFrame(self.conteudo_frame, fg_color='transparent')
         self.botoes_frame.grid(row=1, column=0, pady=(50,0))
-        #pywinstyles.set_opacity(self.botoes_frame, color='transparent', value=1)
 
         criar_icon = Image.open('src/static/img/criar icon.png')
         self.criar_icon = ctk.CTkImage(
@@ -123,39 +112,5 @@ class TelaInicial(ctk.CTkFrame):
         self.logo_label = ctk.CTkLabel(self.logo_frame, text='', image=self.logo, anchor='e')
         self.logo_label.grid(row=0, column=0, sticky='e')
 
-    # def redimensionar_imagem(self, event): # fará o ajuste automático do tamanho da imagem para que ocupe o frame esquerdo
-    #     w, h = event.width, event.height
-    #
-    #     img = self.img_original.resize(
-    #         (w, h),
-    #         Image.Resampling.LANCZOS
-    #     )
-    #
-    #     self.ctk_img = ctk.CTkImage(
-    #         light_image=img,
-    #         dark_image=img,
-    #         size=(w, h)
-    #     )
-    #
-    #     self.bg_label.configure(image=self.ctk_img)
-
-    # def redimensionar_imagem(self, event):
-    #     if event.width <= 1 or event.height <= 1:
-    #         return
-    #
-    #     w, h = event.width, event.height
-    #
-    #     img = self.img_original.resize(
-    #         (w, h),
-    #         Image.Resampling.LANCZOS
-    #     )
-    #
-    #     self.ctk_img = ctk.CTkImage(
-    #         light_image=img,
-    #         dark_image=img,
-    #         size=(event.width, event.height)
-    #     )
-    #
-    #     self.bg_label.configure(image=self.ctk_img)
     def iniciar(self):
         self.janela.mainloop()

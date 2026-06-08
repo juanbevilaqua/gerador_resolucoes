@@ -19,10 +19,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     tipo_apresentacao = dados_dinamicos["Tipo de Apresentação"]
     data_apresentacao = dados_dinamicos["Data da Apresentação"]
 
-    #doc_pdf = input('Informe a solicitação de banca: ')7
-    # Carrega o documento de origem
-    #doc_origem = ManipuladorDeArquivos.converterPdfDocx('solicitacao_banca.pdf')
-
     doc_origem = ManipuladorDeArquivos.converterPdfDocx(dados_dinamicos["Solicitação de Banca"])
     # Carrega ou cria o documento de destino
 
@@ -36,7 +32,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
         tabela_origem = doc_origem.tables[2]
     print("NÚMERO DE LINHAS TABELA***:", len(tabela_origem.rows))
 
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, tipo_trabalho, titulo_trabalho, tipo_apresentacao, data_apresentacao = ColetorDeDados.coletaDados(7)
 
     geraTitulo(document, n_res, data_res)
 

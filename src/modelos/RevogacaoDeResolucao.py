@@ -26,7 +26,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     #list_itens.append(FormatadorTexto.add_texto_negrito(p1, f"        Revogar a resolução PPGCTA nº. {resolucao}, de {data_res};", f"{resolucao}"))
     list_itens.append(f"Revogar a resolução PPGCTA nº. {resolucao}, de {data_res};")
     list_itens.append("Informar que esta resolução entra em vigor na data de sua publicação.")
-    #p1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
     FormatadorTexto.add_lista_ordenada(document, list_itens)
 

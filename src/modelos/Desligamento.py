@@ -26,8 +26,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
 
-    #n_res, data_res, ad_referendum, data_reuniao, discentes, cont_discentes, niveis_discentes, motivos = ColetorDeDados.coletaDados(3)
-
     geraTitulo(document, n_res, data_res)
 
     geraCabecalho(document, ad_referendum, data_reuniao)
@@ -41,12 +39,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     # Definir um estilo de borda básica para cada célula
     FormatadorTabela.defineBorda(tabela)
-
-    # # Definir a largura das colunas da tabela (em twips, 1 polegada = 1440 twips)
-    # tabela.columns[0].width = 200000  # Largura da primeira coluna (exemplo: DISCENTE)
-    # tabela.columns[1].width = 375000  # Largura da segunda coluna (exemplo: DISCIPLINA(S))
-    # tabela.columns[2].width = 275000  # Largura da terceira coluna (exemplo: DOCENTE RESPONSÁVEL)
-    # #tabela.columns[3].width = 50000  # Largura da quarta coluna (exemplo: SEMESTRE DE OFERTA)
 
     tabela.cell(0, 0).text = 'DISCENTE'
     tabela.cell(0, 1).text = 'NÍVEL'

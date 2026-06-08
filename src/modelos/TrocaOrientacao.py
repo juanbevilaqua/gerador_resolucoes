@@ -12,7 +12,6 @@ from util.RodapeRepublicacao import geraRodapeRepublicacao
 import yaml
 
 def geraModelo(n_res, data_res, ad_referendum, data_reuniao, valores_dinamicos):
-    #data_res_ext = Data.coletaData(data_res, True)
 
     nivel_discente = valores_dinamicos["Nível do Discente"]
     nome = valores_dinamicos["Nome do Discente"]
@@ -21,7 +20,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, valores_dinamicos):
 
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, orientador_atual, novo_orientador = ColetorDeDados.coletaDados(5)
 
     geraTitulo(document, n_res, data_res)
 
@@ -46,12 +44,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, valores_dinamicos):
     tabela.cell(1, 0).text = 'Novo(a) Orientador(a)'
     tabela.cell(1, 1).text = novo_orientador
 
-    #FormatadorTabela.centralizaTotal(tabela)
-
-    # # Alinha horinzontalmete a primeira coluna
-    # for row in tabela.rows:
-    #     first_cell = row.cells[0]
-    #     first_cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # Centraliza o conteúdo das células horizontalmente
     for row in tabela.rows:

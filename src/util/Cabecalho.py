@@ -7,7 +7,6 @@ def geraCabecalho(document, ad_referendum, data_reuniao):
     with open('./src/config/configs.yaml', "r", encoding="utf-8") as file:
         configs = list(yaml.safe_load_all(file))
 
-    #vice_coordenador = configs[1]['vice_coordenador']
     funcao = 'EM EXERCÍCIO' if configs[1]['vice_coordenador'] else ''
 
     modalidade_reunião = "ordinária" if configs[1]["extraordinaria"] is False else "extraordinária"

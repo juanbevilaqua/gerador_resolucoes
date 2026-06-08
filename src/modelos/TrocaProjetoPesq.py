@@ -18,8 +18,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, valores_dinamicos):
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
 
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, projeto_atual, novo_projeto = ColetorDeDados.coletaDados(15)
-
     geraTitulo(document, n_res, data_res)
 
     geraCabecalho(document, ad_referendum,data_reuniao)

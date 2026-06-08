@@ -27,7 +27,6 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     file_parts = CarregadorDeConfigs.carregar_config()
     document = Document(str(file_parts[0]['timbre_res']))
-    #n_res, data_res, ad_referendum, data_reuniao, nivel_discente, nome, n_dias_afast, data_inicio, data_fim, motivo = ColetorDeDados.coletaDados(10)
 
     geraTitulo(document, n_res, data_res)
 
