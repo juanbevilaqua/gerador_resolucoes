@@ -28,8 +28,8 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
 
     p1 = document.add_paragraph('      APROVAR o trancamento do semestre ')
     p1.add_run(f'{semestre}').bold = True
-    p1.add_run(f', a pedido, do(a) acadêmico(a)')
-    p1.add_run(f'{nome}').bold = True
+    p1.add_run(f', a pedido, do(a) acadêmico(a) ')
+    p1.add_run(f'{nome} ').bold = True
     p1.add_run(f'(RGA: {rga}), por {motivo}.')
     p1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     p1_format = p1.paragraph_format

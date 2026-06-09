@@ -1,4 +1,7 @@
 repositorio_de_versoes/
+resolucoes/
 build/
+build.zip
 dist/
 *.exe
+*.egg-info/

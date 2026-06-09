@@ -457,14 +457,15 @@ class TelaPrincipal(ctk.CTkFrame):
 
         valor = element.get()
         frame_pai = frame_extra["frame"]
-        frame = frame_pai.winfo_children()[0]
-        print("Frame filho: ", frame)
+        frame = frame_pai.winfo_children()[-1] #pega o último elemento (frame). Por padrão não há outros elementos abaixo dele
+        #print("Frame filho: ", frame)
 
-        if not valor or isinstance(element, ctk.CTkOptionMenu) and valor not in frame_extra["palavra_ativacao"]:#pega o último valor por padrão
+        if not valor or (isinstance(element, ctk.CTkOptionMenu) and valor not in frame_extra["palavra_ativacao"]):#pega o último valor por padrão
+            #print("entrou no primeiro IF")
             for widget in frame.winfo_children():#limpa os valores preenchdios nos entries
-
+                print("Widget Frame extra: ", widget)
                 if isinstance(widget, ctk.CTkEntry):
-                    #print("Entrou IF IF ativacao")
+                    #print("entrou no IF do entry")
                     widget.delete(0, ctk.END)
                     widget.insert(0, "null")# atribui um valor padrão p/ verif. que o campo foi ignorado(fica apenas no background)
             frame_pai.pack_forget()

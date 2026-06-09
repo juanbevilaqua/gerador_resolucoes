@@ -17,9 +17,9 @@ def geraModelo(n_res, data_res, ad_referendum, data_reuniao, dados_dinamicos):
     data_fim = dados_dinamicos["Data de Finalização"]
     motivo = dados_dinamicos["Motivo"]
     if motivo == "Particular":
-        motivo = "motivos particulares do(a) discente."
+        motivo = "motivos particulares do(a) discente"
     elif motivo == "Saúde":
-        motivo = "questões de saúde, comprovadas através de atestado médico apresentado."
+        motivo = "questões de saúde, comprovadas através de atestado médico apresentado"
     else:
         outro = dados_dinamicos["Outro"]
         motivo = outro
