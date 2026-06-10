@@ -5,21 +5,29 @@ import io
 from PyPDF2 import PdfMerger
 import os
 
-def converterDocxPdf(input_path, output_path):
 
+def converterDocxPdf(input_path, output_path):
     try:
-        subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', input_path, '--outdir', output_path])
-        # subprocess.run([
-        #     'soffice',
-        #     '--headless',
-        #     '--convert-to', 'pdf',  # Método direto de conversão (sem impressora)
-        #     '--outdir', os.path.dirname(output_path),
-        #     input_path
-        # ], check=True)
+        possiveis_caminhos = [
+            r"C:\Program Files\LibreOffice\program\soffice.exe",
+            r"C:\Program Files (x86)\LibreOffice\program\soffice.exe",
+            "soffice"  # fallback se estiver no PATH
+        ]
+
+        soffice_path = None
+        for caminho in possiveis_caminhos:
+            if os.path.exists(caminho):
+                soffice_path = caminho
+                break
+
+        if soffice_path is None:
+            print("LibreOffice não encontrado.")
+            return
+
+        subprocess.run([soffice_path, '--headless', '--convert-to', 'pdf', input_path, '--outdir', output_path])
         print(f"Arquivo PDF gerado: {output_path}")
     except Exception as e:
         print(f"Erro ao gerar PDF: {e}")
-
 def converterPdfDocx(pdf_path):
     # Criar um buffer de memória
     buffer = io.BytesIO()

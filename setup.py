@@ -1,5 +1,8 @@
 import sys
 from cx_Freeze import setup, Executable
+import sys
+import os
+import pymupdf
 
 # Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {"packages": ["os",
@@ -12,12 +15,16 @@ build_exe_options = {"packages": ["os",
                                 "CTkToolTip",
                                 "pywinstyles",
                                   "src",
-                                "src.modelos"],
+                                "src.modelos",
+                                "pymupdf",
+                                "fitz"
+                                ],
                      "includes": ["src.modelos.CalendarioReunioes"],
 
                      "include_files": [("themes", "themes"), ("src/static/img", "src/static/img"),
                                        ("src/database", "src/database"), ("src/config", "src/config"),
-                                        ("MODELO papel timbrado FACET.docx", "MODELO papel timbrado FACET.docx")
+                                        ("MODELO papel timbrado FACET.docx", "MODELO papel timbrado FACET.docx"),
+                                        (os.path.dirname(pymupdf.__file__), "lib/pymupdf"),
                                        ]
 
                      }
