@@ -1,5 +1,8 @@
 # Bem-vindo ao SiGRe-CTA!
 
+Na pasta de resoluções do projeto encontrará alguns exemplos de documentos emitidos via gerador de resoluções. Para visualizá-los, acesse: https://github.com/juanbevilaqua/gerador_resolucoes/tree/main/resolucoes/2026.
+Estão disponíveis versões .docx e PDF (as versões PDF podem ser visualizada diretamente no github, sem necessidade de download).
+
 Caso deseje testar o sistema, será necessário realizar o download da pasta build disponível em: https://drive.google.com/drive/folders/1ef6gQ7gKKhn4m_sBiJcTmDDnbEEZ9zBH?usp=sharing
 
 ## Tutorial de execução após a pasta build ser baixada:
